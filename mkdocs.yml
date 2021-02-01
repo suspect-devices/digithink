@@ -1,1 +1,14 @@
 site_name: Server Notes
+
+theme:
+  name: material
+  palette:
+    primary: grey
+    accent: red
+  font:
+    text: Courier Prime
+#  icon:
+#    logo: images/favicon.png
+  favicon: images/ithinkt.png
+  features:
+    - navigation.expand

@@ -1,0 +1,9 @@
+[submodule "docs/edge-server-configuration"]
+	path = docs/edge-server-configuration
+	url = git@github.com:feurig/edge-server-configuration.git
+[submodule "docs/gitea-configuration"]
+	path = docs/gitea-configuration
+	url = git@github.com:feurig/gitea-configuration.git
+[submodule "docs/buildnotes/redmine-configuration"]
+	path = docs/buildnotes/redmine-configuration
+	url = git@github.com:feurig/redmine-configuration.git
