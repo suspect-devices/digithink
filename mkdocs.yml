@@ -1,14 +1,15 @@
-site_name: Unix Time Ends in 2038. I think we'll have it figured out by then
+site_name: D. Delmar Davis
 
 theme:
   name: material
   palette:
-    primary: grey
+    primary: white
     accent: red
   font:
-    text: Courier Prime
-#  icon:
-#    logo: images/favicon.png
-  favicon: images/ithinkt.png
+#    text: Courier Prime
+    text: JetBrains Mono
+#    text: Share Tech Mono
+  logo: images/think2t.png.svg
+  favicon: images/favicon.png
   features:
     - navigation.expand
