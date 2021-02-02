@@ -1,12 +1,12 @@
-site_name: Server Notes
+site_name: Unix Time Ends in 2038. I think we'll have it figured out by then
 
 theme:
-  name: material
-  palette:
-    primary: grey
-    accent: red
-  font:
-    text: Courier Prime
+  name: mkdocs
+#  palette:
+#    primary: grey
+#    accent: red
+#  font:
+#    text: Courier Prime
 #  icon:
 #    logo: images/favicon.png
   favicon: images/ithinkt.png
