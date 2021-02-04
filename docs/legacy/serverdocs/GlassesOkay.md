@@ -1,0 +1,3 @@
+
+* U alright how you doing yeah yeah yeah good I love you too yeah yeah what's going on it was actually really warm yeah I'm just trying to practice manual out it's going really slow want to get it done why actually need to get done yeah U okay I don't know yet I'm considering actually asking if they can do tomorrow so tell Tony said hi I love you Shirley men's league okay stick
+https://us-west-2.console.aws.amazon.com/console/home?region=us-west-2#

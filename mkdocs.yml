@@ -13,3 +13,6 @@ theme:
   favicon: images/favicon.png
   features:
     - navigation.expand
+
+plugins:
+    - with-pdf
