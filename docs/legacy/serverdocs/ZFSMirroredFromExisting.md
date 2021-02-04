@@ -1,11 +1,12 @@
-# ZFS Mirrored data on existing file server## Adding zfs mirror to existing data
+# ZFS Mirrored data on existing file server
+## Adding zfs mirror to existing data
 On Annie, the Home File Server we have a pair of matched 2T sata disks, one of which contains the majority of the shared data. We want to convert these to a mirrored disk using  ZFS  (thereby securing the existing data). Rather than using entire disks the disks should be partitioned so that they are bootable and can contain a fresh os installation.
 
 _note: the following assumes we have installed some prerequisites...._
 	
 	root@annie:~# apt-get install  zfsutils-linux parted nfs-kernel-server zfs-initramfs 
 	
-* First we wipe and partition the unused disk.
+First we wipe and partition the unused disk.
 	
 	root@annie:~# df -k
 	Filesystem      1K-blocks      Used  Available Use% Mounted on
@@ -25,7 +26,7 @@ _note: the following assumes we have installed some prerequisites...._
 	(parted) set 2 boot on            
 	root@annie:~# reboot                                 
 	
-* create a zfs pool on the first partition
+Create a zfs pool on the first partition
 	
 	root@annie:~# zpool create basement -f /dev/disk/by-id/wwn-0x5000039ff3c899c1-part1
 	root@annie:~# zpool list
@@ -46,7 +47,7 @@ _note: the following assumes we have installed some prerequisites...._
 	basement       1787817216 906994176  880823040  51% /basement
 	...
 	
-* Repartition old drive and add the first partition to  the zfs pool as a mirror.
+Repartition old drive and add the first partition to  the zfs pool as a mirror.
 	
 	root@annie:~# umount /export
 	... adjust /etc/fstab if necessary ...
@@ -65,7 +66,7 @@ _note: the following assumes we have installed some prerequisites...._
 	root@annie:~# zpool status 
 	... should show both disks and note (reslivering)
 	
-* wait for reslivering to finish (1.7T took about 1.75 hours)
+Wait for reslivering to finish (1.7T took about 1.75 hours)
 	
 	don@annie:~$ zpool status
 	  pool: basement

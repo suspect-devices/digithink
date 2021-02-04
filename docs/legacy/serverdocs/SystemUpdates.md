@@ -1,3 +1,4 @@
+#SystemUpdates
 When you log into your ubunty cloud server it will greet you with most of what need to know to keep it up and running.
 	
 	Welcome to Ubuntu 14.04.4 LTS (GNU/Linux 3.13.0-74-generic x86_64)
@@ -21,7 +22,7 @@ When you log into your ubunty cloud server it will greet you with most of what n
 	8 updates are security updates.
 	
 	
-*** System restart required ***
+    *** System restart required ***
 	Last login: Mon Apr  4 18:58:15 2016 from 71-222-65-56.ptld.qwest.net
 	don@cloud:~$
 	

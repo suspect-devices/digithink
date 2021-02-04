@@ -19,6 +19,7 @@ This server could have been better documented but I needed it her to document ev
 ### Suspect devices wordpress blog
 * create lxc container and install lamp server using tasksel.
 	
+```
 	root@bs2020:~# lxc init local:ubuntults ian -p susdev
 	Creating ian
 	root@bs2020:~# lxc start ian
@@ -28,10 +29,11 @@ This server could have been better documented but I needed it her to document ev
 	root@ian:~# tasksel
 	... select lamp server ...
 	... set password for mysql server ...
-	
+```	
 
 * Sort out the wordpress blog from the other legacy stuff.
-	
+
+```	
 	root@medea:/home/newcourse/suspectdevices/www# ls -ls
 	total 9916
 	   4 drwxr-xr-x  4 www-data www-data    4096 Nov 17  2015 art2013
@@ -75,16 +77,19 @@ This server could have been better documented but I needed it her to document ev
 	...
 	root@medea:/home/newcourse/suspectdevices/www# cp -rpv blahg ../exodus/
 	...
-	
+```	
 	
 * dump the database
 	
+```
 	root@medea:/home/newcourse/suspectdevices/www# mysqldump -u www-data  -p  susdevweb> ../exodus/susdevweb.dump
 	Enter password: 
+```
 	
 * move and untar into /var/www/html
 * restore database
 	
+```
 	root@ian:/var/www# mysqladmin -p create susdevweb
 	Enter password: 
 	root@ian:/var/www/html/blahg# mysql -p susdevweb< exodus/susdevweb.dump
@@ -98,13 +103,14 @@ This server could have been better documented but I needed it her to document ev
 	Query OK, 0 rows affected (0.00 sec)
 	
 	mysql> 
-	
+```	
 * adjust /etc/apache2/sites-enabled/000-default
 	
 	.... not really needed ....
 	
 * enable mod rewrite and .htaccess override.
 	
+```
 	root@ian:~# nano /etc/apache2/apache2.conf 
 	...
 	<Directory /var/www/>
@@ -118,9 +124,10 @@ This server could have been better documented but I needed it her to document ev
 	root@ian:/etc/apache2/mods-enabled# apachectl configtest
 	Syntax OK
 	root@ian:/etc/apache2/mods-enabled# apachectl restart
-	
+```	
 * route / to /blahg/ and check rewrite rules for wordpress site
-	
+
+```	
 	root@ian:~# nano /var/www/html/.htaccess 
 	<IfModule mod_rewrite.c>
 	RewriteEngine on
@@ -137,7 +144,7 @@ This server could have been better documented but I needed it her to document ev
 	RewriteRule . /blahg/index.php [L]
 	</IfModule>
 	
-	
+```	
 ## Static web server.
 ### busholini, Straight.fromhell.com, (with processing) osxavr.org
 
@@ -147,8 +154,9 @@ In order to mitigate the issues around CMS's such as wordpress, web sites whos p
 * copy static content into directories under /var/www
 * edit /etc/lighttpd/lighttpd.conf
 	
-	....
-	# default server and configuration
+```	....
+   # default server and configuration
+
 	server.document-root        = "/var/www/busholini/www"
 	server.upload-dirs          = ( "/var/cache/lighttpd/uploads" )
 	server.errorlog             = "/var/log/lighttpd/error.log"
@@ -156,9 +164,9 @@ In order to mitigate the issues around CMS's such as wordpress, web sites whos p
 	server.username             = "www-data"
 	server.groupname            = "www-data"
 	server.port                 = 80
-	#
-	# virtualhosts
-	#
+
+	
+   # virtualhosts
 	
 	$HTTP["host"] =~ "www.suspectdevices.com" {
 	  url.redirect # ( "^/(.*)"> "http://blog.suspectdevices.com/$1" )
@@ -173,7 +181,7 @@ In order to mitigate the issues around CMS's such as wordpress, web sites whos p
 	# disable php
 	index-file.names            = ( "index.html", "index.lighttpd.html" )
 	url.access-deny             = ( "~", ".inc", ".php" )
-	
+```	
 Note/todo: the redirects should be more specific
 * ie /project/todo -> trac.suspectdevices.com
 * ie /blahg/ -> blog.suspectdevices.com
@@ -182,6 +190,7 @@ Note/todo: the redirects should be more specific
 ### DNS
 * consolidate active zone files and create single master.conf to be included by /etc/bind/named.conf.local
 	
+```
 	//
 	// Do any local configuration here
 	//
@@ -240,9 +249,10 @@ Note/todo: the redirects should be more specific
 	        type master;
 	        file "/etc/bind/zones/bluegin.hosts";
 	};
-	
+```	
 * check and restart bind
 	
+```
 	root@naomi:~# named-checkconf /etc/bind/named.conf
 	root@naomi:~# named-checkconf /etc/bind/named.conf
 	root@naomi:~# service bind9 restart
@@ -268,7 +278,7 @@ Note/todo: the redirects should be more specific
 	Jan 30 10:19:15 naomi named[965]: zone bluegin.net/IN: sending notifies (serial 2004072500)
 	Jan 30 10:19:15 naomi named[965]: zone thesofttargets.com/IN: sending notifies (serial 2018012200)
 	Jan 30 10:19:15 naomi named[965]: zone bresgal.com/IN: sending notifies (serial 2009123000)
-	
+```	
 	
 * install bind9 and email services via tasksel
 * move dns1 ip from medea to naomi
@@ -278,19 +288,21 @@ Based on the file dates of the Maildir's being updated by postfix on the old ser
 
 * Look at existing server for active email users.
 
-	
+```	
 	root@medea:~# find / -name Maildir -a -newer www/postgres7JUL17.dump -print
 	/var/www/Maildir
 	/home/eldufe/Maildir
 	/home/don/Maildir
 	/home/fromhell/users/feurig/Maildir
-	
+```	
 We notice that only three users are reading email so we need to serve those users.
 
 * So create users for feurig@fromhell.com, eldufe@busholini.org and don@suspectdevices.com since www is going to be exclusively spam.
 	
+```
 	root@naomi:~# useradd -c "The Commander and Thief" -m eldufe
 	root@naomi:~# useradd -c "D Delmar Davis" -m don
+```
 	
 The rest of the documentation has been moved to a separate [wiki:UbuntuMailServerSetup mail server setup] document.
 
@@ -299,6 +311,7 @@ The rest of the documentation has been moved to a separate [wiki:UbuntuMailServe
 * install dns using tasksel
 * transfer and convert master configuration to slave.
 	
+```
 	root@teddy:~# cd /etc/bind
 	root@teddy:/etc/bind# mkdir zones
 	root@teddy:/etc/bind# scp don@198.202.31.231:/etc/bind/zones/master.conf slave.conf
@@ -318,9 +331,11 @@ The rest of the documentation has been moved to a separate [wiki:UbuntuMailServe
 	// organization
 	//include "/etc/bind/zones.rfc1918";
 	include "/etc/bind/zones/slave.conf";
+```
 	
 * deal with duplicate filename and slave configuration in bresgals....
 	
+```
 	root@teddy:/etc/bind# named-checkconf 
 	/etc/bind/zones/slave.conf:52: writeable file '/etc/bind/zones/bresgal.hosts': already in use: /etc/bind/zones/slave.conf:46
 	root@teddy:/etc/bind# nano /etc/bind/zones/slave.conf
@@ -351,9 +366,11 @@ The rest of the documentation has been moved to a separate [wiki:UbuntuMailServe
 	Jan 31 22:17:01 teddy named[5450]: zone bresgal.org/IN: sending notifies (serial 2009123000)
 	Jan 31 22:17:01 teddy named[5450]: dumping master file: /etc/bind/zones/tmp-qGurg6XtTG: open: permission denied
 	Jan 31 22:17:01 teddy named[5450]: dumping master file: /etc/bind/zones/tmp-jUyE6xKRDk: open: permission denied
+```
 	
 * Move zone files to /var/lib/bind/ because apparmor won't let you write to /etc/bind/zones...
-	
+
+```	
 	root@teddy:~# sed -i 's/etc\/bind\/zones/var\/lib\/bind/' /etc/bind/zones/slave.conf 
 	root@teddy:~# service bind9 restart
 	root@teddy:~# tail /var/log/syslog
@@ -371,7 +388,7 @@ The rest of the documentation has been moved to a separate [wiki:UbuntuMailServe
 	3dangst.hosts         bluegin.hosts   bresgal1.hosts   digithink.hosts  osx-avr.hosts         thesofttargets.hosts
 	bind9-default.md5sum  bresgal0.hosts  busholini.hosts  fromhell.hosts   suspectdevices.hosts
 	root@teddy:~# 
-	
+```	
 
 ## Sidenote: 17.10/18.04 container
 While we were running up new containers we started the process of looking at the changes coming down the road (next LTS candidate) [BleedingEdgeServer Phillip] is our current exploration into what the kids are up to.

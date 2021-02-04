@@ -1,4 +1,5 @@
-# OpenWRT NotesAt a very minimum open the ssh port so that the router can be managed from the outside. Then disable logins (ssh keys only) in /etc/dropbear.
+# OpenWRT Notes
+At a very minimum open the ssh port so that the router can be managed from the outside. Then disable logins (ssh keys only) in /etc/dropbear.
 	
 	root@OpenWrt:/etc/config# opkg update
 	root@OpenWrt:/etc/config# opkg install nano

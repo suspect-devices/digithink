@@ -1,5 +1,6 @@
 ### Videoranch Cloud Server Configuration.
 The purpose of this document is provide information on how gihon.orgs cloud server is currently configured and basic guidelines for maintaining it.
+
 |# Date|# Author|# Email|# Comments|
 |------|--------|-------|----------|
 |28MAY16|Donald Delmar Davis|don@suspectdevices.com|Initial document|
@@ -160,7 +161,8 @@ The AWS instance is placed in a private network. This network provides the insta
 
 This address is attached to the outside world via an "Elastic" ip (52.34.143.142). To connect the external traffic to the private address you have to create a "Security group" and define the rules which allow traffic in and out of the private network.
 
-* INBOUND RULES * ||
+* INBOUND RULES 
+
 |# protocol|# family|# port|# allow from|
 |----------|--------|------|------------|
 | HTTP | TCP | 80 | 0.0.0.0/0 |

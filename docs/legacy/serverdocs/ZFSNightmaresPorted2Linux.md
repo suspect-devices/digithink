@@ -1,4 +1,5 @@
-# ZFS IS ALL THE RAGEZfs is recomended  by the UBUNTU team for LXC/LXD and it has its positives but just like everything else the damned kids fixed is pleanty fucking broke. It does not play well with others and it will fuck you in the most subtle and substantial ways.
+# ZFS IS ALL THE RAGE!
+Zfs is recomended  by the UBUNTU team for LXC/LXD and it has its positives but just like everything else the damned kids fixed is pleanty fucking broke. It does not play well with others and it will fuck you in the most subtle and substantial ways.
 * look at the disks.
 
 	

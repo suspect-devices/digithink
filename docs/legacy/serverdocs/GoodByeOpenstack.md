@@ -23,7 +23,8 @@ Now we want to see about the devstack container. It should have its own network 
 	
 
 * setup br1 use dpkg-reconfigure to point the network at br1 
-	
+
+```	
 	root@bs2020:~# nano /etc/network/interfaces
 	... add the following ...
 	auto br1
@@ -41,9 +42,10 @@ Now we want to see about the devstack container. It should have its own network 
 	    link/ether d4:be:d9:ec:ee:d2 brd ff:ff:ff:ff:ff:ff
 	    inet6 fe80::d6be:d9ff:feec:eed2/64 scope link 
 	       valid_lft forever preferred_lft forever
-	
+```	
 * set up lxc config file 
-	
+
+```	
 	root@bs2020:~# nano /etc/lxc/devstack.conf 
 	# from https://docs.openstack.org/devstack/latest/guides/lxc.html
 	# Permit access to /dev/loop*
@@ -65,16 +67,18 @@ Now we want to see about the devstack container. It should have its own network 
 	lxc.start.auto = 1
 	lxc.start.delay = 7
 	lxc.start.order = 150
+```
 	
 * create the image
-	
-	
+
+```	
 	root@bs2020:~# lxc-create -n theswedishchef  -t ubuntu -f /etc/lxc/devstack.conf -B zfs \        
 	                                  --zfsroot=lxd4devstack \
 	                              -- --packages=bsdmainutils,git,nano,ebtables,openvswitch-common
-	
+```	
 * add local admin users, setup network and  lockdown ubuntu user.
-	
+
+```	
 	root@bs2020:~# passwd -l ubuntu -R /var/lib/lxc/theswedishchef/rootfs
 	passwd: password expiry information changed.
 	root@bs2020:~# cd /var/lib/lxc/theswedishchef/rootfs/
@@ -101,9 +105,10 @@ Now we want to see about the devstack container. It should have its own network 
 	    dns-nameservers 198.202.31.132 198.202.31.141 8.8.8.8
 	    dns-search suspectdevices.com digithink.com
 	eod2
-	  
+```	  
 * check for ebtables module
-	
+
+```	
 	root@bs2020:~# lsmod |grep ebt
 	ebtable_broute         16384  0
 	ebtable_nat            16384  0
@@ -111,9 +116,11 @@ Now we want to see about the devstack container. It should have its own network 
 	ebtables               36864  3 ebtable_broute,ebtable_nat,ebtable_filter
 	x_tables               36864  9 xt_CHECKSUM,ip_tables,xt_tcpudp,ipt_MASQUERADE,xt_conntrack,iptable_filter,ebtables,ipt_REJECT,iptable_mangle
 	bridge                126976  1 ebtable_broute
+```
 	 
 * run up instance and install devstack
-	
+
+```	
 	root@bs2020:~# lxc-start -n theswedishchef
 	root@bs2020:~# lxc-attach -n theswedishchef
 	root@theswedishchef:~# apt-get install --reinstall ca-certificates
@@ -140,7 +147,7 @@ Now we want to see about the devstack container. It should have its own network 
 	 stack@theswedishchef:~/devstack$ ./stack.sh
 	... don't even look at it just walk away ....
 	
-	
+```	
 
 ## Approaches Attempted
 

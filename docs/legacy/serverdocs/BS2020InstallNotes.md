@@ -1,7 +1,8 @@
 
-# BS2020 (RE)Install NotesInstalling devstack on server left entirely too much shit everywhere. Realized that devstack should be installed in a container or vm. This page documents the reinstallation of bs2020 using the remote console and admin network.
+# BS2020 (RE)Install Notes
+Installing devstack on server left entirely too much shit everywhere. Realized that devstack should be installed in a container or vm. This page documents the reinstallation of bs2020 using the remote console and admin network.
 ## Firewall Setup
-Allowing access to the server is discussed in the [wiki:OpenWRT OpenWRT notes] section.
+Allowing access to the server is discussed in the [OpenWRT notes](OpenWRTNotes/) section.
 ## Loading a new os via the idrac 6
 
 * log into idrac by browsing (https://vpn.suspectdevices.com)

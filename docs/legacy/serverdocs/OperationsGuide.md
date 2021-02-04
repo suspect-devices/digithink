@@ -81,7 +81,8 @@ On kb2018 the second pair of disks are Solid State. The first partition on each 
 
 ## Containers
 The majority of the work previously done by standalone servers is now done though LXD managed containers. [#fn1 (1)]
-=== LXD Containers (development/deployment)===
+### LXD Containers (development/deployment)
+
 |#  NAME |#  OS |#  IP|# zfs pool|# Purpose |# Notes|
 |--------|------|-----|----------|----------|-------|
 | kb2018/naomi   | Ubuntu 16.04 |198.202.31.225|infra| primary dns / email|   |
@@ -94,16 +95,19 @@ The majority of the work previously done by standalone servers is now done thoug
 | kb2018/sandbox  | Ubuntu 18.04 |198.202.31.191|devel|Development/OpenWRT Build|   |
 | bs2020/teddy   | Ubuntu 16.04 |198.202.31.132|infra|Secondary DNS|  |
 
-# Tasks## Accessing Hosts
+# Tasks: Accessing Hosts
 ### bs2020/kb2020 ssh access
 The host machines for the containers can be accessed through the admin lan. Currently this is done through ssh redirection. Eventually it will require a vpn connection. Only ssh key access is allowed and root is not allowed to login. To escalate privileges requires sudo. 
+
  ||||# Current ssh port mappings to vpn.suspectdevices.com||
- ||=port =||=destination =||
- || 22  || bs2020 ssh via admin lan ||
- || 222 || bs2020 racadm / serial console via ssh ||
- || 2222 || knight / vpn ||
- || 22222 ||kb2018 hpILO / serial console via ssh ||
- || 22223 ||kb2018 ssh via admin lan ||
+ 
+  port |destination 
+  ---- |----
+  22   | bs2020 ssh via admin lan 
+  222  | bs2020 racadm / serial console via ssh 
+  2222 | knight / vpn 
+  22222 |kb2018 hpILO / serial console via ssh
+  22223 |kb2018 ssh via admin lan
 
 	
 	steve:~ don$ ssh -p 22222 feurig@vpn.suspectdevices.com

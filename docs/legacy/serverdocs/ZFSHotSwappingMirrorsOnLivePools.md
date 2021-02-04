@@ -1,4 +1,5 @@
-# HOLY FUCKING AWESOME!!!!Watch while I add a fresh disk as a mirror, resliver the pool and remove and repartition the original disk while the container using the pool is still running!!!
+# HOLY FUCKING AWESOME!!!!
+Watch while I add a fresh disk as a mirror, resliver the pool and remove and repartition the original disk while the container using the pool is still running!!!
 ... make this into a structured document ...
 
 	

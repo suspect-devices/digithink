@@ -1,9 +1,11 @@
-# Ubuntu LTS Email Server SetupThis document assumes that you have set up a debian 9 or ubuntu LTS server(/container) set up and that postfix/email has been set up using tasksel. 
+# Ubuntu LTS Email Server Setup
+This document assumes that you have set up a debian 9 or ubuntu LTS server(/container) set up and that postfix/email has been set up using tasksel. 
 
 ## Dovecot (imap server) and Postfix (mail server)
 
 * configure dovecot to use self signed ssl cert created by postfix.
-	
+
+```	
 	root@naomi:/etc/postfix# cd ../dovecot/conf.d/
 	root@naomi:/etc/dovecot/conf.d# nano 10-ssl.conf 
 	##
@@ -21,23 +23,26 @@
 	ssl_key = </etc/ssl/private/ssl-cert-snakeoil.key
 	#ssl_cert = </etc/dovecot/dovecot.pem
 	#ssl_key = </etc/dovecot/private/dovecot.pem
-	
+```	
 * Also set mailbox format to Maildir or all of your legacy data will be hosed.
 	
 	
+```
 	root@naomi:/etc/dovecot/conf.d# nano 10-mail.conf
 	  mail_location = maildir:~/Maildir
 	...
-	
+```	
 * notice issues with sending mail using ssl/tls
-	
+
+```	
 	don@bob2:~$ openssl s_client -connect mail.suspectdevices.com:465 -starttls smtp
 	connect: Connection refused
 	connect:errno=111
-	
+```	
 * add ssl/tls to postfix for outgoing mail
 	
-	
+
+```	
 	root@naomi:/etc/postfix# nano master.cf
 	...
 	# ==========================================================================
@@ -69,10 +74,12 @@
 	postfix/postfix-script: warning: group or other writable: /usr/lib/postfix/./libpostfix-util.so.1
 	postfix/postfix-script: warning: group or other writable: /usr/lib/postfix/sbin/./lmtp
 	root@naomi:/etc/postfix# service postfix reload
+```	
 	
+* link authentication to dovecot and enable auth server in dovecot.  '' apparently this 
+can be avoided by installing a single package buried in ubuntu's documentation (g: Mail-Stack Delivery).
 	
-* link authentication to dovecot and enable auth server in dovecot.  '' apparently this can be avoided by installing a single package buried in ubuntu's documentation (g: Mail-Stack Delivery).
-	
+```
 	root@naomi:/etc/postfix# nano /etc/dovecot/conf.d/10-master.conf 
 	...
 	  #Postfix smtp-auth
@@ -101,19 +108,20 @@
 	smtpd_sasl_type = dovecot
 	smtpd_sasl_path = private/auth
 	smtpd_sasl_auth_enable = yes
-	smtpd_recipient_restrictions = permit_sasl_authenticated permit_mynetworks reject_unauth_destination
-	
+	smtpd_recipient_restrictions = permit_sasl_authenticated permit_mynetworks  reject_unauth_destination
+```	
 	
 * follow up on above errors
   
    NOTE: the above errors are related to symlinks and not the files. Both debian and canonical aren't concerned about it and may or may not fix it at some point. https://bugs.launchpad.net/ubuntu/+source/postfix/+bug/1728723
 
 * eliminate pop3 as it isn't needed
-	
+
+```	
 	mv /usr/share/dovecot/protocols.d/pop3d.protocol /usr/share/dovecot/pop3d.protocol.disabled
 	service dovecot reload
 	netstat -ta
-	
+```	
 ## SPF and openDKIM
 Gmail currently requires that any email you send that isn't controlled by them use both SPF and DKIM. 
 ### What the hell is it?
@@ -127,11 +135,12 @@ According to linuxbabe https://www.linuxbabe.com/mail-server/setting-up-dkim-and
 
 ### SPF
  We only want to send email through a single server which is accomplished with the following record. Which needs to be added for each domain using the email server.
-	
+
+```	
 	root@naomi:~# nano /etc/bind/zones/fromhell.hosts 
 	... add the following ...
 	@ TXT "v=spf1 ip4:198.202.31.141 -all"
-	
+```	
 ### openDKIM
 #### gotchas
 * convoluted and complex configuration involving 3 major services (dns,postfix,opendkim).
@@ -141,6 +150,7 @@ According to linuxbabe https://www.linuxbabe.com/mail-server/setting-up-dkim-and
 #### installation
 * install opendkim and edit configuration file
 	
+```
 	root@naomi:~# apt-get install opendkim opendkim-tools
 	root@naomi:~# nano /etc/opendkim.conf 
 	... add/correct the following ...
@@ -151,16 +161,18 @@ According to linuxbabe https://www.linuxbabe.com/mail-server/setting-up-dkim-and
 	SigningTable        refile:/etc/opendkim/signing.table
 	ExternalIgnoreList  refile:/etc/opendkim/trusted.hosts
 	InternalHosts       refile:/etc/opendkim/trusted.hosts
-	
+```	
 * for each domain being handled create a signing key and add to dns zone files.
 	
+```
 	root@naomi:~# cd /etc/opendkim/keys/
 	root@naomi:/etc/opendkim/keys# opendkim-genkey -b 2048 -h rsa-sha256 -r -s 201807 -d suspectdevices.com -v
 	root@naomi:/etc/opendkim/keys# mv 201807.private suspectdevices.private
 	root@naomi:/etc/opendkim/keys# cat 201807.txt >>/etc/bind/zones/suspectdevices.hosts 
-	
+```	
 * fix the error in dns entry and increment the zones serial number
 	
+```
 	root@naomi:/etc/opendkim/keys# nano /etc/bind/zones/suspectdevices.hosts 
 	@               IN      SOA  dns1.digithink.com. don.digithink.com (
 	                2018072200 10800 3600 3600000 86400 )
@@ -170,9 +182,10 @@ According to linuxbabe https://www.linuxbabe.com/mail-server/setting-up-dkim-and
 	201807._domainkey       IN      TXT     ( "v=DKIM1; h=sha256; k=rsa; s=email; "
 	          "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6ymvRll+pEDThA6fMersYbr6dB5HKIFl4SMSF3ORxkFmrYC//wm6/vrqWNft3AWy4zC7AQNiKyQGg7$
 	          "BUpxeL2bSGUhMrcZ+OheWWzw7aF746IOYO0IR4oMTFNP9a6hrmwBrLmnA8ploFYUWCa2ETq/VYP6i14LU7P/yi8JhDMu4ZVI6ytlynBcLU42orcNWjWNLHqy/F3L$
-	
+```	
 * reload bind and check key
 	
+```
 	root@naomi:/etc/opendkim/keys# service bind9 reload
 	root@naomi:/etc/opendkim/keys# service bind9 status
 	● bind9.service - BIND Domain Name Server
@@ -185,9 +198,10 @@ According to linuxbabe https://www.linuxbabe.com/mail-server/setting-up-dkim-and
 	opendkim-testkey: checking key '201807._domainkey.suspectdevices.com'
 	opendkim-testkey: key not secure .... ignore this ....
 	opendkim-testkey: key OK
-	
+```	
 * add entries to key.table signing.table and trusted hosts.
-	
+
+```	
 	root@naomi:/etc/opendkim# nano key.table 
 	fromhell     fromhell.com:201807:/etc/opendkim/keys/fromhell.private
 	suspectdevices suspectdevices.com:201807:/etc/opendkim/keys/suspectdevices.private
@@ -202,9 +216,10 @@ According to linuxbabe https://www.linuxbabe.com/mail-server/setting-up-dkim-and
 	localhost
 *.fromhell.com
 *.suspectdevices.com
-	
+```	
 * configure socket file to communicate with postfix and add postfix to opendkim group. 
 	
+```
 	root@naomi:~# mkdir -p /var/spool/postfix/var/run/opendkim
 	root@naomi:~# chown -R opendkim:opendkim /var/spool/postfix/var/run/opendkim
 	root@naomi:~# touch /var/spool/postfix/var/run/opendkim/opendkim.sock
@@ -220,9 +235,10 @@ According to linuxbabe https://www.linuxbabe.com/mail-server/setting-up-dkim-and
 	# listen on all interfaces on port 54321:
 	#SOCKET="inet:54321"
 	...
-	
+```	
 * add filter to postfix and restart both services.
 	
+```
 	root@naomi:~# nano /etc/postfix/main.cf
 	...
 	milter_protocol = 6
@@ -232,20 +248,23 @@ According to linuxbabe https://www.linuxbabe.com/mail-server/setting-up-dkim-and
 	...
 	root@naomi:~# service opendkim reload
 	root@naomi:~# service postfix reload
+```
 	
 * send test mail 
 	
+```
 	root@naomi:~# echo "dkim test" |mail -testopendkim  check-auth@verifier.port25.com
-	
+```	
 #### adding signatures to relayed hosts
 To relay mail from other hosts on the local networks requires the following additions to postfix's main.cf
 	
+```
 	root@naomi:~# nano /etc/postfix/main.cf
 	...
 	mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128, 198.202.31.128/25
 	...
 	masquerade_domains = suspectdevices.com, fromhell.com
-	
+```	
 #### openDKIM/SPF links
 
 * https://www.cioby.ro/2013/11/14/configuring-opendkim-to-sign-postfix-emails/
@@ -272,11 +291,13 @@ In order for email to be signed by opendkim and validated by spf the email needs
 	
 * since all systems will be striped of their machine names insure the full name of common accounts is made to be uniq
 	
+```
 	root@bs2020:~# chfn -f "Root at BS2020"
-	
+```
+#### References	
 * http://www.postfix.org/STANDARD_CONFIGURATION_README.html
 * https://www.tecmint.com/setup-postfix-mail-server-smtp-using-null-client-on-centos/
-_Todo:_
+#### Todo
 * I think postfix is a little heavy handed to run a null client. Investigate simpler secure solution.
 * add amivis,and other filters linked in at https://help.ubuntu.com/community/MailServer
 * make procmail do some work since its enabled by default

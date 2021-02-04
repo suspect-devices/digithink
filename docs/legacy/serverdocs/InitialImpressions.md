@@ -1,4 +1,5 @@
-# You may say to yourself "Well, How did I get here?"_(first attempts at setting things up)_
+# You may say to yourself "Well, How did I get here?"
+_(first attempts at setting things up)_
 
 This is my collection of notes on how the servers we own and operate were set up. 
 
