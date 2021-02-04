@@ -1,3 +1,4 @@
+
 The ILO 3 card on the HP Prolient DL380 allows us complete remote control of the server for this reason the same security precautions which are used on the idrac6 need to be implemented.
 
 ### Securing the ILO3
@@ -36,7 +37,6 @@ Once you have administrative access to the ILO3 and you have an os install you c
 ## Connecting to the console
 * once the bios is set up you can ssh to the console using your iso credentials and ssh key. 
 	
-```
 	steve:~ don$ ssh -p22222 feurig@vpn.suspectdevices.com
 	User:feurig logged-in to kb2018.suspectdevices.com(192.168.31.119 / FE80::9E8E:99FF:FE0C:BAD8)
 	iLO 3 Advanced for BladeSystem 1.88 at  Jul 13 2016
@@ -60,12 +60,12 @@ Once you have administrative access to the ILO3 and you have an os install you c
 	LANGUAGE : Command to set or get default language
 	VSP      : Invoke virtual serial port.
 	TEXTCONS : Invoke Remote Text Console.
-```	
+	
 
 * then you can connect to the console
 	
 	
-```	
+	
 	</>hpiLO-> vsp
 	
 	Virtual Serial Port Active: COM2
@@ -77,11 +77,9 @@ Once you have administrative access to the ILO3 and you have an os install you c
 	Ubuntu 18.04.1 LTS kb2018 ttyS1
 	
 	kb2018 login: 
-```
 	
 * if the session is preoccupied use the following (stop /system1/oemhp_vsp1)
 	
-```
 	steve:~ don$ ssh -p 22222 feurig@vpn.suspectdevices.com
 	User:feurig logged-in to kb2018.suspectdevices.com(192.168.31.119 / FE80::9E8E:99FF:FE0C:BAD8)
 	iLO 3 Advanced for BladeSystem 1.88 at  Jul 13 2016
@@ -97,27 +95,23 @@ Once you have administrative access to the ILO3 and you have an os install you c
 	
 	Virtual Serial Port Active: COM2
 	
-```	
-## fixing grub (identical to the process for idrac 6)
-
+	
+== fixing grub (identical to the process for idrac 6)==
 * you need set the console to ttyS1 by adding a console=ttyS1,115200n8 to the end of the kernel line
-
-```	
+	
 	root@bs2020:~# nano /boot/grub/menu.list
 	...
 	kernel          /boot/vmlinuz-4.4.0-96-generic root=UUID=8cafbdf6-441e-4f76-b89c-017fc22253f9 ro console=hvc0 console=ttyS1,115200n8
 	
-```
 * add the changes to /etc/default/grub so that it will survive updates to the kernel.
 	
-```
 	root@bs2020:~# nano /etc/default/grub
 	...
 	GRUB_TERMINAL='serial console'
 	GRUB_CMDLINE_LINUX="console=hvc0 console=ttyS1,115200n8"
 	GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=1 --word=8 --parity=no --stop=1"
 	root@bs2020:~# update-grub
-```	
+	
 * reboot the server and attach to the console.
 [[Image(ILO3Notes:ILo3SerialBootScreen.png)]]
 [[Image(ILO3Notes:ILO3SerialConsoleBootFinish.png)]]

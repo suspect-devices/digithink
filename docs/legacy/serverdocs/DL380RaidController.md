@@ -1,3 +1,4 @@
+# Old DL380 Raid Notes
 ## Problem: Where are my disks???
 When we installed the os on our new (to us) prolient DL380, Only a single disk was visible in spite of there having been 6 disks installed. This is because the DL380s disk controller was set up in raid mode an did not expose disks until they were configured as "logical" disks. 
 
@@ -133,8 +134,7 @@ HP provides utilities and officially supports bionic and hosts a repo for it. It
 For the purpose of maintaining disks we only need ssacli and perhaps ssaducli. 
 
 * install the hp supported utilities.
-
-```	
+	
 	root@kb2018:~# echo "deb http://downloads.linux.hpe.com/SDR/downloads/MCP/ubuntu bionic/current non-free" >> /etc/apt/sources.list.d/hp.list
 	root@kb2018:~# root@kb2018:/etc/apt# wget http://downloads.linux.hpe.com/SDR/repo/mcp/GPG-KEY-mcp
 	--2018-11-12 09:00:29--  http://downloads.linux.hpe.com/SDR/repo/mcp/GPG-KEY-mcp
@@ -188,7 +188,7 @@ For the purpose of maintaining disks we only need ssacli and perhaps ssaducli.
 	Reading package lists... Done
 	root@kb2018:/etc/apt# apt-get install ssacli ssaducli
 	...
-```	
+	
 Once the issues with his signature were resolved (above) I was able to instal the ssacli. [#fn2 (2)]
 #### Seeing the drives
 Use the ssacli to show the unassigned drives after inserting fresh disks.

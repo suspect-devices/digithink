@@ -1,3 +1,4 @@
+# Nigel
 Nigel is a TP-Link Mr3020 router running LEDE 17.01.3 that I am using to connect things to the net. Things are connected in one of 2 ways.
 
 * wifi

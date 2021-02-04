@@ -1,5 +1,7 @@
-When replacing our new disks there were hard errors on the disk being reslivered from. 
+#Foobarred zfs filesystem
 
+When replacing our new disks there were hard errors on the disk being reslivered from. 
+(spot the error....) 
 	
 	root@bs2020:~# zpool status -v
 	  pool: devel

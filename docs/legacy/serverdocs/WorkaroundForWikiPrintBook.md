@@ -1,3 +1,5 @@
+# fixing 
+trac database
 The database created when upgrading the trac site does not work with wikiprintbook. 
 
 Here is a workaround while I debug the issue.
@@ -64,8 +66,7 @@ Here is a workaround while I debug the issue.
 	 CaptiveRaidController => /tmp/docsdump/CaptiveRaidController
 	
 * clear out any existing pages on the disposable wiki site
-
-```	
+	
 	root@herbert:~# trac-admin /var/trac/devel/env wiki remove *
 	
 	Deleted pages
@@ -81,11 +82,10 @@ Here is a workaround while I debug the issue.
 	TitleIndex
 	InterMapTxt
 	OperationsGuide
-```	
+	
 * load the pages onto the new site.
 ( may be missing a step for the images )
 	
-```
 	root@herbert:~# trac-admin /var/trac/devel/env wiki load /tmp/
 	.ICE-unix/                                                                        env/
 	.Test-unix/                                                                       files/
@@ -152,6 +152,5 @@ Here is a workaround while I debug the issue.
 	  InitialImpressions imported from /tmp/docsdump/InitialImpressions
 	  7900NWashburne imported from /tmp/docsdump/7900NWashburne
 	root@herbert:~#
-```
 	 
 Then go to the [/devel devel] site and print the book.

@@ -1,4 +1,4 @@
-# kb 2018 Install Bash History
+#kb2018 install bash history.
 	df -k
 	fdisk -l
 	apt-get update&&apt-get dist-upgrade&& apt-get autoremove

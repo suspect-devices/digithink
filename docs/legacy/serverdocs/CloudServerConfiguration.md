@@ -4,6 +4,7 @@ The purpose of this document is provide information on how gihon.orgs cloud serv
 |# Date|# Author|# Email|# Comments|
 |------|--------|-------|----------|
 |28MAY16|Donald Delmar Davis|don@suspectdevices.com|Initial document|
+
 ### Background
 We were asked to  convert a 15 year old internet server running freebsd to the cloud. We started by setting up a staging server running Ubuntu 14.04 and migrating the users data and log files from the old server. This provided a backup of the original data and a place where we could work without having to pay for disk or bandwidth before deploying the final product. After a long process of porting all of the users and web sites that the server had served over the decades we began identifying which services, users, and domains were needed on the server. Given a much smaller set of users and web sites that were actually needed, we deployed an AWS image based on the AMI provided by the commercial entity which maintains Ubuntu. The active users users and web content have been installed on this server and the remainder has been archived to an external disk.
 
@@ -161,9 +162,9 @@ The AWS instance is placed in a private network. This network provides the insta
 
 This address is attached to the outside world via an "Elastic" ip (52.34.143.142). To connect the external traffic to the private address you have to create a "Security group" and define the rules which allow traffic in and out of the private network.
 
-* INBOUND RULES 
+####INBOUND RULES
 
-|# protocol|# family|# port|# allow from|
+|protocol|# family|# port|# allow from|
 |----------|--------|------|------------|
 | HTTP | TCP | 80 | 0.0.0.0/0 |
 | SSH | TCP | 22 | 0.0.0.0/0 |

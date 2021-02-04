@@ -1,8 +1,9 @@
 
-# BS2020 (RE)Install Notes
-Installing devstack on server left entirely too much shit everywhere. Realized that devstack should be installed in a container or vm. This page documents the reinstallation of bs2020 using the remote console and admin network.
+# BS2020 (RE)Install
+
+NotesInstalling devstack on server left entirely too much shit everywhere. Realized that devstack should be installed in a container or vm. This page documents the reinstallation of bs2020 using the remote console and admin network.
 ## Firewall Setup
-Allowing access to the server is discussed in the [OpenWRT notes](OpenWRTNotes/) section.
+Allowing access to the server is discussed in the [wiki:OpenWRT OpenWRT notes] section.
 ## Loading a new os via the idrac 6
 
 * log into idrac by browsing (https://vpn.suspectdevices.com)
@@ -17,7 +18,7 @@ Allowing access to the server is discussed in the [OpenWRT notes](OpenWRTNotes/)
 
 ## Post install configuration
 
-* make primary interface static (on admin lan)
+Make primary interface static (on admin lan)
 	
 	root@bs2020:~# nano /etc/network/interfaces
 	...
@@ -31,7 +32,7 @@ Allowing access to the server is discussed in the [OpenWRT notes](OpenWRTNotes/)
 	...
 	root@bs2020:~#
 	
-* update server
+Update server
 	
 	feurig@bs2020:~$ sudo bash
 	[sudo] password for feurig: 
@@ -41,7 +42,7 @@ Allowing access to the server is discussed in the [OpenWRT notes](OpenWRTNotes/)
 	root@bs2020:~# apt-get install openssl-server
 	
 	
-* Add second admin user
+Add second admin user
 	
 	root@bs2020:~# useradd -m joe -c"Joe Dumoulin" -Gsudo,root
 	root@bs2020:~# su - joe
@@ -50,12 +51,13 @@ Allowing access to the server is discussed in the [OpenWRT notes](OpenWRTNotes/)
 	joe@bs2020:~$ nano .ssh/authorized_keys
 	
   _paste key from vpn /etc/dropbear/autorized_keys_
-* Set initial password so that admin can sudo.
+
+Set initial password so that admin can sudo.
 	
 	root@bs2020:~# vipw -s
 	... paste hash from medea ...
 	
-* Consider removing password based ssh authentication once both admins can connect.
+Consider removing password based ssh authentication once both admins can connect.
 
 ## LXC
 

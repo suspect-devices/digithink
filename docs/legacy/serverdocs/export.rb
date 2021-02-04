@@ -11,7 +11,8 @@ OUT_PATH = '/var/trac/markdown'
 
 require 'pg'
 
-con = PG.connect :dbname => 'trac_db', :user => 'trac_db_admin', :password => 'trac2016'
+#con = PG.connect :dbname => 'trac_db', :user => 'trac_db_admin', :password => 'trac2016'
+con = PG.connect :dbname => 'tracdb', :user => 'tracuser', :password => 'password'
 pages =  con.exec 'select name, text from wiki w2 where version = (select max(version) from wiki where name = w2.name);'
 
 pages.each do |row|

@@ -1,7 +1,7 @@
-# ZFS IS ALL THE RAGE!
+# ZFS IS ALL THE RAGE
 Zfs is recomended  by the UBUNTU team for LXC/LXD and it has its positives but just like everything else the damned kids fixed is pleanty fucking broke. It does not play well with others and it will fuck you in the most subtle and substantial ways.
-* look at the disks.
 
+Look at the disks.
 	
 	root@bs2020:~# fdisk -l
 	Disk /dev/sda: 136.8 GiB, 146815733760 bytes, 286749480 sectors
@@ -63,7 +63,7 @@ Zfs is recomended  by the UBUNTU team for LXC/LXD and it has its positives but j
 	
 	root@bs2020:~# 
 	
-* there is no connection between this and zfs.
+There is no connection between this and zfs.
 	
 	root@bs2020:~# zpool status
 	  pool: lxd4dev

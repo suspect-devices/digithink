@@ -1,5 +1,6 @@
-# FIRST IMPRESSIONS: Creating LXD Container with Static IP (and Docker Profile)
-We want to create a docker capable LXD container using an existing bridge with a static ip and zfs. Then we want to install docker and test it. We will make a copy of this container once the admin users have been added so that we wont have to replicate these tasks. Our security model requires ssh keys to log in AND passwords to escalate privileges.
+# FIRST IMPRESSIONS: 
+
+Creating LXD Container with Static IP (and Docker Profile)We want to create a docker capable LXD container using an existing bridge with a static ip and zfs. Then we want to install docker and test it. We will make a copy of this container once the admin users have been added so that we wont have to replicate these tasks. Our security model requires ssh keys to log in AND passwords to escalate privileges.
 
 The first thing we learned is that LXC and LXD are pretty different beasts and that while lxc with lxc-templates is a straightforward way to create containers that act a lot like regular old hardware LXD brings on all of its we love the mother fucking cloud baggage. Major differences had to do with user mapping on the containers files created by root on the host were mapped to nobody on the container, making it really difficult to set up home directories etc. (for a workaround to this see https://stackoverflow.com/questions/33377916/migrating-lxc-to-lxd) The second was the way that the network is initialized with the assumption that LXD would be providing the bridge and the context. 
 
@@ -7,7 +8,6 @@ The first thing we learned is that LXC and LXD are pretty different beasts and t
 
 * create zfs container and bridge as before
 	
-```
 	root@bs2020:~# lxd init
 	... create new zfs pool and use all of /dev/sdd1 do not configure bridge ...
 	root@bs2020:~# dpkg-reconfigure -p medium lxd
@@ -40,11 +40,10 @@ The first thing we learned is that LXC and LXD are pretty different beasts and t
 	>     dns-search suspectdevices.com digithink.com
 	> eod2
 	root@bs2020:/var/lib/lxd/containers/franklin.zfs/rootfs# lxc start franklin
-```	
+	
 * try to log in to instance over the network..... FAIL
 * unlike lxc's ubuntu:16.04, lxd's ubuntu:16.04 has all of the cloud cruft . That and all of the modifications to the containers directory was rootsquashed (rendering it useless).
 	
-```
 	root@bs2020:/var/lib/lxd/containers/franklin.zfs/rootfs# lxc exec franklin bash
 	root@franklin:~# nano /etc/network/interfaces
 	root@franklin:~# cat /etc/network/interfaces
@@ -65,10 +64,9 @@ The first thing we learned is that LXC and LXD are pretty different beasts and t
 	    gateway 198.202.31.129
 	    dns-nameservers 198.202.31.132 198.202.31.141 8.8.8.8
 	    dns-search suspectdevices.com digithink.com
-```	 
+	 
 * _first thought_: remove all of the cloud crap...
 	
-```
 	root@franklin:~# apt-get remove cloud*
 	...
 	The following packages will be REMOVED:
@@ -86,24 +84,21 @@ The first thing we learned is that LXC and LXD are pretty different beasts and t
 	+----------+---------+-----------------------+------+------------+-----------+
 	| franklin | RUNNING | 198.202.31.201 (eth0) |      | PERSISTENT | 0         |
 	+----------+---------+-----------------------+------+------------+-----------+
-```
 	
 * _second thought_: Fuck that! Make it work!
 ## Second attempt
    (create LXD profile for suspect devices development). 
-
-```	
+	
 	root@bs2020:~# lxc stop franklin 
 	root@bs2020:~# lxc delete franklin
 	root@bs2020:~# lxc profile create susdev
 	root@bs2020:~# lxc profile edit susdev
 	... 
-```	
+	
 	
 * repeat until you have a working system that can be logged into remotely
 * create docker container container
 	
-```
 	root@bs2020:~# lxc profile show susdev
 	config:
 	  user.network_mode: link-local
@@ -214,7 +209,7 @@ The first thing we learned is that LXC and LXD are pretty different beasts and t
 	| test13   | RUNNING | 198.202.31.200 (eth0) |      | PERSISTENT | 0         |
 	+----------+---------+-----------------------+------+------------+-----------+
 	root@bs2020:~# 
-```	
+	
 	
 ## References
 * http://www.whiteboardcoder.com/2016/04/cloud-init-nocloud-with-url-for-meta.html

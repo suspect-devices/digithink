@@ -32,4 +32,3 @@ once installed you can use it to get most of its dependencies. _(not sure I like
 * https://www.thingforward.io/techblog/2016-11-22-getting-started-with-platformio-and-esp8266htmlmarkdown.html
 * https://esp8266.github.io/Arduino/versions/2.0.0/doc/ota_updates/ota_updates.html
 * https://www.bakke.online/index.php/2017/06/02/self-updating-ota-firmware-for-esp8266/
-* 

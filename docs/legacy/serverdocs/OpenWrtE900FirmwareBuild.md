@@ -1,4 +1,4 @@
-	
+# OpenWRT E900 Firmware Build
 	feurig@sandbox:~$ cd /home/openwrt/current/openwrt-imagebuilder-18.06.1-brcm47xx-mips74k.Linux-x86_64/
 	feurig@sandbox:/ho..._64$ sudo cat ~joe/.ssh/authorized_keys ~feurig/.ssh/authorized_keys >files/etc/dropbear/authorized_keys
 	feurig@sandbox:/ho...64$ make image PROFILE=linksys-e900-v1 PACKAGES="nano sudo shadow shadow-utils shadow-vipw  -luci -ppp -ppp-mod-pppoe -odhcp6c -odhcpd-ipv6only" FILES="files/"

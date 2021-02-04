@@ -1,3 +1,5 @@
+#Bleading Edge (old)
+
 ### Looking at LTS debian/ubuntu 18.04 for the next 5 years (bs2020/phillip)
 As an excersize we ran up a 17.10 ubuntu container to see what all was going to break when we upgraded. So far the usual suspects (Network configuration, startup etc) are all fucked up. We upgraded this to 18.04 using do-release-upgrade.
 	

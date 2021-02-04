@@ -1,5 +1,4 @@
-# Docker Installation on Franklin
-Once the LXD container for docker was built out I followed the [directions at docker.com](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/) to install docker-ce
+# Docker Installation on FranklinOnce the LXD container for docker was built out I followed the [directions at docker.com](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/) to install docker-ce
 	
 	root@franklin:~# apt-get remove docker docker-engine docker.io
 	...

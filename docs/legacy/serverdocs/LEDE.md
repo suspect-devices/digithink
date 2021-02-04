@@ -1,4 +1,4 @@
-## Building LEDE firmware using imagebuilder
+## Building firmware using imagebuilder
 In the same page as the binary releases for openwrt/LEDE is the image builder for that architecture for instance at the bottom https://downloads.lede-project.org/releases/17.01.4/targets/ar71xx/generic/ there is a link https://downloads.lede-project.org/releases/17.01.4/targets/ar71xx/generic/lede-imagebuilder-17.01.4-ar71xx-generic.Linux-x86_64.tar.xz. which we untar into /home/openwrt/xx.xx.xx/  on the sandbox.suspectdevices.com container (where xx.xx.xx is the release number. Then we can build the image as follows.
 	
 	root@sandbox:~# cd /home/openwrt/17.01.4/lede-imagebuilder-17.01.4-ar71xx-generic.Linux-x86_64

@@ -1,4 +1,4 @@
-Building new firmware
+#Building old LEDE firmware
 	
 	root@sandbox:/home/openwrt/15.05.1/OpenWrt-ImageBuilder-15.05.1-ar71xx-generic.Linux-x86_64/bin/ar71xx# make info
 	....

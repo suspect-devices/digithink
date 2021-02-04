@@ -19,7 +19,6 @@ Our trac server has been setup using the old trac implementation running on 16.0
 * https://stackoverflow.com/questions/6097515/deleting-trac-tickets-created-since-a-certain-date-until-today 
 #### Raw dump of install
 	
-```
 	root@douglas:~# apt-get install git
 	...
 	root@douglas:~# apt-get install mercurial
@@ -430,5 +429,5 @@ Our trac server has been setup using the old trac implementation running on 16.0
 	root@douglas:/var/trac/devel# cp ~feurig/sd_logo_sm.png env/htdocs/
 	root@douglas:/var/trac/devel# chmod oug+r env/htdocs/sd_logo_sm.png 
 	root@douglas:/var/trac/devel# nano env/conf/trac.ini
-```	
+	
 	

@@ -1,4 +1,4 @@
-	
+	# Migrate Users UID/GID
 	apt-get update
 	apt-get dist-upgrade
 	tasksel

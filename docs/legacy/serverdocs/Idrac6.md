@@ -1,3 +1,5 @@
+#Idrac 6 Notes:
+
 The Dell idrac is a very powerful tool allowing remote administration of a server down to bare bones os installation.  The console feature of this tool is based on a Java app which is downloaded from the idrac and which then sets up a vnc style remote console. As the hardware ages this code becomes less and less secure and is often broken but updates to the local os (OS X being ours) and to java. 
 
 When purchasing a dell with idrac capabilities ALWAYS opt for the "Enterprise" edition. 
@@ -50,7 +52,6 @@ As well as access to the f2 key.
 ## Connecting to the console
 * once you can ssh to the idrac set up the serial using racadm
 	
-```
 	steve:~ don$ ssh -p222 feurig@198.202.31.242
 	feurig@198.202.31.242's password: 
 	/admin1-> racadm config -g cfgSerial -o cfgSerialBaudRate 115200
@@ -63,32 +64,29 @@ As well as access to the f2 key.
 	Object value modified successfully
 	/admin1-> racadm config -g cfgIpmiSol -o cfgIpmiSolBaudRate 115200
 	Object value modified successfully
-```	
+	
 * then you can connect to the console
 	
-```
 	/admin1-> console com2
 	
 	Connected to Serial Device 2. To end type: ^\
-```	
+	
 ## fixing grub
 * you need set the console to ttyS1 by adding a console=ttyS1,115200n8 to the end of the kernel line
-
-```	
+	
 	root@bs2020:~# nano /boot/grub/menu.list
 	...
 	kernel          /boot/vmlinuz-4.4.0-96-generic root=UUID=8cafbdf6-441e-4f76-b89c-017fc22253f9 ro console=hvc0 console=ttyS1,115200n8
-```	
+	
 * add the changes to /etc/default/grub so that it will survive updates to the kernel.
-
-```	
+	
 	root@bs2020:~# nano /etc/default/grub
 	...
 	GRUB_TERMINAL='serial console'
 	GRUB_CMDLINE_LINUX="console=hvc0 console=ttyS1,115200n8"
 	GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=1 --word=8 --parity=no --stop=1"
 	root@bs2020:~# update-grub
-```	
+	
 * reboot the server and attach to the console.
 [[Image(post0.png)]]
 

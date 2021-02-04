@@ -1,3 +1,5 @@
+#ZFS Disk Replacement
+
 The process of replacing mirrored zfs disks is fairly simple. The changes are done by zpool attach and detach.
 	
 	zpool detach <pool> <disk-id>
@@ -6,11 +8,12 @@ The process of replacing mirrored zfs disks is fairly simple. The changes are do
 The heavy lifting is done by zfs itself.
 
 ## process
+
 ### PREP
 * use the [pdf article link](http://trac.suspectdevices.com/trac/wiki/ZFSDiskReplacement?format=pdfarticle) to print this before going down 
 * If possible pre wipe and check the disks on a separate linux machine _(note: /dev/sdf is an placeholder for the disk mounted on that system)_
 	
-   ```
+  ```
 	root@homebox:~# wipefs -af --backup /dev/sdf
 	/dev/sdf: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
 	/dev/sdf: 8 bytes were erased at offset 0x222ee64e00 (gpt): 45 46 49 20 50 41 52 54
@@ -33,6 +36,7 @@ The heavy lifting is done by zfs itself.
 ```	
 
 * insure that you can ssh into the box
+
 ### On site
 The following assumes you have escalated to root privileges (sudo bash), in this case we are replacing /dev/sdc and /dev/sdd in the pool named 'level'
 
@@ -40,12 +44,13 @@ The following assumes you have escalated to root privileges (sudo bash), in this
    The following should cause the disk to light up\
  _(<CTRL> C when you have identified the disk. Careful with the if/of here)_.
 	
-   ```
+  ```
 	root@bs2020:~# dd if=/dev/sdc of=/dev/null
 ```	
-* find the disk in the pool.
 
-   ```	
+* find the disk in the pool.
+	
+  ```
 	root@bs2020:~# zpool status
 	  pool: devel
 	 state: ONLINE
@@ -68,12 +73,12 @@ The following assumes you have escalated to root privileges (sudo bash), in this
 	0 lrwxrwxrwx 1 root root  9 Nov 10 21:22 scsi-35000cca00b33a264 -> ../../sdf
 	0 lrwxrwxrwx 1 root root  9 Nov 10 21:22 scsi-3600508e00000000069cf3977618f1408 -> ../../sdg
 	root@bs2020:~# 
-```
+```	
   _We notice above that the disk we are looking for is scsi-35000c5005501b45b_
 
 * detach the disk from the pool.
-  
-  ```	
+	
+  ```
 	root@bs2020:~# zpool detach devel scsi-35000c5005501b45b 
 	root@bs2020:~# zpool status
 	  pool: devel
@@ -95,14 +100,14 @@ The following assumes you have escalated to root privileges (sudo bash), in this
 * even if expanding the disk size insure that auto expand is off.
 	
   ```
-	root@bs2020:~# zpool set autoexpand=off devel
+  	root@bs2020:~# zpool set autoexpand=off devel
 ```	
 
 * Swap out the old disk with the new one. 
 
 * find the new disk's id.  
 
-   ```
+  ```	
 	root@bs2020:~# partprobe
 	root@bs2020:~# ls -ls /dev/disk/by-id/|grep sdc
 	0 lrwxrwxrwx 1 root root  9 Nov 10 21:56 scsi-xxxxxxxxxxxxxxx -> ../../sdc
@@ -119,9 +124,9 @@ The following assumes you have escalated to root privileges (sudo bash), in this
 ```	
 
 * wait for pool to resliver
-	
-  ```
-  	root@bs2020:~# zpool status
+
+  ```	
+	root@bs2020:~# zpool status
 	  pool: devel
 	 state: ONLINE
 	status: One or more devices is currently being resilvered.  The pool will
@@ -159,16 +164,17 @@ The following assumes you have escalated to root privileges (sudo bash), in this
 	
 	errors: No known data errors
 	...
-```
-	
+```	
+
 * if expanding disk check for new size and if not expand it
-	
-* zfs list and check for larger disk pool 
+
+  ```	
+	# zfs list and check for larger disk pool 
+```
 
 * repeat process for disk in bay below (we already know its old id from above).
 
-  ```
-  	
+  ```	
 	root@bs2020:~# dd if=/dev/sdd of=/dev/null
 	root@bs2020:~# zpool detach devel scsi-35000c50054fee503  
 	... swap disks ...
@@ -182,8 +188,7 @@ The following assumes you have escalated to root privileges (sudo bash), in this
 	...
 	root@bs2020:~# zpool attach devel scsi-xxxxxxxxxxxxxx scsi-yyyyyyyyyyyyyyy
 	... wait for resliver...
-```
-	
+```	
 * use the process below to grow disks to new size
 	
   ```
@@ -191,7 +196,7 @@ The following assumes you have escalated to root privileges (sudo bash), in this
 	# zpool online -e devel scsi-xxxxxxxxxxxxxxxxxxxx
 	# zpool online -e devel scsi-yyyyyyyyyyyyyyyyyyy
 	# zpool set autoexpand=off devel  
-```	
+```
 
 ### references
 

@@ -74,7 +74,7 @@ Assuming that your cloud configuration does not overwrite it the following file 
 	root@annie:~# 
 	
 ## And it works for anonymous bridges .... EXCEPT FOR THE BUG
-* Basically if no address is given for a bridge netplan fails to tell systemd to up the interface anyway and the bridges do not come up. 
+Basically if no address is given for a bridge netplan fails to tell systemd to up the interface anyway and the bridges do not come up. 
 	
 	root@bs2020:~# nano /etc/netplan/50-cloud-init.yaml 
 	# This file is generated from information provided by
@@ -141,7 +141,7 @@ http://djanotes.blogspot.com/2018/04/anonymous-bridges-in-netplan.html
 ### Freaking Cloud init
 Need to figure out how much damage is done here...
 
-* Starting with the hostname.
+Starting with the hostname.
 The hostname is now handled by a new command and /etc/cloud/cloud.config needs to be modified to preserve the hostname across boots.
 	
 	feurig@bs2020:~$ sudo bash
@@ -155,12 +155,13 @@ The hostname is now handled by a new command and /etc/cloud/cloud.config needs t
 	root@bs2020:~# reboot
 	
 	
-* Install the root users .
+Install the root users .
+
    One would like for the installer to give you some options for installing the admin team but we just paste the hash from one of the other machines into the shadow password file and copy the home directories for their ssh keys. see wiki:kb2018InstallBashHistory
    	
 	 ( .. tired of winning .... write up later... )
 	
-* install zfs 
+Install zfs 
 	
 	root@bs2020:~# apt-get install nfs-kernel-server samba-common-bin zfsutils-linux
 	

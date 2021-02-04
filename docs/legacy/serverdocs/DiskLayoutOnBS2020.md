@@ -1,3 +1,4 @@
+#BS2020 LXC to LXD Notes 
 When I set up BS2020 a year ago I was new to LXC and LXD (both of which are used at present because I wanted separate disk pools and network for infrastructure and development(/deployment). I believe that once we move from 16.04 to 18.04 we should be able to remove LXC from the equation. Regardless the initial pools were set up using lxd init as described in [wiki:BS2020InstallNotes the install notes for BS2020]. 
 	
 	root@bs2020:~# lxd init

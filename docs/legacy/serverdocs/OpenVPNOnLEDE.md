@@ -1,4 +1,4 @@
-#OpenVPNOnLEDE
+#OpenVPN on LEDE (Fail)
 Now that we have a recent version of the operating system OpenVPN seems to work as advertised. Following the instructions at https://lede-project.org/docs/user-guide/openvpn.server. Much of the heavy lifting is done by easyRSA and MakeOpenVPN.sh. 
 
 The client setups fail if you use an empty passphrase which is good. OTOH In my initial attempts I could not get the server certificates to work with one. When in doubt read the documentation sections on the old openWRT site. It provides a little more depth but there still are some missing pieces that  require more exploration (https://wiki.openwrt.org/doc/howto/vpn.openvpn#tab__using_openssl_commands_most_secure). 
@@ -7,7 +7,6 @@ For the client I used tunnelblick which works well and takes the .ovpn configura
 ### Sample Install
 * follow the bouncing prompt using lede user guide.
 	
-```
 	root@mullein:~# opkg update && opkg install openvpn-openssl openvpn-easy-rsa luci-app-openvpn
 	Downloading ..... 
 	.....note additional dependencies.....
@@ -46,10 +45,9 @@ For the client I used tunnelblick which works well and takes the .ovpn configura
 	Common Name (eg, your name or your server's hostname) [Fort-Funston CA]:mullein
 	Name [EasyRSA]:mullein
 	Email Address [me@myhost.mydomain]:don@suspectdevices.com
-```	
+	
 * plan on the next step taking so long you will probably have to reconnect and pick up where you were...
 	
-```
 	root@mullein:/etc/easy-rsa# build-dh
 	NOTE: If you run ./clean-all, I will be doing a rm -rf on /etc/easy-rsa/keys
 	Generating DH parameters, 2048 bit long safe prime, generator 2
@@ -57,10 +55,9 @@ For the client I used tunnelblick which works well and takes the .ovpn configura
 	.... 
 	.... They are not kidding ....
 	.........................................................................+.....++*++*
-```	
+	
 * continue to follow the bouncing prompt
 	
-```
 	root@mullein:/etc/easy-rsa# build-key-server mullein
 	..... answer the questions ....
 	A challenge password []:
@@ -83,10 +80,9 @@ For the client I used tunnelblick which works well and takes the .ovpn configura
 	Write out database with 1 new entries
 	Data Base Updated
 	root@mullein:/etc/easy-rsa# openvpn --genkey --secret /etc/easy-rsa/keys/ta.key
-```	
+	
 * set up the network and firewall rules.
 	
-```
 	root@mullein:/etc/easy-rsa# openvpn --genkey --secret /etc/easy-rsa/keys/ta.key
 	root@mullein:/etc/easy-rsa# uci set network.vpn0="interface"
 	root@mullein:/etc/easy-rsa# uci set network.vpn0.ifname="tun0"
@@ -121,16 +117,14 @@ For the client I used tunnelblick which works well and takes the .ovpn configura
 	....
 	root@mullein:/etc/easy-rsa# /etc/init.d/firewall reload
 	....
-```	
+	
 * check ip forwarding
 	
-```
 	root@mullein:/etc/easy-rsa# cat /proc/sys/net/ipv4/ip_forward
 	1
-```	
+	
 * edit /etc/config/openvpn, enable and restart daemon.
 	
-```
 	root@mullein:/etc/easy-rsa# nano /etc/config/openvpn
 	... add the following (change name, cert, and key to match your server) ...
 	##########################################################
@@ -181,10 +175,9 @@ For the client I used tunnelblick which works well and takes the .ovpn configura
 	Thu Oct 26 00:22:46 2017 IFCONFIG POOL: base=10.9.0.2 size=252, ipv6=0
 	Thu Oct 26 00:22:46 2017 Initialization Sequence Completed
 	...
-```	
+	
 * create client cert.
 	
-```
 	root@mullein:~# cd /etc/easy-rsa/
 	root@mullein:/etc/easy-rsa# source vars
 	NOTE: If you run ./clean-all, I will be doing a rm -rf on /etc/easy-rsa/keys
@@ -220,11 +213,9 @@ For the client I used tunnelblick which works well and takes the .ovpn configura
 	Enter PEM pass phrase:
 	Verifying - Enter PEM pass phrase:
 	root@mullein:/etc/easy-rsa# 
-```
 	
 * MakeOpenVPN.sh script (install missing dependencies)
 	
-```
 	root@mullein:/etc/easy-rsa# cd keys
 	root@mullein:/etc/easy-rsa/keys# wget https://gist.githubusercontent.com/ivanmarban/57561e2bacf3b3a709426d353d2b6584/raw/30bf3c86fbc95a0a
 	5d53d0aac348bcebdc9aa2eb/MakeOpenVPN.sh -O /etc/easy-rsa/keys/MakeOpenVPN.sh
@@ -239,10 +230,9 @@ For the client I used tunnelblick which works well and takes the .ovpn configura
 	/etc/easy-rsa/keys/M 100% |*******************************|  1839   0:00:00 ETA
 	Download completed (1839 bytes)
 	root@mullein:/etc/easy-rsa/keys# chmod oug+x MakeOpenVPN.sh 
-```	
+	
 * configure and run script.
 	
-```
 	root@mullein:/etc/easy-rsa/keys# nano Default.txt
 	... Add the following, Adjust host name accordingly ....
 	client
@@ -280,7 +270,6 @@ For the client I used tunnelblick which works well and takes the .ovpn configura
 	CA public Key found: ca.crt
 	tls-auth Private Key found: ta.key
 	Done! donathome.ovpn Successfully Created.
-```
 	
 ### References (Link Dump)
 * https://help.my-private-network.co.uk/support/solutions/articles/24000005597-openwrt-lede-openvpn-setup

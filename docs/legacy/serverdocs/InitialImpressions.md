@@ -1,4 +1,6 @@
-# You may say to yourself "Well, How did I get here?"
+#Overview
+
+You may say to yourself "Well, How did I get here?"
 _(first attempts at setting things up)_
 
 This is my collection of notes on how the servers we own and operate were set up. 
@@ -10,7 +12,7 @@ This is my collection of notes on how the servers we own and operate were set up
 #### BS2020
 BS2020 is an upgrade for bernie with an eye on modern hardware and virtualization. The hardware is a Dell R610 from Server Monkey with 12 processors and 96 Gig of memory. 
 
-[wiki:BS2020InstallNotes BS2020 Install Notes]
+[BS2020 Install Notes](BS2020InstallNotes)
 
 #### KB2020
 The addition of a second server is planned using similar hardware. 
@@ -30,7 +32,7 @@ The addition of a second server is planned using similar hardware.
 
 For years now Medea (a pile of junk that Joe found) has been providing DNS, Websites and Email to all of our domains. (including this site until recently) These services have been migrated to LXC containers and moved to BS2020.
 
-[wiki:MigratingServicesToLXC Server Migration -- Theory and practice]
+[Server Migration -- Theory and practice](MigratingServicesToLXC/)
 
 
 #### Admin Network (Currently the dot 1)
@@ -45,10 +47,10 @@ The availability of cheap wifi routers capable or running openwrt or dd-wrt make
 
 
 
-=#### OpenWRT=
-[wiki:OpenWRT OpenWRT Setup]
+#### OpenWRT
+[OpenWRT Setup](OpenWRT/)
 
-=#### Remote Control (Dell IDRAC)=
+#### Remote Control (Dell IDRAC)
 
 ## Other stuff on the site
 * [wiki:7900NWashburne Home Network adventures]
