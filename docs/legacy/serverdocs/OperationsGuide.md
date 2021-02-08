@@ -1,6 +1,6 @@
 # Server Modernization Phase II
 ## Overview 
-[[Image(OperationsGuide:ContainerShip.jpg)]]
+![](images/ContainerShip.jpg)
 ### Phase I
 Phase one of the server modernization shifted away from multipurposed servers and kvms to lxc/lxd based containers.
 * Moving all legacy system functions onto separate linux containers isolated from each other.
@@ -119,13 +119,13 @@ The host machines for the containers can be accessed through the admin lan. Curr
  
 #### Current ssh port mappings to vpn.suspectdevices.com
 
- |port|destination|
- |----|-----------|
- | 22  | bs2020 ssh via admin lan |
- | 222 | bs2020 racadm / serial console via ssh |
- | 2222 | knight / vpn |
- | 22222 |kb2018 ssh via admin lan |
- | 22223 |kb2018 hpILO / serial console via ssh |
+| port | destination |
+|----|-----------|
+| 22  | bs2020 ssh via admin lan |
+| 222 | bs2020 racadm / serial console via ssh |
+| 2222 | knight / vpn |
+| 22222 |kb2018 ssh via admin lan |
+| 22223 |kb2018 hpILO / serial console via ssh |
  
 _note: as of a few updates ago you have to tell apples ssh client to use ssh-dss as below_
 	
@@ -221,9 +221,10 @@ https://bitbucket.org/suspectdevicesadmin/ansible/src/master/roles/create_lxd_co
 .....YOU ARE HERE.....
 _documenting the ansible script to create containers_.
 ## Backing Up Containers
+Backing up containers using ansible is depreciated. A python script and cron tab create nightly snapshots and moves them to bs2020.
 	
 	cd /etc/ansible ;screen -L time ansible-playbook playbooks/backup-lxd-containers.yml -vvv -i importants
 	
 https://bitbucket.org/suspectdevicesadmin/ansible/src/master/roles/snapshot_lxd_containers/tasks/main.yml
-.... document current ansible script ....
+
 #  links.... review / [Cruft](Cruft/) ..
