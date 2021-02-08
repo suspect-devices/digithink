@@ -72,7 +72,7 @@ port| Interface| IP Address/mask |  linux device| purpose
 
 As Drawn|As Deployed.
 ---|---
-<img src="images/IMG_1402.jpg" width="80%"> | <img src="images/r610Network.jpg" width="70%">
+![](images/IMG_1402.jpg) | ![](images/r610Network.jpg)
 
 
 |   |   |   |   |    kb2018 ports|
@@ -86,7 +86,7 @@ As Drawn|As Deployed.
 
 As Drawn|As Deployed.
 ---|---
-<img src="images/IMG_1401.jpg" width="80%"> | <img src="images/DL380Network.jpg" width="70%">
+![](images/IMG_1401.jpg) | ![](images/DL380Network.jpg)
 
 See: ​[https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts](https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts) which is built referencing [a google doc with proposed allocations](https://docs.google.com/spreadsheets/d/1KRkqdYvgRtV4vu6AGzdLWJVGTIsV2o2iSSJBEFMZJAw/edit#gid=0)
 
