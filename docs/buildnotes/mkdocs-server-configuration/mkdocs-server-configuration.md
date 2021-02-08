@@ -29,7 +29,8 @@ I found this [python based script (trac2down.py)](https://gist.githubusercontent
 
 [export.py](export.py)
 
-... add some explanation for getting the resulting 
+... add some explanation for getting the resulting the converted markdown to the mkdocs servers...
+
 ### Building the static web site (staging server).
 
     cd /theflatfield/static/digithink/
@@ -51,6 +52,58 @@ I found this [python based script (trac2down.py)](https://gist.githubusercontent
     root@nina:/# service lighttpd restart
  
 ### Moving the site to production. 
-The source code for the site is on github under feurig/digithink. Any changes made to the source files (like this one) should be pushed. Then the site is updated and rebuilt on herbert our lightttpd server (serves digitihink,busholini, and 3dangst).
+The source code for the site is on github under feurig/digithink. Any local changes made to the source files (like this one) should be pushed. 
+
+    hoffa:docs don$ git commit -a -m "Start documenting process for mkdoc -> static site"
+	...
+	hoffa:docs don$ git push
+	
+Then the site is updated and rebuilt on herbert our lightttpd server (serves digitihink,busholini, and 3dangst).
+
+	root@kurt:~# cd /var/www/digithink
+	root@kurt:/var/www/digithink# git pull
+	remote: Enumerating objects: 21, done.
+	remote: Counting objects: 100% (21/21), done.
+	remote: Compressing objects: 100% (10/10), done.
+	remote: Total 16 (delta 5), reused 15 (delta 4), pack-reused 0
+	Unpacking objects: 100% (16/16), done.
+	From github.com:feurig/digithink
+	   89bf97d..d563f50  main       -> origin/main
+	Updating 89bf97d..d563f50
+	Fast-forward
+	 .gitignore                                                    |  3 ++
+	 docs/buildnotes/mkdocs-server-configuration/export.py         | 68 ++++++++++++++++++++++++++++
+	 .../mkdocs-server-configuration}/export.rb                    |  0
+	 .../mkdocs-server-configuration.md                            | 56 +++++++++++++++++++++++
+	 4 files changed, 127 insertions(+)
+	 create mode 100644 .gitignore
+	 create mode 100644 docs/buildnotes/mkdocs-server-configuration/export.py
+	 rename docs/{legacy/serverdocs => buildnotes/mkdocs-server-configuration}/export.rb (100%)
+	 create mode 100644 docs/buildnotes/mkdocs-server-configuration/mkdocs-server-configuration.md
+
+Since we created several buildnotes repositories before we started this project we imported them as submodules. We need to sync and update these as well.
+
+	root@kurt:/var/www/digithink# git submodule sync
+	Synchronizing submodule url for 'docs/buildnotes/edge-server-configuration'
+	Synchronizing submodule url for 'docs/buildnotes/gitea-configuration'
+	Synchronizing submodule url for 'docs/buildnotes/redmine-configuration'
+	root@kurt:/var/www/digithink# git submodule update
+
+Then we update the live site.
+
+	root@kurt:/var/www/digithink# mkdocs build
+	INFO    -  Cleaning site directory 
+	INFO    -  Building documentation to directory: /var/www/digithink/site 
+	INFO    -  Documentation built in 3.22 seconds 
+	root@kurt:/var/www/digithink# chown -R www-data:www-data site/
+
+
+
+
+
+	
+
+	
+
 
 
