@@ -1,12 +1,16 @@
 # Server Modernization
 ## Overview 
+
 ![](images/ContainerShip.jpg)
+
 ### Phase I
+
 Phase one of the server modernization shifted away from multipurposed servers and kvms to lxc/lxd based containers.
 * Moving all legacy system functions onto separate linux containers isolated from each other.
 * Use mirrored disk systems to insure that disk corruption does not lead to data corruption.
 * Start giving a shit about the systems, code, and sites on them.
 * Own your code/data. (If your free code hosting system is shutdown or taken over by Microsoft is it really free)
+
 ### Server Modernization Phase II
 
 Phase two extends on this by integrate Ansible into system maintenance tasks.
@@ -17,6 +21,7 @@ Phase two extends on this by integrate Ansible into system maintenance tasks.
 * Clean up the cruft (If it doesn't bring you joy DTMFA)
 
 ### SMP III _Make Shit Happen / Own Your Shit_
+
 * Work on secure and efficient traffic in and out of home lans (Privoxy,DNS based ad blocking,squid etc) 
 * Continue to refine server operation/maintanance.
 * Build Gitlab and other alternatives to trac/git and evaluate workflows.
@@ -28,20 +33,28 @@ Phase two extends on this by integrate Ansible into system maintenance tasks.
 
 
 ### Goals.
+
 * Security
 * Flexibility
 * Simplification
+
 ### Isolation
+
 * network
 * performance
 * disk
+
 ## Hardware
+
 At present the environment  contains a vpn capable router (Knight) and two enterrise class servers 
+
 * bs2020 , a Dell PowerEdge R610 [[br]]and 
 * kb2018 a HP ProLiant DL380 (g7) .
 
 ## Network
+
 The network is divided into 3 segments 
+
 * 192.168.31.0/24 a private administrative lan
 * tbd.tbd.tbd.tbd/? a private vpn for home offices
 * 198.202.31.129/25 A public facing lan.
@@ -57,7 +70,9 @@ port| Interface| IP Address/mask |  linux device| purpose
  4 |  br0  |  0.0.0.0/0 | eno4 |Public Interface for dev/deploymant servers
  idrac |   |  192.168.31.121/24 | |remote console
 
-<!--||||||[[Image(OperationsGuide:IMG_1402.jpg,80%)]]||||[[Image(OperationsGuide:r610Network.jpg,70%)]]-->
+As Drawn|As Deployed.
+---|---
+<img src="images/IMG_1402.jpg" width="80%"> | <img src="images/r610Network.jpg" width="70%">
 
 
 |   |   |   |   |    kb2018 ports|
@@ -69,9 +84,11 @@ port| Interface| IP Address/mask |  linux device| purpose
 | 1 |  br0  |  0.0.0.0/32 | enp3s0f0 |Public Interface for dev/deploymant servers|
 | ilo |   |  192.168.31.119/24 | |remote console|
 
-<!--|||||||[[Image(OperationsGuide:IMG_1401.jpg,70%)]]||||[[Image(OperationsGuide:DL380Network.jpg,70%)]]-->
+As Drawn|As Deployed.
+---|---
+<img src="images/IMG_1401.jpg" width="80%"> | <img src="images/DL380Network.jpg" width="70%">
 
-See: ​https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts which is built referencing [a google doc with proposed allocations](https://docs.google.com/spreadsheets/d/1KRkqdYvgRtV4vu6AGzdLWJVGTIsV2o2iSSJBEFMZJAw/edit#gid=0)
+See: ​[https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts](https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts) which is built referencing [a google doc with proposed allocations](https://docs.google.com/spreadsheets/d/1KRkqdYvgRtV4vu6AGzdLWJVGTIsV2o2iSSJBEFMZJAw/edit#gid=0)
 
 ## Server OS, Filesystems and Disk layout
 The servers are both running a standard install Ubuntu Server LTS, along with the Canonical supported LXD "snap". Outside of zfs not much is added to the stock installation. This is intentional. Since the real work is done by the containers the host os is considered disposable and can be rebuilt without effecting production.
@@ -181,9 +198,12 @@ _ if the serial port is still in use do the following _
 	</>hpiLO-> stop /system1/oemhp_vsp1
 	
 ### bs2020/kb2018 graphical console access
+
 bs2020 allows complete control of the system via a Dell Idrac 6 controller. This also requires access to the admin lan. This is described on the [wiki:NotesOnIdrac6 Idrac 6 page]
 kb2020 allows similar using the on board described on the [wiki:NotesOnILO3 ILO 3 Notes page.]
+
 ### ssh access to containers
+
 The susdev profile adds ssh keys and sudo passwords for admin users allowing direct ssh access to the container.
 	
 	steve:~ don$ ssh feurig@ian.suspectdevices.com
@@ -197,6 +217,7 @@ The containers can be accessed directly from the lxc/lxd host as root
 	
 
 ## Updating dns
+
 Dns is provided by bind , The zone files have been consolidated into a single directory under /etc/bind/zones  on naomi (dns.suspectdevices.com).
 	
 	root@naomi:/etc/bind/zones# nano suspectdevices.hosts
@@ -219,6 +240,7 @@ Dns is provided by bind , The zone files have been consolidated into a single di
 	
 	
 ## Updating Hosts / Containers
+
 When updates are available Apticron sends us an email. We prefer this to autoupdating our hosts as it helps us maintain awareness of what issues are being addressed and does not stop working when there are issues. All hosts in /etc/asnsible/hosts on kb2018 shoul be updated using the following add hoc command. 
 
 	
@@ -235,7 +257,9 @@ https://bitbucket.org/suspectdevicesadmin/ansible/src/master/files/update.sh
 https://bitbucket.org/suspectdevicesadmin/ansible/src/master/roles/create_lxd_containers/tasks/main.yml
 .....YOU ARE HERE.....
 _documenting the ansible script to create containers_.
+
 ## Backing Up Containers
+
 Backing up containers using ansible is depreciated. A python script and cron tab create nightly snapshots and moves them to bs2020.
 	
 	cd /etc/ansible ;screen -L time ansible-playbook playbooks/backup-lxd-containers.yml -vvv -i importants
