@@ -1,4 +1,4 @@
-# Server Modernization Phase II
+# Server Modernization
 ## Overview 
 ![](images/ContainerShip.jpg)
 ### Phase I
@@ -7,15 +7,26 @@ Phase one of the server modernization shifted away from multipurposed servers an
 * Use mirrored disk systems to insure that disk corruption does not lead to data corruption.
 * Start giving a shit about the systems, code, and sites on them.
 * Own your code/data. (If your free code hosting system is shutdown or taken over by Microsoft is it really free)
-### Phase II
+### Server Modernization Phase II
+
 Phase two extends on this by integrate Ansible into system maintenance tasks.
- 
+
 * Integrate Ansible into system maintenance tasks
-* Reevaluate Centos and other RPM based containers built using playbooks vs profiles/scripts/cloud-init
-* while maintaining current security model
-* Build Gitlab and other alternatives to trac/git and evaluate workflows.
+* Reevaluate Centos and other RPM based containers built using playbooks vs profiles/scripts/cloud-init _while maintaining current security model_
+* Develop off site backup strategy.
 * Clean up the cruft (If it doesn't bring you joy DTMFA)
- 
+
+### SMP III _Make Shit Happen / Own Your Shit_
+* Work on secure and efficient traffic in and out of home lans (Privoxy,DNS based ad blocking,squid etc) 
+* Continue to refine server operation/maintanance.
+* Build Gitlab and other alternatives to trac/git and evaluate workflows.
+* Deploy off site backup strategy.
+* Build out content. 
+* Start new projects.
+* Distribute data and backups over the network to home servers.
+* [Document home server/network setup](edge-server-configuration/)
+
+
 ### Goals.
 * Security
 * Flexibility
@@ -99,19 +110,23 @@ On kb2018 the second pair of disks are Solid State. The first partition on each 
 |sdb2|devel|2|zfs| | zfs cache (proposed) |
 
 ### Hardware raid on the DL380
+
 The raid controller on the Dell allows a mixing of hardware raid and direct hot swappable connections. The HP 420i does only hardware raid or direct connections (HBA) but not both. Since we use the hardware raid the remaining disks need to be configured using the ssacli or the raid controllers bios.
 See: DudeWhereAreMyDisks
 
 ## Containers
+
 Work previously done by standalone servers is now done though LXD managed containers. [#fn1 (1)]
 An up to date list of containers is maintained at  https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts''
 
 ## Ansible
+
 Ansible is used to make most tasks reasonable including.
 * creating containers
 * updating containers
 * updating admin passwords and ssh keys.
 * accessing 
+
 # Tasks: Accessing Hosts
 ### bs2020/kb2020 ssh access
 The host machines for the containers can be accessed through the admin lan. Currently this is done through ssh redirection. Eventually it will require a vpn connection. Only ssh key access is allowed and root is not allowed to login. To escalate privileges requires sudo. 

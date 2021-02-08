@@ -10,10 +10,11 @@
 * Own your code/data. (If your free code hosting system is shutdown or taken over by Microsoft is it really free)
 * Clean up the cruft (If it doesn't bring you joy DTMFA)
  
- ### Server Modernization Phase II
+### Server Modernization Phase II
 * Integrate Ansible into system maintenance tasks
 * Reevaluate Centos and other RPM based containers built using playbooks vs profiles/scripts/cloud-init _while maintaining current security model_
 * Develop off site backup strategy.
+
 ### SMP III _Make Shit Happen / Own Your Shit_
 * Work on secure and efficient traffic in and out of home lans (Privoxy,DNS based ad blocking,squid etc) 
 * Continue to refine server operation/maintanance.
