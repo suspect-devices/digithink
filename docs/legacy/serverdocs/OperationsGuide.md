@@ -61,18 +61,19 @@ The network is divided into 3 segments
 
 The hosts themselves do not have any public facing interfaces and are only accessible though the admin lan. The containers which handle all public facing work do so via an anonymous bridge configuration, allowing them to access the internet directly without allowing external access to the servers.
 
-   |   |   |   |  bs2020 ports
----|---|---|---|-----------------
-port| Interface| IP Address/mask |  linux device| purpose
- 1 |  eno1  |   192.168.31.158/24  | eno1 |internal / admin lan
- 2 |  ?  | ?.?.?.?/?? | eno2 | vpn for home/office networks
- 3 |  br1  | 0.0.0.0/0 | eno3 |Public Interface for infrastructure servers
- 4 |  br0  |  0.0.0.0/0 | eno4 |Public Interface for dev/deploymant servers
- idrac |   |  192.168.31.121/24 | |remote console
+|   |   |   |   |  bs2020 ports|
+|---|---|---|---|-----------------|
+|port| Interface| IP Address/mask |  linux device| purpose|
+| 1 |  eno1  |   192.168.31.158/24  | eno1 |internal / admin lan|
+| 2 |  ?  | ?.?.?.?/?? | eno2 | vpn for home/office networks|
+| 3 |  br1  | 0.0.0.0/0 | eno3 |Public Interface for infrastructure servers|
+| 4 |  br0  |  0.0.0.0/0 | eno4 |Public Interface for dev/deploymant servers|
+| idrac |   |  192.168.31.121/24 | |remote console|
 
 As Drawn|As Deployed.
 ---|---
 ![](images/IMG_1402.jpg) | ![](images/r610Network.jpg)
+
 
 
 |   |   |   |   |    kb2018 ports|
@@ -87,6 +88,7 @@ As Drawn|As Deployed.
 As Drawn|As Deployed.
 ---|---
 ![](images/IMG_1401.jpg) | ![](images/DL380Network.jpg)
+
 
 See: ​[https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts](https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts) which is built referencing [a google doc with proposed allocations](https://docs.google.com/spreadsheets/d/1KRkqdYvgRtV4vu6AGzdLWJVGTIsV2o2iSSJBEFMZJAw/edit#gid=0)
 
