@@ -10,3 +10,6 @@
 [submodule "docs/buildnotes/edge-server-configuration"]
 	path = docs/buildnotes/edge-server-configuration
 	url = git@github.com:feurig/edge-server-configuration.git
+[submodule "docs/buildnotes/ansible"]
+	path = docs/buildnotes/ansible
+	url = git@bitbucket.org:suspectdevicesadmin/ansible.git
