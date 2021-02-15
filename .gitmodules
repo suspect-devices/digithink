@@ -13,3 +13,6 @@
 [submodule "docs/buildnotes/ansible"]
 	path = docs/buildnotes/ansible
 	url = git@bitbucket.org:suspectdevicesadmin/ansible.git
+[submodule "docs/buildnotes/config"]
+	path = docs/buildnotes/lede-config
+	url = git@bitbucket.org:houselan/config.git
