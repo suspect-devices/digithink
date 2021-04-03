@@ -1,6 +1,18 @@
-site_name: buggy
+site_name: D. Delmar Davis
 
 theme:
   name: material
+  palette:
+    primary: white
+    accent: red
+  font:
+#    text: Courier Prime
+    text: JetBrains Mono
+#    text: Share Tech Mono
+  logo: images/think2t.png.svg
+  favicon: images/favicon.png
   features:
-    - navigation.sections
+    - navigation.expand
+
+plugins:
+    - with-pdf
