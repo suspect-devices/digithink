@@ -1,4 +1,4 @@
-<!-- GoldCoastRouter, Version: 6, Modified: 2020/08/29, Author: feurig -->
+<!-- GoldCoastRouter, Version: 6, Modified: 2021/04/15, Author: feurig -->
 #Gold Coast
 
  Gold Coast (goldcoast.lan) is the house router for portland. The configuration and this doc are at https://bitbucket.org/houselan/config/src/master/
@@ -28,7 +28,7 @@ The Ubiquity EdgeRouter Lite is my new favorite OpenWrt device. It is fast and i
 	feurig@vasily:~$ git clone https://git.openwrt.org/openwrt/openwrt.git
 	
 
-* Building for the target
+Building for the target
 	
 	feurig@vasily:~$ cd openwrt/
 	feurig@vasily:~/openwrt$ make clean
@@ -43,12 +43,12 @@ The Ubiquity EdgeRouter Lite is my new favorite OpenWrt device. It is fast and i
 
 ### Deploying the image
 
-* download the image from vasily 
+Download the image from vasily 
 	
 	feurig@colbert:~ $ scp feurig@wrt.suspectdevices.com:firmware/openwrt-octeon-ubnt_edgerouter-lite-ext4-sysupgrade.tar.gz .
 	
 
-* Format the stick with 2 partitions (142M dos and the lemaining linux)
+Format the stick with 2 partitions (142M dos and the lemaining linux)
 	
 	root@colbert:~ # fdisk -l
 	... On our machine, this is our disk ...
@@ -69,7 +69,7 @@ The Ubiquity EdgeRouter Lite is my new favorite OpenWrt device. It is fast and i
 	root@colbert:/home/feurig# mkfs.ext4 /dev/sda2
 	
 
-* copy firmware to usb stick
+Copy firmware to usb stick
 	
 	root@colbert:~ # mkdir scratch
 	root@colbert:~ # cd scratch/
@@ -87,7 +87,7 @@ The Ubiquity EdgeRouter Lite is my new favorite OpenWrt device. It is fast and i
 
 ### Fixing the bootloader for standard USB Sticks.
 
-* If the usb stick used takes longer than the stock one to initialize the boot will fail.
+If the usb stick used takes longer than the stock one to initialize the boot will fail.
 	
 	don$ screen /dev/tty.usbserial 115200
 	...
@@ -109,7 +109,7 @@ The Ubiquity EdgeRouter Lite is my new favorite OpenWrt device. It is fast and i
 	No device found. Not initialized?                                                                                                                  0 
 	
 
-* Getting the stock boot command
+Getting the stock boot command
 	
 	Octeon ubnt_e100# printenv               
 	bootdelay=0
@@ -121,7 +121,7 @@ The Ubiquity EdgeRouter Lite is my new favorite OpenWrt device. It is fast and i
 	bootcmd=fatload usb 0 $loadaddr vmlinux.64;bootoctlinux $loadaddr coremask=0x3 root=/dev/sda2 rootdelay=15 rw rootsqimg=squashfs.img rootsqwdir=w mtd
 	...
 	
-* Copy the bootcmd from the existing environment and add a delay and usb reset
+Copy the bootcmd from the existing environment and add a delay and usb reset
 	
 	Octeon ubnt_e100# setenv bootcmd 'sleep 10;usb reset;fatload usb 0 $loadaddr vmlinux.64;bootoctlinux $loadaddr coremask=0x3 root=/dev/sda2 rootdelay=15 rw rootsqimg=squashfs.img rootsqwdir=w mtd'
 	Octeon ubnt_e100# saveenv
