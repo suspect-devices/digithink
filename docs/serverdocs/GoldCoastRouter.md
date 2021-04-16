@@ -23,7 +23,7 @@ The Ubiquity EdgeRouter Lite is my new favorite OpenWrt device. It is fast and i
 
 ## How do I get set up?
 ### Building 19.07 for the device
-* Getting the source. See LEDE documentation for dependencies.
+Getting the source. See LEDE documentation for dependencies.
 	
 	feurig@vasily:~$ git clone https://git.openwrt.org/openwrt/openwrt.git
 	
