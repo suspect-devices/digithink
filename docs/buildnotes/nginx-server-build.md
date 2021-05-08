@@ -171,11 +171,69 @@ root@guenter:/var/www#
 
 Part of this servers job is to serve this documentation. The static content is generated from markdown maintained in a git repository. To get the html we use mkdocs as described in [this document](https://www.digithink.com/buildnotes/mkdocs-server-configuration/mkdocs-server-configuration/). 
 
+
 ```
 Hoffa-6:Documents don$ cd /Volumes/TheFlatField/static/digithink/docs/
 Hoffa-6:docs don$ git add buildnotes/nginx-server-build.md 
+Hoffa-6:docs don$ git commit -a -m"add ngnix server docs"
+[main 44590d5] add ngnix server docs
+ 1 file changed, 188 insertions(+)
+ create mode 100644 docs/buildnotes/nginx-server-build.md
+Hoffa-6:docs don$ git push
+...
+To github.com:feurig/digithink.git
+   8d8f2c1..44590d5  main -> main
+Hoffa-6:docs don$ 
+```
 
+In order to pull the content we need to add the ssh key to the github repository.
 
+```
+root@guenter:/var/www/digithink/docs# git pull
+The authenticity of host 'github.com (192.30.255.112)' can't be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'github.com,192.30.255.112' (RSA) to the list of known hosts.
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+...
+root@guenter:/var/www/digithink/docs# ssh-keygen 
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa): 
+...
+root@guenter:/var/www/digithink/docs# cat /root/.ssh/id_rsa.pub 
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDjUUSJi9AOkqLW85EAUkmRGGbdRiACSKhtOTNifL4Twf/PQM/ViGIAj/nkA97fdvVRpA93f7C/9hXPGd+ZCe3S5mm2KN8yxi6pqq+y6AZ/vN58c3zeHT1YQerqzRM9WP59bQOq2uuLpH65BmcMwq1hLY+wHW5c+mIUyrWOictg0gT8QzZdJ95hFsUkkfQWi90PID1MmiWdNhnOKPqUHTjbdv4Vljg6OwgguRUJd2OGRxodRON0OuWqQK7A4JKqVF3LYk5ym0R+xWmFDaskxmTqlbHd1xeka4GturOec4GsJujl86iM1kre8v0Mgtw2Op+xRVlcd1ltlg1iTSNHGGx38X+x70SQCiErWDTVzxM90HgGG8enTN+3Mz69FZORmI2Ml0+sXesgWnblFbSNFCG0YytOVSWHORwc/+l1ZGP4AigCkQJ8/3pUex7ccJoFcvhbJ8e1KGRPnlL9/BVm3baZb8iATZMb8puZoMxE/kutM8nuhP+pjQ04iU2QXXl62xs= root@guenter
+
+```
+
+Then we can regenerate the content
+
+```
+root@guenter:/var/www/digithink/docs# git pull
+Warning: Permanently added the RSA host key for IP address '192.30.255.113' to the list of known hosts.
+...
+create mode 100644 docs/buildnotes/nginx-server-build.md
+root@guenter:/var/www/digithink/docs# cd ..
+root@guenter:/var/www/digithink# ls
+docs  mkdocs.yml  site
+root@guenter:/var/www/digithink# nano mkdocs.yml 
+root@guenter:/var/www/digithink# mkd
+mkdir   mkdocs  
+root@guenter:/var/www/digithink# git submodule sync
+Synchronizing submodule url for 'docs/buildnotes/ansible'
+Synchronizing submodule url for 'docs/buildnotes/edge-server-configuration'
+root@guenter:/var/www/digithink# mkdocs build
+INFO    -  Cleaning site directory 
+INFO    -  Building documentation to directory: /var/www/digithink/site 
+INFO    -  Number headings up to level 3. 
+INFO    -  Generate a table of contents up to heading level 2. 
+INFO    -  Generate a cover page with "default_cover.html.j2". 
+INFO    -  Converting <img> alignment(workaround). 
+INFO    -  Rendering for PDF. 
+INFO    -  Output a PDF to "/var/www/digithink/site/pdf/document.pdf". 
+INFO    -  Converting 93 articles to PDF took 41.1s 
+INFO    -  Documentation built in 43.43 seconds 
+root@guenter:/var/www/digithink# chown -R www-data:www-data site/
 ```
 
 
