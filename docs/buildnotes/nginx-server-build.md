@@ -1,9 +1,9 @@
 # Nginx Server Build
-I am looking at nginx to serve the static sites previously served by lighttpd (www.digithink.com, www.busholini.org) with encryption. Hopefully I can get it to autoupdate the certbot/letsencrypt certificates.
+After lighthttpd left me with a broken configuration during the last round of updates, I started looking at nginx to serve the static sites previously served (www.digithink.com[this site], www.busholini.org). Since it and apache are both supported by the eff's certbot I was hoping that the automatic configuration and renewal features would work. And they did. 
 
 ## Nginx install.
 ### Broke it the first try.
-Nginx's debian package installs a default web server configuration which breaks if ipv6 is disabled. 
+Nginx's debian package installs a default web server configuration which breaks if ipv6 is disabled. This breaks at the package installation. Not cool at all.
 #### The broken.
 
 ```
@@ -25,6 +25,7 @@ May 08 09:34:46 guenter systemd[1]: Failed to start A high performance web serve
 ```
 
 #### The fix.
+To fix this we correct the bad configuration file and reinstall the package.
 
 ```
 root@guenter:/etc/nginx# nano sites-available/default 
@@ -87,8 +88,8 @@ server {
 
 Even though this site is static and public we still want to add SSL to the site to prevent the content from being altered along the way.
 
-#### Certbot work as advertized. 
-The first couple of web pages I found on the web described the automagic creation and configuration of certificate and once I replaced python-certbot-nginx with python3-cerbot-nginx things actually went brilliantly.
+#### Certbot actually worked as advertized for the first time. 
+The first couple of web pages I found on the web described the automagic creation and configuration of certificate and once I replaced python-certbot-nginx with python3-cerbot-nginx things actually went brilliantly. No more --manual reinstallation.
 
 ```
 root@guenter:/var/www# apt-get install python3-certbot-nginx
