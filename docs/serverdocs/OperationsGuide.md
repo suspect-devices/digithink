@@ -7,6 +7,7 @@
 ### Phase I
 
 Phase one of the server modernization shifted away from multipurposed servers and kvms to lxc/lxd based containers.
+
 * Moving all legacy system functions onto separate linux containers isolated from each other.
 * Use mirrored disk systems to insure that disk corruption does not lead to data corruption.
 * Start giving a shit about the systems, code, and sites on them.
@@ -269,4 +270,4 @@ Backing up containers using ansible is depreciated. A python script and cron tab
 	
 https://bitbucket.org/suspectdevicesadmin/ansible/src/master/roles/snapshot_lxd_containers/tasks/main.yml
 
-#  links.... review / [Cruft](Cruft/) ..
+#  links.... (tbd)
