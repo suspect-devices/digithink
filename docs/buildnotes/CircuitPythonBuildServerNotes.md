@@ -14,7 +14,7 @@ sudo pip3 install cascadetoml
 sudo apt-get install gcc-arm-none-eabi
 ```
 
-This should allow you to check out the source code for circuitpython as a user.
+This should allow you to check out the source code for circuitpython as a user. As per their suggestions I forked the repo first.
 
 ```
 git clone git@github.com:suspect-devices/circuitpython.git

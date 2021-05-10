@@ -25,7 +25,7 @@ May 08 09:34:46 guenter systemd[1]: Failed to start A high performance web serve
 ```
 
 #### The fix.
-To fix this we correct the bad configuration file and reinstall the package.
+To fix this we correct the bad configuration file that was installed and reinstall the package. I could also have (dpkg -a --configure)d here.
 
 ```
 root@guenter:/etc/nginx# nano sites-available/default 
@@ -236,7 +236,8 @@ INFO    -  Converting 93 articles to PDF took 41.1s
 INFO    -  Documentation built in 43.43 seconds 
 root@guenter:/var/www/digithink# chown -R www-data:www-data site/
 ```
-
+And life is good.
+![](../images/letsencrypt.png)
 
 ### Link Dump
 
@@ -244,4 +245,4 @@ root@guenter:/var/www/digithink# chown -R www-data:www-data site/
 * [https://docs.nginx.com/nginx/admin-guide/web-server/serving-static-content/](https://docs.nginx.com/nginx/admin-guide/web-server/serving-static-content/)
 * [https://medium.com/@jasonrigden/how-to-host-a-static-website-with-nginx-8b2dd0c5b301](https://medium.com/@jasonrigden/how-to-host-a-static-website-with-nginx-8b2dd0c5b301)
 * [https://www.digithink.com/buildnotes/mkdocs-server-configuration/mkdocs-server-configuration/](https://www.digithink.com/buildnotes/mkdocs-server-configuration/mkdocs-server-configuration/)
-* 
+* [https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04)

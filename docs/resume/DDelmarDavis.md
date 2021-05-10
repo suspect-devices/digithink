@@ -1,9 +1,8 @@
-#Resume
-## D Delmar Davis 
+# D Delmar Davis 
 Portland, Oregon,  [ddelmardavis@gmail.com](mailto:ddelmardavis@gmail.com) (503) 284-2945
 
 ## Summary
-*(I'll be 78 when Unix time ends)....*
+*(I'll be 78 when Unix(tm) time ends)....*
 
 I have been administering Unix systems since 1991, in addition to deploying and maintaining Web and other Internet services since 1996. The systems have ranged from stand-alone, completely exposed servers to services with separate Web, application, and database layers, clustered and load balanced for redundancy and scalability, and placed behind firewalls, I have done work in the ever amorphous cloud infrastructure provided by Amazon but I am more interested in locally owned and operated LXD based containers.
 
@@ -11,17 +10,21 @@ I have extensive experience with Linux deployments (Red Hat/Fedora/Centos, SUSE,
 (SSO, SMB, etc). Additionally, I have a strong background and proven success in providing instruction and documentation for work to be maintained by others.
 
 Throughout my career I have learned new systems quickly. I follow issues and problems through to solution, be they social or technical. Security is the key to surviving on both the World Wide Web and large Intranets. For this reason, I am a practitioner and proponent and of well defined policies, best practices, regular updates, and common sense. My reputation for getting things done and team participation make me an ideal candidate for positions where honest work is valued.
-Specialties: Thinking outside the box. LFCS-1500-0198-0100
+Specialties: Thinking outside the box. 
 
 Also: Springfield and Waltham are not Boston in the same way Hillsboro and Beaverton are not Portand and I am not interested in your urgent requirement for Intel's permanently contingent workforce at Jones Farm so don't bother asking....
 
 ## Experience
+###Contiguous Online Server Presence
+**Fromhell.com** Nov 1996 - Present *(24 years 7 months +)*
+
+I have built and maintained servers for the domains digithink.com and fromhell.com (email only) since 1996. They started as a sparc IPC running SunOs 4.1.3 and have had many different varients of bsd and linux since then. They are currently on LXD containers running Ubuntu (20.04 lts). My current toolset includes ansible, python and zfs. I also document my work even when it's just mine. (See: https://www.digithink.com)
 
 ###Package Handler 
 **UPS** Oct 2017 - Present *(3 years 8 months +)*
 
 Its funny, If I went to the gym I would never build the muscles I have from sorting ~6000 packages a day. I have a 12 minute bicycle commute. Another 10 minutes to get to the other side of the channel to PCCs campus in the shipyards (UPS is reimbursing my tuition as I update my welding skills). I get to see first hand the advantages that unionized workers have over similar non union positions (looking at you Amazon). Through the teamsters I have better health insurance than I ever received doing
-tech work. Also nice to not have a digital leash (going on 3 years cell phone free) or a psychotic work environment.
+tech work. Also nice to not have a digital leash (going on 3 years cell phone free).
 Life is good.
 ###Applications Engineer
 **Suspect Devices** Apr 2008 - Jan 2017 *(8 years 10 months)*
@@ -121,21 +124,19 @@ Daily operations included setup and administration of FreeBSD and Linux servers 
 ###SHOP HAND/FABRICATOR
 **GIBSON STEEL FABRICATING, INC.** Jul 1995 - Sep 1996 *(1 year 3 months)*
 
-When I moved to Eugene the wage base was so low that Symatec moved its customer support there. So I went to work using the skills I learned in High School. I performed in all aspects of storm water catch basin assembly except for seam welding. Operated metal sheers, and torch , band saw, fork lift, assembled basins using SMAW.
+When I moved to Eugene the wage base was so low that Symatec moved its customer support there. So I went to work using the skills I learned in High School. I performed all aspects of storm water catch basin assembly except for seam welding. Operated metal sheers, and torch ,band saw, fork lift, assembled basins using SMAW.
 ###Technician
 **Eli Hefron and Sons** Jan 1993 - May 1993 *(5 months)*
 
 Tested setup and configured surplus sun systems, including installation of SunOS 4.1.x through Solaris 1.x [sic] for shipment to clients.
 ###UNIX System Administrator/CAD Support Specialist
-**Badger Engineers** Mar 1991 - Sep 1992 *(1 year 7 months)*
+**Badger Engineers** Feb 1989 - Sep 1992 *(1 year 7 months)*
 
 Supported department's expansion from one Vax and 4 un-networked PCs to two Vax's, 40 Unix Stations, and 100 networked PCs.
 UNIX administration included direct user support, adding software, user accounts and scripting. Served as project leader; responsible for development of a method of high volume batch translation between different CAD formats.
 Piloted the use of several (then) new technologies for better cross platform integration such as PCNFS and sendmail based problem logging.
 Initiated cadre based help/support groups.
 Trained senior operators and engineers in computer fundamentals.
-###Cad Support Specialist
-**Badger Engineering, A Raytheon Company** 1989 - 1991 *(2 years)*
 
 ###Engineering Programmer
 Bovay Northwest, Inc.
@@ -151,14 +152,15 @@ At UO I studied History with an emphasis on revolution. While there I actively p
 **Associate of Arts, Science; Software Engineering Technology** 1983 - 1991
 At SFCC I split my studies between fine arts, core studies and software engineering.
 ###Kellogg Sr High
-**High School Diploma, High School/Secondary Diplomas and Certificates** 1982 - 1983
+**High School Diploma, High School** 1982 - 1983
+###Secondary Diplomas and Certificates
 Cross country, debate, yawn.
 ###ITP Summer Camp 
 ##Licenses & Certifications
 ###Linux Foundation Certified Systems Administrator (LFCS-1500-0198-0100) 
-**The Linux Foundation** Issued Feb 2015 - Expires Feb 2017
-LFCS-1500-0198-0100
+**The Linux Foundation** Issued Feb 2015 - Expired Feb 2017
+
  
 ##Skills
-Unix • Linux • System Administration • Disaster Recovery Computing • Troubleshooting • Data Center • Firewalls • Security
-• Cloud
+Unix • Linux • System Administration • Disaster Recovery • Computing • Troubleshooting • Data Center • Firewalls • Security
+• Cloud • GTAW • SMAW • FCAW • 
