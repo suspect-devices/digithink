@@ -56,7 +56,7 @@ and media for bare bones AIX recovery. Developed transition plan from aging HP-U
 **SolutionsIQ** May 2005 - May 2006 *(1 year 1 month)*
 
 Prepared Unix production and development systems for maintenance by windows based skeleton crew. Systems were comprised of Linux and Solaris based Oracle servers along with several Debian- based infrastructure servers. Cloned Solaris 8/Oracle 8 server for disaster recovery. Spec'd out and installed additional disk for all Solaris Oracle servers. Built serial console server for sun systems. Trained operations staff in general maintenance tasks for all Unix and Linux platforms.
-Unix System Administrator
+###Unix System Administrator
 **SolutionsIQ** Sep 2005 - Dec 2005 *(4 months)*
 
 Researched, redesigned and deployed web server and content management framework for internal content and documentation. Integrated existing documentation into framework. Trained team to perform ongoing maintenance. Deployed 11 production and development servers running Solaris 9 and 10. Worked with other engineers to refine Jumpstart install process, in particular with regards to JASS and postinstall scripts.
@@ -85,7 +85,7 @@ Installed compilers, databases, patches, and other software required for develop
 ###Fabricator
 **GIBSON STEEL FABRICATING, INC.** Jun 2001 - Sep 2001 *(4 months)*
 
-I told my employer that if they called me at 11am on my days off, as they had for months, I was walking. You have to mean that stuff. To be fair it took well over a month before I got the call, gave my notice, and went back to welding. I stood and welded out catch basins (GMAW and OXY/Acetylene work) until I realized how short I was financially. I asked for $1.75 more an hour at a shop that hadn't raised any of its employees wages in close to a year. They raised the entire shop floor by 50c and offered me a 75c raise. I took the first tech job offered. Like I said. You have to mean it.
+I told my employer that if they called me at 11am on my days off, as they had for months, I was walking. You have to mean that stuff. To be fair it took well over a month before I got the call, gave my notice, and went back to welding. I stood and welded out catch basins (GMAW and OXY/Acetylene work) until I realized how short I was financially. I asked for $1.75 <!-- $ --> more an hour at a shop that hadn't raised any of its employees wages in close to a year. They raised the entire shop floor by 50c and offered me a 75c raise. I took the first tech job offered. Like I said. You have to mean it.
 ###UNIX System Administrator / Database Programmer
 **Modern Medium** Aug 2000 - Jul 2001 *(1 year)*
 
