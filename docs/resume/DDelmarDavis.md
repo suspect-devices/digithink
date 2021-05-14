@@ -26,6 +26,7 @@ I have built and maintained servers for the domains digithink.com and fromhell.c
 Its funny, If I went to the gym I would never build the muscles I have from sorting ~6000 packages a day. I have a 12 minute bicycle commute. Another 10 minutes to get to the other side of the channel to PCCs campus in the shipyards (UPS is reimbursing my tuition as I update my welding skills). I get to see first hand the advantages that unionized workers have over similar non union positions (looking at you Amazon). Through the teamsters I have better health insurance than I ever received doing
 tech work. Also nice to not have a digital leash (going on 3 years cell phone free).
 Life is good.
+
 ###Applications Engineer
 **Suspect Devices** Apr 2008 - Jan 2017 *(8 years 10 months)*
 
@@ -84,7 +85,7 @@ Installed compilers, databases, patches, and other software required for develop
 ###Fabricator
 **GIBSON STEEL FABRICATING, INC.** Jun 2001 - Sep 2001 *(4 months)*
 
-I told my employer that if they called me at 11am on my days off, as they had for months, I was walking. You have to mean that stuff. To be fair it took well over a month before I got the call. Gave my notice and went back to welding. Stood and welded out catch basins (MIG and OXY/Acetylene work) until I realized how short I was financially. I asked for \$1.75 more an hour at a shop that hadn't raised any of its employees wages in close to a year. They raised the entire shop floor by 50c and offered me a 75c raise. I took the first tech job offered. Like I said. You have to mean it.
+I told my employer that if they called me at 11am on my days off, as they had for months, I was walking. You have to mean that stuff. To be fair it took well over a month before I got the call, gave my notice, and went back to welding. I stood and welded out catch basins (GMAW and OXY/Acetylene work) until I realized how short I was financially. I asked for $1.75 more an hour at a shop that hadn't raised any of its employees wages in close to a year. They raised the entire shop floor by 50c and offered me a 75c raise. I took the first tech job offered. Like I said. You have to mean it.
 ###UNIX System Administrator / Database Programmer
 **Modern Medium** Aug 2000 - Jul 2001 *(1 year)*
 
@@ -130,7 +131,7 @@ When I moved to Eugene the wage base was so low that Symatec moved its customer 
 
 Tested setup and configured surplus sun systems, including installation of SunOS 4.1.x through Solaris 1.x [sic] for shipment to clients.
 ###UNIX System Administrator/CAD Support Specialist
-**Badger Engineers** Feb 1989 - Sep 1992 *(1 year 7 months)*
+**Badger Engineers** Feb 1989 - Sep 1992 *(2 years 7 months)*
 
 Supported department's expansion from one Vax and 4 un-networked PCs to two Vax's, 40 Unix Stations, and 100 networked PCs.
 UNIX administration included direct user support, adding software, user accounts and scripting. Served as project leader; responsible for development of a method of high volume batch translation between different CAD formats.
@@ -145,6 +146,7 @@ Automated drafting and design processes; programming in AutoLisp, MuLisp, and DB
 ##Education
 ###University of Oregon
 **Bachelor of Arts, History** 1995 - 2004
+
 At UO I studied History with an emphasis on revolution. While there I actively promoted punk and other local music as a DJ at KWVA radio. I was invited to display my artwork in several solo and group exhibitions.
 ###Portland Community College
 **Carreer Pathways Certificate, Welding Technology/Welder** 2017 - 2017
@@ -153,9 +155,10 @@ At UO I studied History with an emphasis on revolution. While there I actively p
 At SFCC I split my studies between fine arts, core studies and software engineering.
 ###Kellogg Sr High
 **High School Diploma, High School** 1982 - 1983
-###Secondary Diplomas and Certificates
+
 Cross country, debate, yawn.
-###ITP Summer Camp 
+###Secondary Diplomas and Certificates
+###ITP Summer Camp 2013
 ##Licenses & Certifications
 ###Linux Foundation Certified Systems Administrator (LFCS-1500-0198-0100) 
 **The Linux Foundation** Issued Feb 2015 - Expired Feb 2017
@@ -163,4 +166,4 @@ Cross country, debate, yawn.
  
 ##Skills
 Unix • Linux • System Administration • Disaster Recovery • Computing • Troubleshooting • Data Center • Firewalls • Security
-• Cloud • GTAW • SMAW • FCAW • 
+• Cloud • GTAW • SMAW • FCAW • GMAW
