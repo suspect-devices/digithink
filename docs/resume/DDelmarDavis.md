@@ -4,7 +4,7 @@ Portland, Oregon,  [ddelmardavis@gmail.com](mailto:ddelmardavis@gmail.com) (503)
 ## Summary
 *(I'll be 78 when Unix(tm) time ends)....*
 
-I have been administering Unix systems since 1991, in addition to deploying and maintaining Web and other Internet services since 1996. The systems have ranged from stand-alone, completely exposed servers to services with separate Web, application, and database layers, clustered and load balanced for redundancy and scalability, and placed behind firewalls, I have done work in the ever amorphous cloud infrastructure provided by Amazon but I am more interested in locally owned and operated LXD based containers.
+I have been administering Unix systems for more than 30 years, in addition to deploying and maintaining Web and other Internet services for 25. The systems have ranged from stand-alone, completely exposed servers to services with separate Web, application, and database layers, clustered and load balanced for redundancy and scalability, and placed behind firewalls, I have done work in the ever amorphous cloud infrastructure provided by Amazon but I am more interested in locally owned and operated LXD based containers.
 
 I have extensive experience with Linux deployments (Red Hat/Fedora/Centos, SUSE, Debian/Ubuntu, Tizen, OpenWRT) I have professional experience with HP-UX, True64, Linux, Solaris, Freebsd, OS X, and AIX and I have installed and configured databases such as Oracle, Sybase, and SQL Server. Against my better judgment, I have installed, maintained and configured Microsoft systems, and even made them play well with others
 (SSO, SMB, etc). Additionally, I have a strong background and proven success in providing instruction and documentation for work to be maintained by others.
@@ -18,7 +18,7 @@ Also: Springfield and Waltham are not Boston in the same way Hillsboro and Beave
 ###Contiguous Online Server Presence
 **Fromhell.com** Nov 1996 - Present *(24 years 7 months +)*
 
-I have built and maintained servers for the domains digithink.com and fromhell.com (email only) since 1996. They started as a sparc IPC running SunOs 4.1.3 and have had many different varients of bsd and linux since then. They are currently on LXD containers running Ubuntu (20.04 lts). My current toolset includes ansible, python and zfs. I also document my work even when it's just mine. (See: https://www.digithink.com)
+I have built and maintained servers for the domains digithink.com and fromhell.com (email only) since 1996. They started as a sparc IPC running SunOs 4.1.3 and have had many different varients of bsd and linux since then. They are currently on LXD containers running Ubuntu (20.04 lts). My current toolset includes ansible, python and zfs. I also document my work even when it's just mine. (See:[https://www.digithink.com](https://www.digithink.com))
 
 ###Package Handler 
 **UPS** Oct 2017 - Present *(3 years 8 months +)*
@@ -38,7 +38,7 @@ I was contracted to provide primary IT support for the servers and workstations 
 ###Continuing Education Instructor
 **Pacific Northwest College of Art** Sep 2012 - Dec 2014 *(2 years 4 months)*
 
-Developed curriculum for and taught an 8 week survey course introducing Artists to microcontrollers using the Arduino platform.
+After three years of giving one day classes to the community through Dorkbotpdx I was asked by PNCA's extensions school to develop curriculum for and teach an 8 week survey course introducing Artists to microcontrollers using the Arduino platform.
 ###Unix Systems Engineer
 **Adecco** Dec 2012 - Mar 2013 *(4 months)*
 
@@ -125,7 +125,7 @@ Daily operations included setup and administration of FreeBSD and Linux servers 
 ###SHOP HAND/FABRICATOR
 **GIBSON STEEL FABRICATING, INC.** Jul 1995 - Sep 1996 *(1 year 3 months)*
 
-When I moved to Eugene the wage base was so low that Symatec moved its customer support there. So I went to work using the skills I learned in High School. I performed all aspects of storm water catch basin assembly except for seam welding. Operated metal sheers, and torch ,band saw, fork lift, assembled basins using SMAW.
+When I moved to Eugene the wage base was so low that Symatec moved its customer support there. So I went to work using the skills I learned in High School (Welding). I performed all aspects of storm water catch basin assembly except for seam welding. Operated hydraulic sheers, torch ,band saw, and fork lift. Assembled basins using SMAW.
 ###Technician
 **Eli Hefron and Sons** Jan 1993 - May 1993 *(5 months)*
 
@@ -162,7 +162,8 @@ Cross country, debate, yawn.
 ##Licenses & Certifications
 ###Linux Foundation Certified Systems Administrator (LFCS-1500-0198-0100) 
 **The Linux Foundation** Issued Feb 2015 - Expired Feb 2017
-
+### Osha 10
+**US Department of Labor** Issued Jul 2017
  
 ##Skills
 Unix • Linux • System Administration • Disaster Recovery • Computing • Troubleshooting • Data Center • Firewalls • Security
