@@ -1,7 +1,7 @@
 #FreeBSD on lxd
-LXD 4.0 allows for the creation of VM's based on qemu. This allows us to create  "virtual machines" capable of running non linux operating systems such as FreeBSD (or god forbid WindBlows).
+LXD 4.0 allows for the creation of VM's based on qemu. This allows us to create  "virtual machines" capable of running non linux operating systems such as FreeBSD (or god forbid WindBlows). So let's look at adding a freebsd 12.3 box to our setup.
 
-## Creating an empty vm.
+## Create an empty vm.
 Based on the examples I was able to find we start by creating an empty vm and then tweek on a few of the parameters (raw.apparmor and raw.qemu). While there i adjust the nic (I am sure that all of this could be done on the init line). After that it's pretty straight forward.
 
 ```
@@ -56,7 +56,150 @@ root@bs2020:/home/feurig# lxc start henry --console
  ???????????????????????????????????????????            .---.....----.
 
 ```
-I found that the console would not come up with the dual "Cons:" setting. Serial worked just fine.
+I found that, on at least one of my servers, the console would not come up with the dual "Cons:" setting. Serial worked just fine.
+
+## Next Steps (sudo, ssh, hardening, usw)
+
+In order to have the server play well with our environment I install the following packages using pkg (sudo, nano, bash, bash-completion, python37) as well as manually adding admin users. At some point it would be nice to use cloud-init or if that is unworkable ansible for the initial configuration.
+
+```.
+[root@henry /usr/home/feurig]# pkg info
+bash-5.1.4_1                   GNU Project's Bourne Again SHell
+bash-completion-2.11,2         Programmable completion library for Bash
+gettext-runtime-0.21           GNU gettext runtime libraries and programs
+indexinfo-0.3.1                Utility to regenerate the GNU info page index
+libffi-3.3_1                   Foreign Function Interface
+nano-5.5                       Nano's ANOther editor, an enhanced free Pico clone
+pkg-1.16.3                     Package manager
+py37-pip-20.2.3                Tool for installing and managing Python packages
+py37-setuptools-44.0.0         Python packages installer
+python37-3.7.10                Interpreted object-oriented programming language
+readline-8.1.0                 Library for editing command lines as they are typed
+sudo-1.9.6p1                   Allow others to run commands as root
+```
+Nano and bash are a personal preference of mine.
+
+```
+feurig@henry:~ $ sudo bash
+Password:
+[root@henry /usr/home/feurig]# chpass -s /usr/local/bin/bash feurig
+[root@henry /usr/home/feurig]# chpass -s /usr/local/bin/bash joe
+
+```
+
+## Setting up Ansible on BSD
+
+In addition to installing python ssh and an admin user needs to be set up as lxd does not "lxc exec" directly to virtual machines. 
+
+```
+[root@henry /usr/home/feurig]# visudo 
+... comment out this 
+ # root ALL=(ALL) ALL
+... and uncomment out this
+%wheel ALL=(ALL) ALL
+...
+[root@henry /usr/home/feurig]# adduser ansible
+... add ansible to wheel group ...
+[root@henry /usr/home/feurig]# su - ansible
+ansible@henry:~ $ssh-keygen
+ansible@henry:~ $cat >> .ssh/authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCssxhi6P1Ssin8QjEMlm+9W1L5ncRqejnw78z/yhQLwCU2av3+vAzPFDKi7CTm2iqeRoNYsKx4IaNYK9t+zQ0OsEXjzIzS+uCNODbNaW4pMtaHcwsaYDCdG9OiXuFa7qWndDAvSJjXQR6t1pygdw/tdbsGN0//zq71j9ChitXJQUr0YYCYwa4MaB6Srn/Zpkhfut1OP56XMo15F+0YD+oS/IqJp/QTH6Q9LzVh+HKI9rdhDEqEsrNZsaQw6UZ8JrfRYmJWzcFlqztv2qBv/BdStWbJGMBDTDNOSqf9wkts43lkZGYgSyZo80NLmq4oXJanuNO0wOBeRtMyX+HUEmgh root@kb2018
+<ctrl-D>
+``` 
+
+Adding the become password to the ansible servers vault is described [here](https://www.digithink.com/buildnotes/ansible/ServerInstall/)
+
+## Adding an update.sh script.
+### The field expedient way
+
+For quick and dirty's sake we add the following to /usr/local/bin/update.sh which could easily be added to the generalized shell since we have decided that bash is ok. It also might be ok to check if a reboot is necissary.
+
+```
+[root@henry /usr/home/feurig]# cat /usr/local/bin/update.sh 
+#!/bin/sh
+freebsd-update fetch install
+pkg upgrade
+```
+And then life is good and our new pets are equally loved. (including the centos 7 result for sag)
+
+```
+root@kb2018:/etc/ansible/python# ansible pets -m raw -a "update.sh"
+shelly | CHANGED | rc=0 >>
+...
+henry | CHANGED | rc=0 >>
+
+src component not installed, skipped
+Looking up update.FreeBSD.org mirrors... 2 mirrors found.
+Fetching metadata signature for 12.2-RELEASE from update1.freebsd.org... done.
+Fetching metadata index... done.
+Inspecting system... done.
+Preparing to download files... done.
+
+No updates needed to update system to 12.2-RELEASE-p8.
+No updates are available to install.
+Updating FreeBSD repository catalogue...
+FreeBSD repository is up to date.
+All repositories are up to date.
+Checking for upgrades (1 candidates): 100%
+Processing candidates (1 candidates): 100%
+Checking integrity... done (0 conflicting)
+Your packages are up to date.
+Shared connection to henry closed.
+
+keynes | CHANGED | rc=0 >>
+--------------------- begin updating keynes ----------------------
+yum upgrade.
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: mirrors.cat.pdx.edu
+ * extras: mirror.web-ster.com
+ * updates: mirror.keystealth.org
+No packages marked for update
+========================== done ==============================
+Failed to set locale, defaulting to C
+...
+naomi | CHANGED | rc=0 >>
+--------------------- begin updating naomi ----------------------
+Get:1 http://security.ubuntu.com/ubuntu bionic-security InRelease [88.7 kB]
+Hit:2 http://archive.ubuntu.com/ubuntu bionic InRelease
+```
+
+### Making it right. 
+
+```
+[root@henry /usr/home/feurig]# ln -s /usr/local/bin/bash /bin/
+[root@henry /usr/home/feurig]# nano /usr/local/bin/update.sh 
+#!/bin/bash
+echo --------------------- begin updating `uname -n` ----------------------
+if [ -x "$(command -v apt-get)" ]; then
+   apt-get update
+   apt-get -y dist-upgrade
+   apt-get -y autoremove
+fi
+if  [ -x "$(command -v yum)" ]; then
+   echo yum upgrade.
+   yum -y upgrade
+fi
+if  [ -x "$(command -v zypper)" ]; then
+   echo zypper dist-upgrade.
+   zypper -y dist-upgrade
+fi
+if [ -x "$(command -v freebsd-update)" ]; then
+   freebsd-update fetch install
+   pkg upgrade
+fi
+echo ========================== done ==============================
+```
+
+## To do.
+* Look at restricting ansibles ssh access to hosts on the admin lan (as is done for bs2020).
+* Add virtual machines to nightly backups (currently only containers).
+
+```root@kb2018:/etc/ansible# lxc snapshot henry 2021-06-05
+root@kb2018:/etc/ansible# lxc move henry/2021-06-05 bs2020:Spare-henry-2021-06-05
+root@kb2018:/etc/ansible# lxc stop bs2020:Spare-henry-2021-06-05
+Error: The instance is already stopped
+```
 
 ### Linkdump.
 
