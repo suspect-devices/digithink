@@ -164,7 +164,8 @@ Get:1 http://security.ubuntu.com/ubuntu bionic-security InRelease [88.7 kB]
 Hit:2 http://archive.ubuntu.com/ubuntu bionic InRelease
 ```
 
-### Making it right. 
+### Making it right.
+Once we make peace with installing/enforcing bash on a freebsd box then we can add the freebsd update to our multi platform update.sh (again someday deployed by lxd/cloud-init). 
 
 ```
 [root@henry /usr/home/feurig]# ln -s /usr/local/bin/bash /bin/
@@ -195,9 +196,10 @@ echo ========================== done ==============================
 * Look at restricting ansibles ssh access to hosts on the admin lan (as is done for bs2020).
 * Add virtual machines to nightly backups (currently only containers).
 
-```root@kb2018:/etc/ansible# lxc snapshot henry 2021-06-05
-root@kb2018:/etc/ansible# lxc move henry/2021-06-05 bs2020:Spare-henry-2021-06-05
-root@kb2018:/etc/ansible# lxc stop bs2020:Spare-henry-2021-06-05
+  ```
+root@kb2018:/# lxc snapshot henry 2021-06-05
+root@kb2018:/# lxc move henry/2021-06-05 bs2020:Spare-henry-2021-06-05
+root@kb2018:/# lxc stop bs2020:Spare-henry-2021-06-05
 Error: The instance is already stopped
 ```
 
