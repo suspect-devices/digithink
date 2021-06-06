@@ -165,12 +165,15 @@ Hit:2 http://archive.ubuntu.com/ubuntu bionic InRelease
 ```
 
 ### Making it right.
-Once we make peace with installing/enforcing bash on a freebsd box then we can add the freebsd update to our multi platform update.sh (again someday deployed by lxd/cloud-init). 
+Once we make peace with installing/enforcing bash on a freebsd box then we can add the freebsd update to our multi platform [update.sh](https://bitbucket.org/suspectdevicesadmin/ansible/src/master/files/update.sh) (again someday deployed by lxd/cloud-init). 
 
 ```
 [root@henry /usr/home/feurig]# ln -s /usr/local/bin/bash /bin/
 [root@henry /usr/home/feurig]# nano /usr/local/bin/update.sh 
 #!/bin/bash
+# update.sh for debian/ubuntu/centos/suse/freebsd/pihole
+# https://bitbucket.org/suspectdevicesadmin/ansible/src/master/files/update.sh
+# (copyleft 2021) don@suspecdevices.com
 echo --------------------- begin updating `uname -n` ----------------------
 if [ -x "$(command -v apt-get)" ]; then
    apt-get update
@@ -180,6 +183,10 @@ fi
 if  [ -x "$(command -v yum)" ]; then
    echo yum upgrade.
    yum -y upgrade
+fi
+if  [ -x "$(command -v pihole)" ]; then
+   echo pihole upgrade.
+   pihole -up
 fi
 if  [ -x "$(command -v zypper)" ]; then
    echo zypper dist-upgrade.
