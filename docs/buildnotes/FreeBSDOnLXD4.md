@@ -203,8 +203,7 @@ echo ========================== done ==============================
 * Look at restricting ansibles ssh access to hosts on the admin lan (as is done for bs2020).
 * Add virtual machines to nightly backups (currently only containers).
 
-
-  ```
+```
 root@kb2018:/# lxc snapshot henry 2021-06-05
 root@kb2018:/# lxc move henry/2021-06-05 bs2020:Spare-henry-2021-06-05
 root@kb2018:/# lxc stop bs2020:Spare-henry-2021-06-05
