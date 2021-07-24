@@ -176,6 +176,7 @@ Once we make peace with installing/enforcing bash on a freebsd box then we can a
 # (copyleft 2021) don@suspecdevices.com
 echo --------------------- begin updating `uname -n` ----------------------
 if [ -x "$(command -v apt-get)" ]; then
+   echo Updating system
    apt-get update
    apt-get -y dist-upgrade
    apt-get -y autoremove
@@ -185,7 +186,7 @@ if  [ -x "$(command -v yum)" ]; then
    yum -y upgrade
 fi
 if  [ -x "$(command -v pihole)" ]; then
-   echo pihole upgrade.
+   echo Updating pihole.
    pihole -up
 fi
 if  [ -x "$(command -v zypper)" ]; then
@@ -193,7 +194,9 @@ if  [ -x "$(command -v zypper)" ]; then
    zypper -y dist-upgrade
 fi
 if [ -x "$(command -v freebsd-update)" ]; then
+   echo Updating freebsd base
    freebsd-update fetch install
+   echo Updating freebsd packages
    pkg upgrade
 fi
 echo ========================== done ==============================

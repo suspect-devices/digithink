@@ -15,16 +15,19 @@ Specialties: Thinking outside the box.
 Also: Springfield and Waltham are not Boston in the same way Hillsboro and Beaverton are not Portand and I am not interested in your urgent requirement for Intel's permanently contingent workforce at Jones Farm so don't bother asking....
 
 ## Experience
+
+###Systems Engineer
+**Laika** Jul 2021 - Present.
+
 ###Contiguous Online Server Presence
 **Fromhell.com** Nov 1996 - Present *(24 years 7 months +)*
 
 I have built and maintained servers for the domains digithink.com and fromhell.com (email only) since 1996. They started as a sparc IPC running SunOs 4.1.3 and have had many different varients of bsd and linux since then. They are currently on LXD containers running Ubuntu (20.04 lts). My current toolset includes ansible, python and zfs. I also document my work even when it's just mine. (See:[https://www.digithink.com](https://www.digithink.com))
 
 ###Package Handler 
-**UPS** Oct 2017 - Present *(3 years 8 months +)*
+**UPS** Oct 2017 - Jul 2021 *(3 years 9 months)*
 
-Its funny, If I went to the gym I would never build the muscles I have from sorting ~6000 packages a day. I have a 12 minute bicycle commute. Another 10 minutes to get to the other side of the channel to PCCs campus in the shipyards (UPS is reimbursing my tuition as I update my welding skills). I get to see first hand the advantages that unionized workers have over similar non union positions (looking at you Amazon). Through the teamsters I have better health insurance than I ever received doing
-tech work. Also nice to not have a digital leash (going on 3 years cell phone free).
+Its funny, If I went to the gym I would never build the muscles I have from sorting ~6000 packages a day for close to 4 years. I had a 12 minute bicycle commute. Another 10 minutes to get to the other side of the channel to PCCs campus in the shipyards (Before covid, UPS  reimbursed my tuition as I updated my welding skills). I got to see first hand the advantages that unionized workers have over similar non union positions (looking at you Amazon). Through the teamsters I recieved better health insurance than I ever received doing tech work. Also nice to not have a digital leash (going on 3 years cell phone free).
 Life is good.
 
 ###Applications Engineer

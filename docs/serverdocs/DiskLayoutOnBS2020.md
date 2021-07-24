@@ -1,6 +1,6 @@
-<!-- DiskLayoutOnBS2020, Version: 1, Modified: 2018/12/02, Author: trac -->
+<!-- DiskLayoutOnBS2020, Version: 1, Modified: 2021/07/07, Author: don -->
 #BS2020 LXC to LXD Notes 
-When I set up BS2020 a year ago I was new to LXC and LXD (both of which are used at present because I wanted separate disk pools and network for infrastructure and development(/deployment). I believe that once we move from 16.04 to 18.04 we should be able to remove LXC from the equation. Regardless the initial pools were set up using lxd init as described in [wiki:BS2020InstallNotes the install notes for BS2020]. 
+When I set up BS2020 a year ago I was new to LXC and LXD (both of which are used at present because I wanted separate disk pools and network for infrastructure and development(/deployment). I believe that once we move from 16.04 to 18.04 we should be able to remove LXC from the equation. Regardless the initial pools were set up using lxd init as described in [the install notes for BS2020](BS2020InstallNotes). 
 	
 	root@bs2020:~# lxd init
 	Name of the storage backend to use (dir or zfs) [default=zfs]: 
@@ -83,5 +83,5 @@ Since adding the two new disks I keep getting io errors on one of them. They do 
 ## Backing up containers using zfs
 
 ### Link dump
-* http://trac.suspectdevices.com/trac/wiki/FunWithLinuxDisks
+* http://www.digithink.com/serverdocs/FunWithLinuxDisks
 * https://www.thegeekdiary.com/zfs-tutorials-creating-zfs-snapshot-and-clones/
