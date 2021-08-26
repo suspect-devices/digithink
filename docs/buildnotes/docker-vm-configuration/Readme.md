@@ -1,4 +1,4 @@
-# Centos 7 Docker Host (Franklin Rebuild)
+# Centos 7 Docker Host (Franklin Rebuild !!DRAFT!!)
 Lxd 4 introduced qemu/vm support making it possible to install docker in a way that doesnt compromise the underlying server. 
 
 * [https://www.linuxtechi.com/install-docker-on-centos-7/](https://www.linuxtechi.com/install-docker-on-centos-7/)
@@ -15,15 +15,17 @@ Lxd 4 introduced qemu/vm support making it possible to install docker in a way t
 * Install docker-registry
 
 ### Except that it needs to work in an lxd VM.
-So we create the vm.
+####So we create the vm.
 
 ```
 root@kb2018:/etc/ansible# lxc image copy images:centos/7 local: --copy-aliases --vm
 root@kb2018:/home/feurig# lxc init centos/7 franklin --vm -pdefault -psusdev21vm
 ```
-Then we add the static networking.
 
-```root@kb2018:/home/feurig# lxc config edit franklin
+####Then we add the static networking.
+
+```
+root@kb2018:/home/feurig# lxc config edit franklin
 architecture: x86_64
 config:
   image.architecture: amd64
@@ -62,6 +64,7 @@ stateful: false
 description: ""
 root@kb2018:/home/feurig# lxc start franklin
 ```
+
 ### And since the machine had no network the first time it came up it wont have run the cloud init that provides us with our users usw.
 
 #### So we install and rerun cloud init.
@@ -72,6 +75,7 @@ root@kb2018:/home/feurig# lxc exec franklin bash
 [root@franklin ~]# cloud-init init
 
 ```
+
 ### And now we install the docker that comes with centos7
 
 ```
@@ -96,9 +100,11 @@ Is this ok [y/d/N]: y
 ...
 Complete!
 ```
+
 ### Then we realize its too old and get the current docker-ce from docker.
 
 #### First we have to uninstal what we just did.
+
 ```
 [root@franklin feurig]# yum remove docker \
                    docker-client \
@@ -123,12 +129,12 @@ Remove  5 Packages
 Installed size: 146 M
 Is this ok [y/N]: y
 ...
-[root@franklin feurig]#  yum --enablerepo=Extras
 ```
 
 #### Now we add the docker repo and install.
 
 ```
+[root@franklin feurig]#  yum --enablerepo=Extras
 [root@franklin feurig]# yum install -y yum-utils
 ...
 Installed:
@@ -144,7 +150,9 @@ Complete!
 ...
 repo saved to /etc/yum.repos.d/docker-ce.repo
 ```
-#### Then we check to see if the docer version is going to install.
+
+#### Then we check to see if the docker version is going to install.
+
 ```
 [root@franklin feurig]# # yum list docker-ce --showduplicates | sort -r|wc -l
 [root@franklin feurig]# yum list docker-ce --showduplicates | sort -r|wc -l
@@ -161,6 +169,7 @@ docker-ce.x86_64            3:20.10.7-3.el7                     docker-ce-stable
 docker-ce.x86_64            3:20.10.6-3.el7                     docker-ce-stable
 
 ```
+
 #### And install it.
 
 ```
@@ -242,7 +251,8 @@ For more examples and ideas, visit:
 
 [root@franklin feurig]#
 ```
-## And now we set up nginx and lets Encrypt.
+
+### And now we set up nginx and lets Encrypt.
 
 Bouncing prompt at [https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-centos-7](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-centos-7) gets us an nginx front end to route our containers through with LetEncrypt ssl certificates that will manage themselves as long as .well-known/acme-challenge is a valid path on the server.
 
@@ -328,6 +338,7 @@ IMPORTANT NOTES:
    Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
    Donating to EFF:                    https://eff.org/donate-le
 ```
+
 ### And now we are ready to set up our private repository in a docker container.
 
 #### Run up a docker registry:2 image
@@ -336,3 +347,4 @@ IMPORTANT NOTES:
 [root@franklin feurig]# docker run -d -p 5000:5000 --restart always --name registry registry:2
 
 ```
+#### YOU ARE HERE CONFIGURING THE PROXY !!!!
