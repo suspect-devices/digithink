@@ -1,28 +1,24 @@
-# Centos 7 Docker Host (Franklin Rebuild !!DRAFT!!)
-Lxd 4 introduced qemu/vm support making it possible to install docker in a way that doesnt compromise the underlying server. 
-
-* [https://www.linuxtechi.com/install-docker-on-centos-7/](https://www.linuxtechi.com/install-docker-on-centos-7/)
-* [https://www.linuxtechi.com/setup-docker-private-registry-centos-7-rhel-7/](https://www.linuxtechi.com/setup-docker-private-registry-centos-7-rhel-7/)
-* [https://docs.genesys.com/Documentation/System/Current/DDG/InstallationofDockerEngineCommunityEditiononCentOS7](https://docs.genesys.com/Documentation/System/Current/DDG/InstallationofDockerEngineCommunityEditiononCentOS7)
-
-* [https://blog.simos.info/how-to-use-virtual-machines-in-lxd/](https://blog.simos.info/how-to-use-virtual-machines-in-lxd/)
+# Centos 7 Docker Host (Franklin Rebuild *DRAFT*)
+Lxd 4 introduced qemu/vm support making it possible to install docker in a way that doesnt compromise the underlying server. We want to use docker to present a private repository protected by an nginx proxy using LetsEncrypt SSL certificates.
 
 ## Basic process.
-* Install centos7
+* Install centos7 vm
 * Install prerequisites
 * Add docker-ce repository
 * Install docker-ce
 * Install docker-registry
+* Install nginx
 
-### Except that it needs to work in an lxd VM.
-####So we create the vm.
+
+### In order to let docker do its thing withou leaking we use a vm.
+#### Create the vm.
 
 ```
 root@kb2018:/etc/ansible# lxc image copy images:centos/7 local: --copy-aliases --vm
 root@kb2018:/home/feurig# lxc init centos/7 franklin --vm -pdefault -psusdev21vm
 ```
 
-####Then we add the static networking.
+#### Add static networking.
 
 ```
 root@kb2018:/home/feurig# lxc config edit franklin
@@ -66,17 +62,20 @@ root@kb2018:/home/feurig# lxc start franklin
 ```
 
 ### And since the machine had no network the first time it came up it wont have run the cloud init that provides us with our users usw.
+*There are centos/7/cloud vms that would let us skip this step.*
 
-#### So we install and rerun cloud init.
+#### Install and rerun cloud init.
 
 ```
 root@kb2018:/home/feurig# lxc exec franklin bash
+[root@franklin feurig]# yum install cloud-init
+[root@franklin feurig]# cloud-init-cfg all config
 [root@franklin ~]# cloud-init clean
 [root@franklin ~]# cloud-init init
 
 ```
 
-### And now we install the docker that comes with centos7
+### First we installed the docker that comes with centos7
 
 ```
 [root@franklin feurig]# yum search docker
@@ -103,7 +102,7 @@ Complete!
 
 ### Then we realize its too old and get the current docker-ce from docker.
 
-#### First we have to uninstal what we just did.
+#### Uninstal what we just did.
 
 ```
 [root@franklin feurig]# yum remove docker \
@@ -151,12 +150,10 @@ Complete!
 repo saved to /etc/yum.repos.d/docker-ce.repo
 ```
 
-#### Then we check to see if the docker version is going to install.
+#### Check to see if the docker version is the one that's going to be installed.
 
 ```
-[root@franklin feurig]# # yum list docker-ce --showduplicates | sort -r|wc -l
-[root@franklin feurig]# yum list docker-ce --showduplicates | sort -r|wc -l
-63
+
 [root@franklin feurig]# yum list docker-ce --showduplicates | sort -r |head
  * updates: mirror.keystealth.org
 This system is not registered with an entitlement server. You can use subscription-manager to register.
@@ -170,7 +167,7 @@ docker-ce.x86_64            3:20.10.6-3.el7                     docker-ce-stable
 
 ```
 
-#### And install it.
+#### Install it.
 
 ```
 [root@franklin feurig]# yum install docker-ce
@@ -252,7 +249,7 @@ For more examples and ideas, visit:
 [root@franklin feurig]#
 ```
 
-### And now we set up nginx and lets Encrypt.
+### Set up nginx and Let's Encrypt / certbot.
 
 Bouncing prompt at [https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-centos-7](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-centos-7) gets us an nginx front end to route our containers through with LetEncrypt ssl certificates that will manage themselves as long as .well-known/acme-challenge is a valid path on the server.
 
@@ -265,7 +262,7 @@ Bouncing prompt at [https://www.digitalocean.com/community/tutorials/how-to-secu
 [root@franklin feurig]# yum install nginx
 [root@franklin feurig]# systemctl start nginx
 [root@franklin feurig]# systemctl enable nginx
-Created symlink from /etc/systemd/system/multi-user.target.wants/nginx.service to /usr/[root@franklin feurig]# nano /etc/nginx/nginx.conf
+[root@franklin feurig]# nano /etc/nginx/nginx.conf
 [root@franklin feurig]# ping derp.suspectdevices.com
 [root@franklin feurig]# systemctl reload nginx
 ```
@@ -343,8 +340,100 @@ IMPORTANT NOTES:
 
 #### Run up a docker registry:2 image
 
-```
-[root@franklin feurig]# docker run -d -p 5000:5000 --restart always --name registry registry:2
+*Change this to use local storage at some point for now the container stores the data*
 
 ```
-#### YOU ARE HERE CONFIGURING THE PROXY !!!!
+[root@franklin feurig]# docker run -d -p 5000:5000 --restart always --name registry registry:2
+{"repositories":[]}
+[root@franklin feurig]# curl localhost:5000/v2/_catalog
+[root@franklin feurig]# docker tag 1fd8e1b0bb7e localhost:5000/registry:2
+[root@franklin feurig]# docker push localhost:5000/registry:2
+[root@franklin feurig]# curl localhost:5000/v2/_catalog
+{"repositories":["registry"]}
+
+```
+#### *YOU ARE HERE CONFIGURING THE PROXY !!!!*
+What we want is to merge the nginx configuration created by certbot and the one provided below. 
+
+[https://docs.docker.com/registry/recipes/nginx/](https://docs.docker.com/registry/recipes/nginx/)
+
+
+```
+events {
+    worker_connections  1024;
+}
+
+http {
+
+  upstream docker-registry {
+    server registry:5000;
+  }
+
+  ## Set a variable to help us decide if we need to add the
+  ## 'Docker-Distribution-Api-Version' header.
+  ## The registry always sets this header.
+  ## In the case of nginx performing auth, the header is unset
+  ## since nginx is auth-ing before proxying.
+  map $upstream_http_docker_distribution_api_version $docker_distribution_api_version {
+    '' 'registry/2.0';
+  }
+
+  server {
+    listen 443 ssl;
+    server_name myregistrydomain.com;
+
+    # SSL
+    ssl_certificate /etc/nginx/conf.d/domain.crt;
+    ssl_certificate_key /etc/nginx/conf.d/domain.key;
+
+    # Recommendations from https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
+    ssl_protocols TLSv1.1 TLSv1.2;
+    ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+
+    # disable any limits to avoid HTTP 413 for large image uploads
+    client_max_body_size 0;
+
+    # required to avoid HTTP 411: see Issue #1486 (https://github.com/moby/moby/issues/1486)
+    chunked_transfer_encoding on;
+
+    location /v2/ {
+      # Do not allow connections from docker 1.5 and earlier
+      # docker pre-1.6.0 did not properly set the user agent on ping, catch "Go *" user agents
+      if ($http_user_agent ~ "^(docker\/1\.(3|4|5(?!\.[0-9]-dev))|Go ).*$" ) {
+        return 404;
+      }
+
+      # To add basic authentication to v2 use auth_basic setting.
+      auth_basic "Registry realm";
+      auth_basic_user_file /etc/nginx/conf.d/nginx.htpasswd;
+
+      ## If $docker_distribution_api_version is empty, the header is not added.
+      ## See the map directive above where this variable is defined.
+      add_header 'Docker-Distribution-Api-Version' $docker_distribution_api_version always;
+
+      proxy_pass                          http://docker-registry;
+      proxy_set_header  Host              $http_host;   # required for docker client's sake
+      proxy_set_header  X-Real-IP         $remote_addr; # pass on real client's IP
+      proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+      proxy_set_header  X-Forwarded-Proto $scheme;
+      proxy_read_timeout                  900;
+    }
+  }
+}
+```
+
+
+### References.
+
+* [https://www.linuxtechi.com/install-docker-on-centos-7/](https://www.linuxtechi.com/install-docker-on-centos-7/)
+* [https://www.linuxtechi.com/setup-docker-private-registry-centos-7-rhel-7/](https://www.linuxtechi.com/setup-docker-private-registry-centos-7-rhel-7/)
+* [https://docs.genesys.com/Documentation/System/Current/DDG/InstallationofDockerEngineCommunityEditiononCentOS7](https://docs.genesys.com/Documentation/System/Current/DDG/InstallationofDockerEngineCommunityEditiononCentOS7)
+* [https://blog.simos.info/how-to-use-virtual-machines-in-lxd/](https://blog.simos.info/how-to-use-virtual-machines-in-lxd/)
+* [https://www.cyberciti.biz/faq/how-to-secure-nginx-lets-encrypt-on-centos-7/](https://www.cyberciti.biz/faq/how-to-secure-nginx-lets-encrypt-on-centos-7/)
+* [https://linuxize.com/post/secure-nginx-with-let-s-encrypt-on-centos-7/](https://linuxize.com/post/secure-nginx-with-let-s-encrypt-on-centos-7/)
+* [https://linuxconcept.com/how-to-secure-nginx-with-lets-encrypt-on-centos-7-linux/](https://linuxconcept.com/how-to-secure-nginx-with-lets-encrypt-on-centos-7-linux/)
+* https://stackoverflow.com/questions/41456996/how-to-access-docker-registry-v2-with-curl
+* https://bobcares.com/blog/docker-private-repository/
+* [https://docs.docker.com/registry/recipes/nginx/](https://docs.docker.com/registry/recipes/nginx/)
