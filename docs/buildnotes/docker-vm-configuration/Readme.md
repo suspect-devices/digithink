@@ -10,7 +10,7 @@ Lxd 4 introduced qemu/vm support making it possible to install docker in a way t
 * Install nginx
 
 
-### In order to let docker do its thing withou leaking we use a vm.
+### In order to let docker do its thing without leaking we use a vm.
 #### Create the vm.
 
 ```
@@ -100,7 +100,7 @@ Is this ok [y/d/N]: y
 Complete!
 ```
 
-### Then we realize its too old and get the current docker-ce from docker.
+### Then we realized its too old and so we got the current docker-ce from docker.
 
 #### Uninstal what we just did.
 
@@ -130,7 +130,7 @@ Is this ok [y/N]: y
 ...
 ```
 
-#### Now we add the docker repo and install.
+#### Add the docker repo and install.
 
 ```
 [root@franklin feurig]#  yum --enablerepo=Extras
@@ -251,7 +251,7 @@ For more examples and ideas, visit:
 
 ### Set up nginx and Let's Encrypt / certbot.
 
-Bouncing prompt at [https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-centos-7](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-centos-7) gets us an nginx front end to route our containers through with LetEncrypt ssl certificates that will manage themselves as long as .well-known/acme-challenge is a valid path on the server.
+The bouncing prompt at [https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-centos-7](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-centos-7) gets us an nginx front end to route our containers through with LetEncrypt ssl certificates that will manage themselves as long as .well-known/acme-challenge is a valid path on the server.
 
 ```
 [feurig@franklin ~]$ sudo bash
@@ -353,9 +353,8 @@ IMPORTANT NOTES:
 
 ```
 #### *YOU ARE HERE CONFIGURING THE PROXY !!!!*
-What we want is to merge the nginx configuration created by certbot and the one provided below. 
 
-[https://docs.docker.com/registry/recipes/nginx/](https://docs.docker.com/registry/recipes/nginx/)
+What we want is to merge the nginx configuration created by certbot and the one provided below. [https://docs.docker.com/registry/recipes/nginx/](https://docs.docker.com/registry/recipes/nginx/)
 
 
 ```
