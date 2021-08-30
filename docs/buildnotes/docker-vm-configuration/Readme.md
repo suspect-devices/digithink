@@ -102,7 +102,7 @@ Complete!
 
 ### Then we realized its too old and so we got the current docker-ce from docker.
 
-#### Uninstal what we just did.
+#### Uninstall what we just did.
 
 ```
 [root@franklin feurig]# yum remove docker \
@@ -250,7 +250,12 @@ For more examples and ideas, visit:
 ```
 
 ### Set up nginx and Let's Encrypt / certbot.
+#### Derp.
 
+For this we need an fqdn. I picked derp.
+Derp. Docker Eh? Really? Pfffft.
+
+#### BLDGP.  (Here are some other plans).
 The bouncing prompt at [https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-centos-7](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-centos-7) gets us an nginx front end to route our containers through with LetEncrypt ssl certificates that will manage themselves as long as .well-known/acme-challenge is a valid path on the server.
 
 ```
@@ -344,8 +349,8 @@ IMPORTANT NOTES:
 
 ```
 [root@franklin feurig]# docker run -d -p 5000:5000 --restart always --name registry registry:2
-{"repositories":[]}
 [root@franklin feurig]# curl localhost:5000/v2/_catalog
+{"repositories":[]}
 [root@franklin feurig]# docker tag 1fd8e1b0bb7e localhost:5000/registry:2
 [root@franklin feurig]# docker push localhost:5000/registry:2
 [root@franklin feurig]# curl localhost:5000/v2/_catalog
@@ -421,8 +426,63 @@ http {
     }
   }
 }
-```
 
+```
+# Derp's nginx.conf looks like this.
+
+```
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 4096;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+
+    server {
+    if ($host = derp.suspectdevices.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        listen       80;
+        listen       [::]:80;
+        server_name  derp.suspectdevices.com;
+    return 404; # managed by Certbot
+
+
+}}
+
+```
 
 ### References.
 
