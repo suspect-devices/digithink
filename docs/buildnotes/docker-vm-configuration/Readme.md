@@ -496,3 +496,5 @@ http {
 * https://stackoverflow.com/questions/41456996/how-to-access-docker-registry-v2-with-curl
 * https://bobcares.com/blog/docker-private-repository/
 * [https://docs.docker.com/registry/recipes/nginx/](https://docs.docker.com/registry/recipes/nginx/)
+* [https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching](https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching)
+* 
