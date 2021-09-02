@@ -357,9 +357,10 @@ IMPORTANT NOTES:
 {"repositories":["registry"]}
 
 ```
-#### *YOU ARE HERE CONFIGURING THE PROXY !!!!*
 
-What we want is to merge the nginx configuration created by certbot and the one provided below. [https://docs.docker.com/registry/recipes/nginx/](https://docs.docker.com/registry/recipes/nginx/)
+#### Configure the Proxy.
+
+What we want is to merge the nginx configuration created by certbot and the one provided below. [https://docs.docker.com/registry/recipes/nginx/](https://docs.docker.com/registry/recipes/nginx/) Also the proxy is responsible for authentication. 
 
 
 ```
@@ -428,7 +429,7 @@ http {
 }
 
 ```
-# Derp's nginx.conf looks like this.
+##### After nginx Derp's nginx.conf looks like this.
 
 ```
 # For more information on configuration, see:
@@ -483,6 +484,12 @@ http {
 }}
 
 ```
+##### Adding basic Authentication to the proxy. 
+
+But before we add the proxy pass we need to give it some basic authentication. Since we are a 2 admin user system .httpasswd is fine.
+
+#### *YOU ARE STILL HERE CONFIGURING THE PROXY !!!!*
+
 
 ### References.
 
