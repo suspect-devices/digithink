@@ -429,7 +429,7 @@ http {
 }
 
 ```
-##### After nginx Derp's nginx.conf looks like this.
+##### After istalling nginx and running certbot Derp's nginx.conf looks like this.
 
 ```
 # For more information on configuration, see:
@@ -486,11 +486,137 @@ http {
 ```
 ##### Adding basic Authentication to the proxy. 
 
-But before we add the proxy pass we need to give it some basic authentication. Since we are a 2 admin user system .httpasswd is fine.
+But before we add the proxy pass we need to give it some basic authentication. Since we are a 2 admin user system .htpasswd is fine.
 
-#### *YOU ARE STILL HERE CONFIGURING THE PROXY !!!!*
+```
+[root@franklin feurig]# yum install httpd-tools
+[root@franklin feurig]# cd /etc/nginx/
+[root@franklin nginx]# htpasswd -c .htpasswd feurig 
+[root@franklin nginx]# nano /etc/nginx/nginx.conf
+```
+
+#### Draft of the nginx.conf
+
+The idea here is to authenticate the docker requests without blocking the certbot parts.
+
+```
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+
+    ##### >>>>>>>> from https://docs.docker.com/registry/recipes/nginx/ >>>>>>>>
+    upstream docker-registry {
+       server localhost:5000;
+    }
+    ##### <<<<<<< from https://docs.docker.com/registry/recipes/nginx/ <<<<<<<
 
 
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 4096;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+
+    server {
+        server_name  derp.suspectdevices.com;
+        root         /usr/share/nginx/html;
+	
+
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        error_page 404 /404.html;
+        location = /404.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+        }
+    
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/derp.suspectdevices.com-0001/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/derp.suspectdevices.com-0001/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+ 
+    ##### >>>>>>>> from https://docs.docker.com/registry/recipes/nginx/ >>>>>>>>
+    # disable any limits to avoid HTTP 413 for large image uploads
+    client_max_body_size 0;
+
+    # required to avoid HTTP 411: see Issue #1486 (https://github.com/moby/moby/issues/1486)
+    chunked_transfer_encoding on;
+
+    location /v2/ {
+      # Do not allow connections from docker 1.5 and earlier
+      # docker pre-1.6.0 did not properly set the user agent on ping, catch "Go *" user agents
+      if ($http_user_agent ~ "^(docker\/1\.(3|4|5(?!\.[0-9]-dev))|Go ).*$" ) {
+        return 404;
+      }
+
+      # To add basic authentication to v2 use auth_basic setting.
+      auth_basic "Registry realm";
+      auth_basic_user_file /etc/nginx/.htpasswd;
+
+      ## If $docker_distribution_api_version is empty, the header is not added.
+      ## See the map directive above where this variable is defined.
+      add_header 'Docker-Distribution-Api-Version' $docker_distribution_api_version always;
+
+      proxy_pass                          http://docker-registry;
+      proxy_set_header  Host              $http_host;   # required for docker client's sake
+      proxy_set_header  X-Real-IP         $remote_addr; # pass on real client's IP
+      proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+      proxy_set_header  X-Forwarded-Proto $scheme;
+      proxy_read_timeout                  900;
+    }
+    ##### <<<<<<< from https://docs.docker.com/registry/recipes/nginx/ <<<<<<<
+    
+}
+
+
+    server {
+    if ($host = derp.suspectdevices.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        listen       80;
+        listen       [::]:80;
+        server_name  derp.suspectdevices.com;
+    return 404; # managed by Certbot
+
+
+}}
+```
+## *You are here testing/refining this configuration.*
 ### References.
 
 * [https://www.linuxtechi.com/install-docker-on-centos-7/](https://www.linuxtechi.com/install-docker-on-centos-7/)
@@ -500,8 +626,9 @@ But before we add the proxy pass we need to give it some basic authentication. S
 * [https://www.cyberciti.biz/faq/how-to-secure-nginx-lets-encrypt-on-centos-7/](https://www.cyberciti.biz/faq/how-to-secure-nginx-lets-encrypt-on-centos-7/)
 * [https://linuxize.com/post/secure-nginx-with-let-s-encrypt-on-centos-7/](https://linuxize.com/post/secure-nginx-with-let-s-encrypt-on-centos-7/)
 * [https://linuxconcept.com/how-to-secure-nginx-with-lets-encrypt-on-centos-7-linux/](https://linuxconcept.com/how-to-secure-nginx-with-lets-encrypt-on-centos-7-linux/)
-* https://stackoverflow.com/questions/41456996/how-to-access-docker-registry-v2-with-curl
-* https://bobcares.com/blog/docker-private-repository/
+* [https://stackoverflow.com/questions/41456996/how-to-access-docker-registry-v2-with-curl](https://stackoverflow.com/questions/41456996/how-to-access-docker-registry-v2-with-curl)
+* [https://bobcares.com/blog/docker-private-repository/](https://bobcares.com/blog/docker-private-repository/)
 * [https://docs.docker.com/registry/recipes/nginx/](https://docs.docker.com/registry/recipes/nginx/)
 * [https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching](https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching)
-* 
+* [https://serverfault.com/questions/230749/how-to-use-nginx-to-proxy-to-a-host-requiring-authentication](https://serverfault.com/questions/230749/how-to-use-nginx-to-proxy-to-a-host-requiring-authentication
+)
