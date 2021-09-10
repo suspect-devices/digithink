@@ -6,29 +6,29 @@ If Ubuntu's adoption of LXD and ZFS and other innovations are to mean anything t
 
 It is our intention to support the community as it tells Red hat where to go while insuring that debian and ubuntus innovations do not go to waste. Therefore our new server will run Rocky Linux to create a robust and flexible server which will compliment the work done by our Ubuntu LTS based server. 
 
-Goals.
+## Goals.
 
 * Take advantage of Rocky Linux's downstream compatibility with RHEL8
 
     * Dell's support for its hardware is limited to commercial operating systems. *attempting to get their tools (raid, idrac, configuration etc) wedged into ubuntu is like needing a root canal.*
 
-* Use the tools that Ubuntu has been supporting for virtualization.
+* Use the tools that Ubuntu/Canonical has been supporting for virtualization.
 
-    * LXD for both qemu VMs and lxc based containers.
-    * zfs -- cause it rules.
+    * LXD for both VMs and lxc based containers.
+    * zfs, cause it rules.
 
 * Leave our comfort zones.
 
     * And still do production quality work.
 
-* Hetrogenaity (look it up on the interbutts).
+* [heterogeneity](https://www.merriam-webster.com/dictionary/heterogeneity).
 
 ## Minimal Viable Product.
 In our environment Bernie's primary function has been to provide a fallback to Kate's solid work. It has been our playground and our backup server. At a minimum the new server needs to provide an LXD server to test and backup our production containers and virtual machines. As a refence we will start at [Rocky Linux's LXD server guide](https://docs.rockylinux.org/guides/lxd_server/).
 
-The plan.
+### The plan.
 
-There are several factors that we won't be able to consider until we are actually on the box. Like whether or not the ssd's will work well with the old percs.
+There are several factors that we won't be able to consider until we are actually on the box. Like whether or not the ssd's will work well with the old raid controller.
 
 1. Export images for ernest and the vm's teddy, and franklin.
 2. Pull archive disk and mount it's replacement on kb2018.
