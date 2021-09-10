@@ -630,5 +630,6 @@ http {
 * [https://bobcares.com/blog/docker-private-repository/](https://bobcares.com/blog/docker-private-repository/)
 * [https://docs.docker.com/registry/recipes/nginx/](https://docs.docker.com/registry/recipes/nginx/)
 * [https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching](https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching)
-* [https://serverfault.com/questions/230749/how-to-use-nginx-to-proxy-to-a-host-requiring-authentication](https://serverfault.com/questions/230749/how-to-use-nginx-to-proxy-to-a-host-requiring-authentication
-)
+* [https://serverfault.com/questions/230749/how-to-use-nginx-to-proxy-to-a-host-requiring-authentication](https://serverfault.com/questions/230749/how-to-use-nginx-to-proxy-to-a-host-requiring-authentication)
+* https://www.nginx.com/blog/nginx-plus-authenticate-users/
+* https://developer.okta.com/blog/2018/08/28/nginx-auth-request
