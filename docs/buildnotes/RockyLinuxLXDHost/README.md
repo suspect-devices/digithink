@@ -1,10 +1,11 @@
-# <DEL>Rocky Linux 8.4</DEL> *Ubuntu 21.04 (Hirsute Hippo)* LXD host. (AOC2024 install)
+# <DEL>Rocky Linux 8.4</DEL> *Ubuntu 21.04 (Hirsute Hippo)* LXD host. (*orignal* AOC2024 install *notes*)
 
-*I had hoped that the new community supported downstream operating system based on Red Hats Enterprize Linux would take my work out of the nightmare of FC26 and Centos7. Since they run Dell Hardware, some of which is as old as our server hardware I thought it was an opportunity to test the way forward. It failed. But better to fail here where we aren't taking others with us. And in ways that make us see the errors in our way.*
+*I had hoped that the new community supported downstream operating system based on Red Hats Enterprize Linux could take my work out of the nightmare of FC26 and Centos7. Since they run Dell Hardware, some of which is as old as our server hardware I thought it was an opportunity to test it as way forward. It failed miserably. But better to fail here where we aren't taking others with us and in ways that make us see the errors in our way.*
 
 * The original text in this document is plain text.
 * <del>Where the text is no longer relevant its struck through.
 * *Corrections are in italics*
+* The new document for the server build will be at [https://www.digithink.com/buildnotes/LXD-snapshot-host/](https://www.digithink.com/buildnotes/LXD-snapshot-host/)
 
 
 While bs2020 the candiate and kb2018 our Governer have served us well for the last few years its time for something new. Something community sourced, smart, and revolutionary. AOC2024 
@@ -18,7 +19,7 @@ It <del>is</del>*was* our intention to support the community as it tells Redhat 
 
 * <del>Take advantage of Rocky Linux's downstream *bug for bug* compatibility with RHEL8</del>
 
-    * Dell's support for its hardware is limited to commercial operating systems. Attempting to get their tools (raid, idrac, configuration etc) wedged into ubuntu is like needing a root canal. *but apparently in centos 8 Redhat and Dell only support what they are currently selling.*
+    * Dell's support for its hardware is limited to commercial operating systems. Attempting to get their tools (raid, idrac, configuration etc) wedged into ubuntu is like needing a root canal. *Apparently, in RHEL 8, Redhat and Dell only support what they are currently selling.*
 
 * Use the tools that Ubuntu/Canonical has been supporting for virtualization.
 
