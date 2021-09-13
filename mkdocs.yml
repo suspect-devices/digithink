@@ -15,4 +15,5 @@ theme:
     - navigation.expand
 
 plugins:
+    - search
     - with-pdf
