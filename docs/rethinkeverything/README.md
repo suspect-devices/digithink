@@ -10,9 +10,9 @@
     * Redact and copy your notes in Triplicate.
     * Create/test and share open source gists/solutions
     * Make work pathways to give back to the community
-    * If you have to learn it you best use it at home (ansible/jellyfish/usw)
+    * If you have to learn it you best use it at home (lxd5/ansible/jellyfish/usw)
 
-* Work on one less thing.
+* Work on one less thing (simplify).
   * Every convenience is a point of failure or an attack surface.
   * Git does not need to look good to be usefull. (--gitea, --gitlab, ++bare-git+hooks/mirrors)
   * -- Twitter
