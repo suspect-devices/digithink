@@ -33,15 +33,19 @@
     * dhcp
     * tftp
     * iscsi
+ 
   * All active work behind at least one firewall.
-    * Automate pushes.
-    * Streamline/cleanup push
+    * Automate pushes (including this site).
+    * Streamline/cleanup html generation
 
 * Let's go to your place.
-  * Ticketing systems should be more like distributed <del>punch</del><i>note</i>cards. --trac
-  * You shouldnt be giving out XXX bucks a month to post your public images so they can be "distributed"
-    * flicker free
-    * multi homed
+    * Ticketing systems should be more like distributed <del>punch</del><i>note</i>cards. --trac
+    * You shouldnt be giving out XXX bucks a month to post your public images so they can be "distributed"
+        * flicker free
+        * multi homed
+    * Just because you have source control doesnt mean it's all code 
+        * use markdown/git for most things.
+        * but focus on the english.
 
 ## Sarcasms (link them later)
 
