@@ -13,14 +13,14 @@
     * If you have to learn it you best use it at home (lxd5/ansible/jellyfish/usw)
 
 * Work on one less thing (simplify).
-  * Every convenience is a point of failure or an attack surface.
-  * Git does not need to look good to be usefull. (--gitea, --gitlab, ++bare-git+hooks/mirrors)
-  * -- Twitter
-    * with or without musk
-    * also #fuckthatguy).
-    * If your content is usefull it will recieve the appropriate tweets, links, usw.
-    * and if it doesnt the internet is fundamentally broken.
-  * If your wysywig is so unusable you don't "blog" Throw it away. (--wordpress)  
+    * Every convenience is a point of failure or an attack surface.
+    * Git does not need to look good to be usefull. (--gitea, --gitlab, ++bare-git+hooks/mirrors)
+    * -- Twitter
+        * with or without musk
+        * also #fuckthatguy).
+        * If your content is usefull it will recieve the appropriate tweets, links, usw.
+        * and if it doesnt the internet is fundamentally broken.
+    * If your wysywig is so unusable you don't "blog" Throw it away. (--wordpress)  
 
 * Home is where the heart is.
   * Don't let pi/routers do server/container work.
