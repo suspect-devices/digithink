@@ -2,12 +2,12 @@
 
 (Notes to myself #rethinkeverything)
 
-* It's your data...
+### It's your data...
 
   * Hand Copy it in Triplicate.
   * If its social then scrape it and automate it. God knows they do.
 
-* It's your work.
+### It's your work.
 
   * They can't own what you learn.
   * Redact and copy your notes in Triplicate.
@@ -15,7 +15,7 @@
   * Make work pathways to give back to the community
   * If you have to learn it you best use it at home (lxd5/ansible/jellyfish/usw)
 
-* Work on one less thing (simplify).
+### Work on one less thing (simplify).
 
   * Every convenience is a point of failure or an attack surface.
   * Git does not need to look good to be usefull. (--gitea, --gitlab, ++bare-git+hooks/mirrors)
@@ -28,7 +28,7 @@
 
   * If your wysywig is so unusable you don't "blog" Throw it away. (--wordpress)  
 
-* Home is where the heart is.
+### Home is where the heart is.
 
   * Don't let pi/routers do server/container work.
     * PiHole (filtering dns)
@@ -46,7 +46,7 @@
     * Automate pushes (including this site).
     * Streamline/cleanup html generation
 
-* Let's go to your place.
+### Let's go to your place.
 
   * Ticketing systems should be more like distributed <del>punch</del><i>note</i>cards. --trac
   * You shouldnt be giving out XXX bucks a month to post your public images so they can be "distributed"
@@ -54,10 +54,21 @@
     * flicker free
     * multi homed
 
-  * Just because you have source control doesnt mean it's all code
+### Just because you have source control doesnt mean it's all code
 
-    * use markdown/git for most things.
-    * but focus on the english.
+* use markdown/git for most things.
+* but focus on the english.
+
+### Work imitates life
+
+*(What problems are we trying to solve)*
+
+* Minimize technical debt both past and future.
+* Disentangle the various interconnected pieces and dependencies
+* Automate as much as possible
+* Document what is to be done. (Specification and sample implimentation)
+* Experience based stepwise refinement.
+
 
 ## Sarcasms (link them later)
 
