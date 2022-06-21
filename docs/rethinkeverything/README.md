@@ -1,6 +1,10 @@
 # There is no bullet list like MY Bullet list
 
-(Notes to myself #rethinkeverything)
+*(Notes to myself #rethinkeverything)*
+
+### Switch hands
+  * Move the pain 
+  * Rewire the brain
 
 ### It's your data...
 
