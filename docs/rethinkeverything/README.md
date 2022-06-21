@@ -49,7 +49,7 @@
   * All active work behind at least one firewall.
     * Automate pushes (including this site).
     * Streamline/cleanup html generation
-
+    * It should also be replicated in at least one other location
 ### Let's go to your place.
 
   * Ticketing systems should be more like distributed <del>punch</del><i>note</i>cards. --trac
