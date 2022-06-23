@@ -3,60 +3,62 @@
 *(Notes to myself #rethinkeverything)*
 
 ### Switch hands
-  * Move the pain 
-  * Rewire the brain
 
-### It's your data...
+* Move the pain
+* Rewire the brain
 
-  * Hand Copy it in Triplicate.
-  * If its social then scrape it and automate it. God knows they do.
+### It's your data
 
-### It's your work.
+* Hand Copy it in Triplicate.
+* If its social then scrape it and automate it. God knows they do.
 
-  * They can't own what you learn.
-  * Redact and copy your notes in Triplicate.
-  * Create/test and share open source gists/solutions
-  * Make work pathways to give back to the community
-  * If you have to learn it you best use it at home (lxd5/ansible/jellyfish/usw)
+### It's your work
 
-### Work on one less thing (simplify).
+* They can't own what you learn.
+* Redact and copy your notes in Triplicate.
+* Create/test and share open source gists/solutions
+* Make work pathways to give back to the community
+* If you have to learn it you best use it at home (lxd5/ansible/jellyfish/usw)
 
-  * Every convenience is a point of failure or an attack surface.
-  * Git does not need to look good to be usefull. (--gitea, --gitlab, ++bare-git+hooks/mirrors)
-  * -- Twitter
+### Work on one less thing (simplify)
 
-    * with or without musk
-    * also #fuckthatguy).
-    * If your content is usefull it will recieve the appropriate tweets, links, usw.
-    * and if it doesnt the internet is fundamentally broken.
+* Every convenience is a point of failure or an attack surface.
+* Git does not need to look good to be usefull. (--gitea, --gitlab, ++bare-git+hooks/mirrors)
+* -- Twitter
 
-  * If your wysywig is so unusable you don't "blog" Throw it away. (--wordpress)  
+  * with or without musk
+  * also #fuckthatguy).
+  * If your content is usefull it will recieve the appropriate tweets, links, usw.
+  * and if it doesnt the internet is fundamentally broken.
 
-### Home is where the heart is.
+* If your wysywig is so unusable you don't "blog" Throw it away. (--wordpress)  
 
-  * Don't let pi/routers do server/container work.
-    * PiHole (filtering dns)
-    * dhcp
-    * look at virtualized routing
+### Home is where the heart is
 
-  * If you can't netboot off of it is it really your network.
+* Don't let pi/routers do server/container work.
+  * PiHole (filtering dns)
+  * dhcp
+  * look at virtualized routing
 
-    * Same goes for centralized management (ldap).
-    * dhcp
-    * tftp
-    * iscsi
+* If you can't netboot off of it is it really your network.
 
-  * All active work behind at least one firewall.
-    * Automate pushes (including this site).
-    * Streamline/cleanup html generation
-    * It should also be replicated in at least one other location
-### Let's go to your place.
+  * Same goes for centralized management (ldap).
+  * dhcp
+  * tftp
+  * iscsi
 
-  * Ticketing systems should be more like distributed <del>punch</del><i>note</i>cards. --trac
-  * You shouldnt be giving out XXX bucks a month to post your public images so they can be "distributed"
+* All active work behind at least one firewall.
+  * Automate pushes (including this site).
+  * Streamline/cleanup html generation
+  * It should also be replicated in at least one other location
 
-    * flicker free
-    * multi homed
+### Let's go to your place
+
+* Ticketing systems should be more like distributed <del>punch</del><i>note</i>cards. --trac
+* You shouldnt be giving out XXX bucks a month to post your public images so they can be "distributed"
+
+  * flicker free
+  * multi homed
 
 ### Just because you have source control doesnt mean it's all code
 
@@ -71,10 +73,9 @@
 * Disentangle the various interconnected pieces and dependencies
 * Automate as much as possible
 * Document what is to be done. (Specification and sample implimentation)
-* Experience based stepwise refinement.
-
+* Practice experience based stepwise refinement.
 
 ## Sarcasms (link them later)
 
 1. See: Tufte's critiq of power point.
-2. "as code" is only as good as the management understanding of the job of the people actually write and maintain it minus corporate whims, the abuse of executive privilege, and cultural constraints..
+2. "as code" is only as good as managements understanding of the job of the people who actually write and maintain it minus corporate whims, the abuse of executive privilege, and cultural constraints..
