@@ -1,7 +1,7 @@
 ``` yaml
-# ------------------------------------ rules/ubuntu-unifi-server/tasks/main.yml
+# ------------------------------------ roles/ubuntu-unifi-server/tasks/main.yml
 - name: download unifi-lastest script
-  ansible.builtin.get_url:
+  get_url:
     url: https://get.glennr.nl/unifi/install/install_latest/unifi-latest.sh
     dest: /root/unifi-latest.sh
     mode: '0700'
