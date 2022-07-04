@@ -59,9 +59,5 @@ http {
         server_name _;
         return 301 https://$host:8443$request_uri;
     }
-	access_log /var/log/nginx/access.log;
-	error_log /var/log/nginx/error.log;
-	include /etc/nginx/conf.d/*.conf;
-	include /etc/nginx/sites-enabled/*;
 }
 ```

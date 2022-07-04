@@ -15,8 +15,13 @@
 # Dont Let NetworkManager manage *ANY* devices on this system
 #
 # enp3s0f0  68:fe:f7:09:3c:4c
+# Dont Let NetworkManager manage *ANY* devices on this system
+#2: enp3s0f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+#    link/ether 68:fe:f7:09:3c:4c brd ff:ff:ff:ff:ff:ff
+#    inet 192.168.128.229/17 brd 192.168.255.255 scope global dynamic noprefixroute enp3s0f0
+#3: wlp2s0: <NO-CARRIER,BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state DORMANT group default qlen 1000
+#    link/ether 18:81:0e:ee:7c:88 brd ff:ff:ff:ff:ff:ff
 
-...
 network:
   version: 2
   renderer: networkd
@@ -38,12 +43,16 @@ network:
         mtu: 7000
         addresses:
             - 192.168.129.45/17
-        gateway4: 192.168.129.1
+        #gateway4: 192.168.129.1
+        routes:
+          - to: default
+            via: 192.168.129.1
         nameservers:
             addresses:
                 - 192.168.129.1
                 - 198.202.31.132
         interfaces:
+            - eth0
             - eth0
 # netplan apply
 # reboot
