@@ -171,3 +171,14 @@ ea=none
 # chown feurig /tank/
 # su - feurig
 ```
+
+### Documentation. 
+
+```plaintext
+ip3 install mkdocs                                      # Install mkdocs
+pip3 install mkdocs-bootswatch                           # Themes
+pip3 install mkdocs-multirepo-plugin                     # Multi-repo support
+pip3 install mkdocs-mermaid2-plugin                      # Mermaid.js support
+pip3 install autolink-references-mkdocs-plugin           # Autolink tickets inserted into docs
+#mkdocs serve
+```
