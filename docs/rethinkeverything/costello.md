@@ -8,7 +8,7 @@
 ```
 
 ```shell
-# ip a >> /etc/netplan/01-network-manager-all.yaml
+# ip a |sed 's/^/# /'>> /etc/netplan/01-network-manager-all.yaml
 # nano /etc/netplan/01-network-manager-all.yaml
 #------------------------------------- /etc/netplan/01-network-manager-all.yaml
 #
@@ -52,7 +52,6 @@ network:
                 - 192.168.129.1
                 - 198.202.31.132
         interfaces:
-            - eth0
             - eth0
 # netplan apply
 # reboot
