@@ -147,6 +147,19 @@ cluster:
 ```
 
 ```shell
+nano /etc/systemd/resolved.conf
+[Resolve]
+DNS=192.168.129.250
+#FallbackDNS=
+Domains=lan suspetdevices.com local
+ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+nano /etc/nsswitch.conf
+...
+hosts:          files mdns4_minimal dns [NOTFOUND=return] dns
+...
+```
+
+```shell
 # nano /etc/netatalk/afp.conf
 ;--------------------------------------------- /etc/netatalk/afp.conf
 ; Netatalk 3.x configuration file
