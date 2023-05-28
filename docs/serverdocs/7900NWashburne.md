@@ -1,5 +1,7 @@
 #Portland
 
+Most of the active work here is under (start making) [sense](sense/).
+
 * [wiki:Annie Annie (File server)]
 * [wiki:Mullein Mullein (Firewall/VPN server)]
 * [wiki:Nigel Nigel (IOT gateway)]

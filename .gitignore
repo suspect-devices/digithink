@@ -2,3 +2,4 @@
 **/._[a-zA-Z]*
 site/*
 .DS_Store
+.vscode

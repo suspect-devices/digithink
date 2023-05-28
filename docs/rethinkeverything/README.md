@@ -25,9 +25,8 @@
 * Every convenience is a point of failure or an attack surface.
 * Git does not need to look good to be usefull. (--gitea, --gitlab, ++bare-git+hooks/mirrors)
 * -- Twitter
-
   * with or without musk
-  * also #fuckthatguy).
+  * also #fuckthatguy.
   * If your content is usefull it will recieve the appropriate tweets, links, usw.
   * and if it doesnt the internet is fundamentally broken.
 
@@ -56,7 +55,6 @@
 
 * Ticketing systems should be more like distributed <del>punch</del><i>note</i>cards. --trac
 * You shouldnt be giving out XXX bucks a month to post your public images so they can be "distributed"
-
   * flicker free
   * multi homed
 
@@ -75,6 +73,17 @@
 * Document what is to be done. (Specification and sample implimentation)
 * Practice experience based stepwise refinement.
 
+### [Start making sense](sense/).
+
+#### Consolidate home network using OPNSense.
+- REMOVE openwrt router
+- REMOVE dedicated caching server
+- REMOVE dedicated dnsmasq server.
+- REMOVE (that fucking qwest router)
+- KEEP Pihole-FTL dns based blacklisting
+- ADD Better firewall rules
+- ADD VPN acces to home network
+- ADD Isolated Wireless network for solar array controller.
 ## Sarcasms (link them later)
 
 1. See: Tufte's critiq of power point.
