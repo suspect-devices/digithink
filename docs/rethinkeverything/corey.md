@@ -69,3 +69,20 @@ history|cut -c8-200
 3. Why the fuck does your default install not deal with the fact that NO ONE USES FTP FOR ANYTHING.
 4. WHO THE FUCK BOTHERS TO EXPORT AND IMORT A SITE USING LESS THAN 2M of data.
 5. Man the result of exporting a site and importing it creates some goddamned ugly site.
+
+## References.
+
+- https://www.hostinger.com/tutorials/fix-the-uploaded-file-exceeds-the-upload-max-filesize-directive-in-php-ini-wordpress
+- https://stackoverflow.com/questions/37157264/wordpress-plugin-install-could-not-create-directory
+- THIS https://www.linode.com/docs/guides/how-to-install-wordpress-ubuntu-22-04/
+-https://ubuntu.com/server/docs/how-to-install-and-configure-wordpress
+
+### THIS
+(Optional) WordPress typically uses FTP credentials to install new themes and plug-ins. Add the following lines to the wp_config.php file to remove this restriction. This file is located in the root directory for the domain inside the public_html subdirectory.
+
+
+File: /var/www/html/example.com/public_html/wp-config.php
+```
+/** Bypass FTP */
+define('FS_METHOD', 'direct');
+```
