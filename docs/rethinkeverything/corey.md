@@ -1,9 +1,7 @@
-# wordpress in 2023.
-I still havn't managed to export my wordpress site into something static and maria free and I seem to need to keep using it even though the ui has become impossible to blog in. So I am readopting wordpress or at least trying to get it running on this years ubuntu and not hating it too much. Also upgrading the server from focal to jammy screws this site into something approaching disfunction usually only found at work work without the coresponding paycheck. 
+# Wordpress in 2024
+After 3+ years of trying, I still havn't managed to export my wordpress site into something static and maria free and I seem to need to keep using it even though the ui has become impossible to blog in. So I am readopting wordpress or at least trying to get it running on this years ubuntu and not hating it too much. Also upgrading the existing server from focal to jammy screws this site into something approaching disfunction usually only found at work work without the coresponding paycheck.
 
-
-
-OS ubuntu using apt install wordpress. 
+OS ubuntu using apt install wordpress.
 WOOOT! We can install wordpress as a package!!!
 
 ```
@@ -12,7 +10,7 @@ apt install wordpress
 apt install certbot python3-certbot-apache
 cd /etc/apache2/sites-available/
 ```
-Unfortunately its not that simple. The example from ubuntu sucks ass in terms of detail and the details are on the sites that hand roll the software. 
+Unfortunately its not that simple. The example from ubuntu sucks ass in terms of detail and the details are on the sites that hand roll the software.
 
 ```
 apt update
@@ -63,14 +61,14 @@ history
 history|cut -c8-200
 ```
 
-# the mother fucking issues.
-1. Why the fuck do you move the location of the software when you package it.
-2. Why the fuck dont you install mysql-server
-3. Why the fuck does your default install not deal with the fact that NO ONE USES FTP FOR ANYTHING.
-4. WHO THE FUCK BOTHERS TO EXPORT AND IMORT A SITE USING LESS THAN 2M of data.
+# the mother obscening issues (based on 2023s attempt)
+1. Why the obscenity do you move the location of the software when you package it.
+2. Why the obscenity don't you install mysql-server
+3. Why the obscenity does your default install not deal with the fact that NO ONE USES FTP FOR ANYTHING.
+4. WHO THE OBSCENITY BOTHERS TO EXPORT AND IMPORT A SITE USING LESS THAN 2M of data.
 5. Man the result of exporting a site and importing it creates some goddamned ugly site.
 
-## References.
+## References
 
 - https://www.hostinger.com/tutorials/fix-the-uploaded-file-exceeds-the-upload-max-filesize-directive-in-php-ini-wordpress
 - https://stackoverflow.com/questions/37157264/wordpress-plugin-install-could-not-create-directory
@@ -79,7 +77,6 @@ history|cut -c8-200
 
 ### THIS
 (Optional) WordPress typically uses FTP credentials to install new themes and plug-ins. Add the following lines to the wp_config.php file to remove this restriction. This file is located in the root directory for the domain inside the public_html subdirectory.
-
 
 File: /var/www/html/example.com/public_html/wp-config.php
 ```

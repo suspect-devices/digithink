@@ -1,10 +1,10 @@
 
-# Start making sense.
+# Start making sense
 
-At work we use pf on freebsd-13.1 for our firewalls. I have been re-learning it as my freebsd-firewall experience is over 2 decades old. At home and in the colo we have been using openwrt which is great but a real pain to keep updated and deploy. 
+At work we use pf on freebsd for our firewalls. I have been re-learning it as my freebsd-firewall experience is over 2 decades old. At home and in the colo we have been using openwrt which is great but a real pain to keep updated and deploy.
 I have been looking at pfsense and in the process, I discovered opnsense. If my BSD/PF chops ever get good enough I may go to straight freebsd but the convenience of guided configuration of a secure system is hard to ignore [[1]](#fn1)
 
-## The hardware 
+## The hardware
 
  As I was considering looking at pfsense I scored a pair of routers with 6x1G ports, and room for a pair of ssds.
 
@@ -17,7 +17,7 @@ After that I installed opensense and started working on my list of things to do.
 
 
 
-### The goal: Consolidate home network using OPNSense.
+### The goal: Consolidate home network using OPNSense
 - [x] REMOVE openwrt router
 - [x] REMOVE dedicated caching server (Done)
 - [x] REMOVE dedicated dnsmasq server
