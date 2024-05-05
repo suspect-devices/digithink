@@ -50,7 +50,7 @@ Phase two extends on this by integrate Ansible into system maintenance tasks.
 
 At present the environment  contains a vpn capable router (Knight) and two enterrise class servers 
 
-* bs2020 , a Dell PowerEdge R610 [[br]]and 
+* aoc2024 , a Dell PowerEdge R610 [[br]]and 
 * kb2018 a HP ProLiant DL380 (g7) .
 
 ## Network
@@ -63,7 +63,9 @@ The network is divided into 3 segments
 
 The hosts themselves do not have any public facing interfaces and are only accessible though the admin lan. The containers which handle all public facing work do so via an anonymous bridge configuration, allowing them to access the internet directly without allowing external access to the servers.
 
-|   |   |   |   |  bs2020 ports|
+### AOC network config
+
+|   |   |   |   |  aoc2024 ports|
 |---|---|---|---|-----------------|
 |port| Interface| IP Address/mask |  linux device| purpose|
 | 1 |  eno1  |   192.168.31.158/24  | eno1 |internal / admin lan|
@@ -76,7 +78,53 @@ As Drawn|As Deployed.
 ---|---
 ![](images/IMG_1402.jpg) | ![](images/r610Network.jpg)
 
+/etc/netplan/00-allthethings.yml
+```
+network:
+  ethernets:
+    eno1:
+      dhcp4: false
+      dhcp6: false
+    eno2:
+      dhcp4: false
+      dhcp6: false
+    eno3:
+      dhcp4: false
+      dhcp6: false
+    eno4:
+      dhcp4: false
+      dhcp6: false
+  bridges:
+    br1:
+      dhcp4: false
+      dhcp6: false
+      interfaces:
+         - eno4
+    br0:
+      dhcp4: false
+      dhcp6: false
+      interfaces:
+         - eno3
+    br3:
+      dhcp4: false
+      dhcp6: false
+      addresses:
+      - 192.168.31.158/24
+      routes:
+      - to: default
+        via: 192.168.31.1
+      nameservers:
+        addresses:
+        - 198.202.31.132
+        - 198.202.31.141
+        search: [suspectdevices.com fromhell.com vpn]
+      interfaces:
+         - eno1
 
+  version: 2
+```
+
+### KB2018 Network Config
 
 |   |   |   |   |    kb2018 ports|
 |---|---|---|---|-----------------|
@@ -91,6 +139,52 @@ As Drawn|As Deployed.
 ---|---
 ![](images/IMG_1401.jpg) | ![](images/DL380Network.jpg)
 
+#### As implimented in /etc/netplan/xxxxx
+
+```
+network:
+  ethernets:
+    enp3s0f0:
+      dhcp4: false
+      dhcp6: false
+    enp3s0f1:
+      dhcp4: false
+      dhcp6: false
+    enp4s0f0:
+      dhcp4: false
+      dhcp6: false
+    enp4s0f1:
+      dhcp4: false
+      dhcp6: false
+  bridges:
+    br1:
+      dhcp4: false
+      dhcp6: false
+      interfaces:
+         - enp4s0f1:
+    br0:
+      dhcp4: false
+      dhcp6: false
+      interfaces:
+         - enp4s0f0:
+    br3:
+      dhcp4: false
+      dhcp6: false
+      addresses:
+      - 192.168.31.159/24
+      routes:
+      - to: default
+        via: 192.168.31.1
+      nameservers:
+        addresses:
+        - 198.202.31.132
+        - 198.202.31.141
+        search: [suspectdevices.com fromhell.com vpn]
+      interfaces:
+         - enp4s0f1
+
+  version: 2
+```
 
 See: ​[https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts](https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts) which is built referencing [a google doc with proposed allocations](https://docs.google.com/spreadsheets/d/1KRkqdYvgRtV4vu6AGzdLWJVGTIsV2o2iSSJBEFMZJAw/edit#gid=0)
 
