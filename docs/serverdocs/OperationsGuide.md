@@ -161,12 +161,12 @@ network:
       dhcp4: false
       dhcp6: false
       interfaces:
-         - enp4s0f1:
+         - enp3s0f1:
     br0:
       dhcp4: false
       dhcp6: false
       interfaces:
-         - enp4s0f0:
+         - enp3s0f0:
     br3:
       dhcp4: false
       dhcp6: false
