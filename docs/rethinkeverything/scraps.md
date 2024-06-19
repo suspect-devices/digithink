@@ -68,3 +68,4 @@ zpool create zjail multipath/mp0
 zfs set mountpoint=/jails zjail
 zpool set autotrim=on zroot
 zfs set compression=off zjail
+
