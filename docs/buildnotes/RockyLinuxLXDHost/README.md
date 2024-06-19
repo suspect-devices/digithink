@@ -37,7 +37,7 @@ In our environment, Bernie's primary function has been to provide a fallback to 
 
 ### The <del>original</del>*revised* plan.
 
-There are several factors that we won't be able to consider until we are actually on the box. Like whether or not <del>the ssd's will work well with the old raid controller. </del> 
+There are several factors that <del>we won't be able to</del>*couldn't have* consider*ed* until we <del>are</del>*were* actually on the box. Like whether or not <del>the ssd's will work well with the old raid controller. </del> 
 *The installer will find the disks presented by the raid controller.
 The SSDs were fine, however Rocky is aptly named..*
 
@@ -82,5 +82,3 @@ The SSDs were fine, however Rocky is aptly named..*
 2. <a name=fn2></a>See: [trumpery](https://www.lexico.com/en/definition/trumpery)
 3. <a name=fn3></a>BLDGP/BLGDP = "Build it Like the Dad Gummed Plans". This is a reference to a 70s American Aircraft Modeler editorial on people building tri-planes out of plans for bi-planes and then wondering why they don't fly.
 4. *<a name=fn4></a>Although thanks to LXD4 we are running Rocky Linux 8.4, along with Centos 7 and Freebsd. So failure is relative.*
-
-
