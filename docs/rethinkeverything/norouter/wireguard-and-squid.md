@@ -5,7 +5,7 @@ After working through the complexities of using headscale/tailscale I realized t
 1. Provide us access to the admin lan (the servers and their remote consoles).
 2. Allow the servers to reach the update repositories.
 
-By using a container with access to both the external lan and the admin lan we can set up wireguard and squid. Wireguard allows us to securely connect to the admin lan while squid allows the servers a mechanism to recieve software updated.
+By using a container with access to both the external lan and the admin lan we can set up wireguard and squid. Wireguard allows us to securely connect to the admin lan while squid allows the servers a mechanism to recieve software updates.
 
 ## SETTING UP THE CONTAINER
 
