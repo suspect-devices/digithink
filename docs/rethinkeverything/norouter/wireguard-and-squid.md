@@ -81,11 +81,11 @@ wg genkey | sudo tee private.key
 chmod go= private.key
 private.key | wg pubkey | sudo tee public.key
 wg genpsk |tee preshared.psk
-nano /etc/wireguard/wg-server.conf
+nano /etc/wireguard/wg0.conf
 ```
 
 ```
-# wg-server.conf
+# wg0.conf
 [Interface]
 Address = 10.0.0.1/32
 ListenPort = 1194
