@@ -7,6 +7,16 @@ After working through the complexities of using headscale/tailscale I realized t
 
 By using a container with access to both the external lan and the admin lan we can set up wireguard and squid. Wireguard allows us to securely connect to the admin lan while squid allows the servers a mechanism to recieve software updates.
 
+
+``` mermaid
+graph LR
+  A[Start] --> B{Error?};
+  B -->|Yes| C[Hmm...];
+  C --> D[Debug];
+  D --> B;
+  B ---->|No| E[Yay!];
+```
+
 ## SETTING UP THE CONTAINER
 
 ```
