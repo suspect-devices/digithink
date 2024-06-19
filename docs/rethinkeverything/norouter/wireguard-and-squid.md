@@ -81,7 +81,7 @@ sysctl -w net.ipv4.ip_forward=1
 cd /etc/wireguard/
 wg genkey | sudo tee private.key
 chmod go= private.key
-private.key | wg pubkey | sudo tee public.key
+cat private.key | wg pubkey | sudo tee public.key
 wg genpsk |tee preshared.psk
 nano /etc/wireguard/wg0.conf
 ```
