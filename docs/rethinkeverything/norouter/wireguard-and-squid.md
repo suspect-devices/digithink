@@ -11,7 +11,8 @@ After working through the complexities of using headscale/tailscale I realized t
 root@aoc2024:~# lxc init ubuntu:22.04 homer -c security.privileged=true -p susdev23 -p infra
 root@aoc2024:~# lxc config edit homer
 name: homer
-description: "wireguard/squid host"...
+description: "wireguard/squid host"
+...
 devices:
   eth1:
     name: eth1
@@ -185,7 +186,7 @@ Acquire::http::Proxy "http://192.168.31.227:3128/";
 ```
 ### Test apt through proxy
 ```
-root@aoc2024:/etc/apt/apt.conf.d# ip route delete default^C
+root@aoc2024:/etc/apt/apt.conf.d# ip route delete default
 root@aoc2024:/etc/apt/apt.conf.d# ip route
 192.168.31.0/24 dev br3 proto kernel scope link src 192.168.31.158
 root@aoc2024:/etc/apt/apt.conf.d# apt update
