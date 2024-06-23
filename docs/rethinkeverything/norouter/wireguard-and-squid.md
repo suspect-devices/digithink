@@ -1,21 +1,24 @@
-# Replacing the colo router with a container
+# Replacing the colo router with a container (or two)
 
 After working through the complexities of using headscale/tailscale I realized that I really only needed the colo router to do 2 things.
 
 1. Provide us access to the admin lan (the servers and their remote consoles).
+
+    ```mermaid
+    graph LR
+    D([192.168.31.0/24])<-->A[Host]
+    C[laptop] <-- Wireguard --> B(homer/virgil);
+    B <-- Wireguard -->D;
+    ```
+
 2. Allow the servers to reach the update repositories.
+    ```mermaid
+    graph LR
+    B --> I([internet])
+    A[Host] -- Apt Via Squid https://homer.colo:3128 --> B(homer/virgil);
+    ```
 
-By using a container with access to both the external lan and the admin lan we can set up wireguard and squid. Wireguard allows us to securely connect to the admin lan while squid allows the servers a mechanism to recieve software updates.
-
-
-```mermaid
-graph LR
-  A[Start] --> B{Error?};
-  B -->|Yes| C[Hmm...];
-  C --> D[Debug];
-  D --> B;
-  B ---->|No| E[Yay!];
-```
+By using a container (or two) with access to both the external lan and the admin lan we can set up wireguard and squid. Wireguard allows us to securely connect to the admin lan while squid allows the servers a mechanism to recieve software updates.
 
 ## SETTING UP THE CONTAINER
 
