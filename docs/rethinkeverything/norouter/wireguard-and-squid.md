@@ -15,7 +15,7 @@ After working through the complexities of using headscale/tailscale I realized t
     ```mermaid
     graph LR
     B --> I([internet])
-    A[Host] -- Apt Via Squid https://homer.colo:3128 --> B(homer/virgil);
+    A[Host] -- Apt Via Squid --> B(homer/virgil);
     ```
 
 By using a container (or two) with access to both the external lan and the admin lan we can set up wireguard and squid. Wireguard allows us to securely connect to the admin lan while squid allows the servers a mechanism to recieve software updates.
