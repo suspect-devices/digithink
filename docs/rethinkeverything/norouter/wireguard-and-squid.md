@@ -6,7 +6,8 @@ After working through the complexities of using headscale/tailscale I realized t
 
     ```mermaid
     graph LR
-    D([192.168.31.0/24])<-->A[Host]
+    D([192.168.31.0/24])<-->A[Host interface]
+    D<-->E[Host Drac/ILO]
     C[laptop] <-- Wireguard --> B(homer/virgil);
     B <-- Wireguard -->D;
     ```
