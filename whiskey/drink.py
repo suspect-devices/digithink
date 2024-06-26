@@ -7,7 +7,8 @@ app = Flask(__name__)
 
 @app.route("/whiskey/<style>",methods = ['POST', 'GET'])
 def whiskey(style):
-#    ret=subprocess.call(['mkdocs', 'build'], cwd="/var/www/digithink")
+    subprocess.call(['at', 'now', '-f', '/var/www/digithink/whiskey/pullandbuild.sh'])
+# subprocess.call(['mkdocs', 'build'], cwd="/var/www/digithink")
     return f"One Whiskey, {escape(style)}!"
 
 if __name__ == "__main__":
