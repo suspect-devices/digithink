@@ -3,7 +3,7 @@ from markupsafe import escape
 
 app = Flask(__name__)
 
-@app.route("/whiskey/<style>")
+@app.route("/whiskey/<style>",methods = ['POST', 'GET'])
 def whiskey(style):
     return f"One Whiskey, {escape(style)}!"
 
