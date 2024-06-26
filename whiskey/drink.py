@@ -1,4 +1,6 @@
 from flask import Flask
+from flask import escape
+
 app = Flask(__name__)
 
 @app.route("/whiskey/<style>")
