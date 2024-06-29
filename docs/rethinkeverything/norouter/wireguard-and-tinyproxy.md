@@ -13,6 +13,7 @@ After working through the complexities of using headscale/tailscale I realized t
     ```
 
 2. Allow the servers to reach the update repositories.
+
     ```mermaid
     graph LR
     B --> I([internet])
@@ -23,7 +24,7 @@ By using a container (or two) with access to both the external lan and the admin
 
 ## SETTING UP THE CONTAINER
 
-```
+```sh
 root@aoc2024:~# lxc init ubuntu:22.04 homer -c security.privileged=true -p susdev23 -p infra
 root@aoc2024:~# lxc config edit homer
 name: homer
@@ -61,8 +62,10 @@ network:
 ^x
 root@homer:~# netplan apply
 ```
+
 Backcheck the interfaces
-```
+
+```sh
 root@homer:~# ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -79,19 +82,28 @@ root@homer:~# ip a
 ```
 
 ### Install prerequisites and enable ip forwarding
+
 The next few sections are done on the gateway container (homer)
-```
+
+```sh
 apt install wireguard
 apt install resolvconf
-apt install squid
 sysctl -w net.ipv4.ip_forward=1
+```
+
+### Clone it
+
+```sh
+lxc snapshot aoc2024:homer 19jun24
+lxc copy aoc2024:homer/19jun24 virgil
+lxc config edit virgil
 ```
 
 ## Wireguard
 
 ### Set up wireguard
 
-```
+```sh
 cd /etc/wireguard/
 wg genkey | sudo tee private.key
 chmod go= private.key
@@ -100,7 +112,7 @@ wg genpsk |tee preshared.psk
 nano /etc/wireguard/wg0.conf
 ```
 
-```
+```ini
 # wg0.conf
 [Interface]
 Address = 10.0.0.1/32
@@ -124,24 +136,59 @@ PresharedKey = <<contents of preshared.key>>
 
 #### Enable it
 
-```
+```sh
 wg-quick up wg0
 systemctl enable wg-quick@wg0
 ```
+
 ## ~~Squid proxy for main servers~~
-As of this week the latest update to squid completely overwrote the working configuration file and stopped working.
-FRACK THAT ITS GONE.
+
+As of this week the latest update to squid completely overwrote the working configuration file without even making a backup copy. Can you say exposure and disfunction?
+FRACK THAT. IT'S GONE.
+
+```sh
+root@virgil:/etc/squid# apt remove --purge squid
+```
+
 ## Tiny Proxy
 
-### Setting up TinyProxy.
+### Setting up TinyProxy
 
-YOU ARE HERE DOING THIS WORK.
+This is on virgil (x.x.x.228) repeat this on homer (x.x.x.227)
 
+```sh
+apt install tinyproxy -y
+systemctl enable tinyproxy
+cd /etc/tinyproxy/
+cp tinyproxy.conf tinyproxy.conf.noisy
+grep -v "^\#" tinyproxy.conf.noisy |grep -v "^$" >tinyproxy.conf
+nano tinyproxy.conf
+```
+
+```sh
+User tinyproxy
+Group tinyproxy
+Port 3128
+Listen 192.168.31.228
+Timeout 600
+DefaultErrorFile "/usr/share/tinyproxy/default.html"
+StatFile "/usr/share/tinyproxy/stats.html"
+LogLevel Info
+PidFile "/run/tinyproxy/tinyproxy.pid"
+MaxClients 10
+Allow 192.168.31.1/24
+ViaProxyName "tinyproxy"
+```
+
+```sh
+systemctl enable tinyproxy
+systemctl start tinyproxy
+```
 
 ### Test the proxy
 
-```
-root@kb2018:~# curl -x 192.168.31.227:3128 http://archive.ubuntu.com/ubuntu
+```sh
+root@kb2018:~# curl -x 192.168.31.228:3128 http://archive.ubuntu.com/ubuntu
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
 <title>301 Moved Permanently</title>
@@ -154,14 +201,18 @@ root@kb2018:~# curl -x 192.168.31.227:3128 http://archive.ubuntu.com/ubuntu
 ```
 
 ### Set up apt to use proxy
-```
+
+```sh
 nano /etc/apt/apt.conf.d/00proxy.conf
 ```
-```
+
+```sh
 Acquire::http::Proxy "http://192.168.31.227:3128/";
 ```
+
 ### Test apt through proxy
-```
+
+```sh
 root@aoc2024:/etc/apt/apt.conf.d# ip route delete default
 root@aoc2024:/etc/apt/apt.conf.d# ip route
 192.168.31.0/24 dev br3 proto kernel scope link src 192.168.31.158
@@ -184,10 +235,10 @@ All packages are up to date.
 - <https://www.freecodecamp.org/news/build-your-own-wireguard-vpn-in-five-minutes/>
 - <https://linuxiac.com/how-to-use-apt-with-proxy/>
 - <https://askubuntu.com/questions/257290/configure-proxy-for-apt#257296>
-- https://tinyproxy.github.io
+- <https://tinyproxy.github.io>
 
+## Rehome this pile
 
-## Rehome this.
 ```
 nano /etc/squid/squid.conf
 ```
@@ -233,4 +284,5 @@ refresh_pattern .  0 20% 4320
 systemctl enable squid
 systemctl start squid
 ```
+
 - <https://wiki.squid-cache.org/SquidFaq/SquidAcl>
