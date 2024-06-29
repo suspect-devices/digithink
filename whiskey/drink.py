@@ -11,5 +11,9 @@ def whiskey(style):
 # subprocess.call(['mkdocs', 'build'], cwd="/var/www/digithink")
     return f"One Whiskey, {escape(style)}!"
 
+@app.route("/")
+def root():
+    return f"Not much here...."
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
