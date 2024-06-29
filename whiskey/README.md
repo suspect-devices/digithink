@@ -10,7 +10,13 @@ Three days of swimming through uwsgi, unit and 3 other overtly complicated half 
 
 
 ```
-update the stuff here for gnunicorn and other stuff.
+apt install python3-flask
+apt install python3-gunicorn
+
+apt install at
+echo www-data |tee /etc/at.allow
+www-data
+
 ```
 ## linkdump
 - https://github.com/codingforentrepreneurs/Pi-Awesome/blob/main/how-tos/Create%20a%20Minimal%20Web%20Application%20with%20Nginx%2C%20Python%2C%20Flask%20%26%20Raspberry%20Pi.md
@@ -19,7 +25,5 @@ update the stuff here for gnunicorn and other stuff.
 - https://stackoverflow.com/questions/10748108/nginx-uwsgi-unavailable-modifier-requested-0#11055729
 
 ```
-apt install python3-flask
-apt install uwsgi-plugin-python3
 
 ```

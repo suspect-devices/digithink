@@ -16,7 +16,7 @@ After working through the complexities of using headscale/tailscale I realized t
     ```mermaid
     graph LR
     B --> I([internet])
-    A[Host] -- Apt Via Squid --> B(homer/virgil);
+    A[Host] -- Apt Via Proxy --> B(homer/virgil);
     ```
 
 By using a container (or two) with access to both the external lan and the admin lan we can set up wireguard and squid. Wireguard allows us to securely connect to the admin lan while squid allows the servers a mechanism to recieve software updates.
@@ -128,55 +128,15 @@ PresharedKey = <<contents of preshared.key>>
 wg-quick up wg0
 systemctl enable wg-quick@wg0
 ```
-## Squid proxy for main servers
+## ~~Squid proxy for main servers~~
+As of this week the latest update to squid completely overwrote the working configuration file and stopped working.
+FRACK THAT ITS GONE.
+## Tiny Proxy
 
-### Setting up squid
+### Setting up TinyProxy.
 
-```
-nano /etc/squid/squid.conf
-```
+YOU ARE HERE DOING THIS WORK.
 
-```
-# -------------------------------------------------------/etc/squid/squid.conf
-acl localnet src 192.168.31.0/24  # RFC 1918 local private network (LAN)
-acl SSL_ports port 443
-acl Safe_ports port 80  # http
-acl Safe_ports port 21  # ftp
-acl Safe_ports port 443  # https
-acl Safe_ports port 70  # gopher
-acl Safe_ports port 210  # wais
-acl Safe_ports port 1025-65535 # unregistered ports
-acl Safe_ports port 280  # http-mgmt
-acl Safe_ports port 488  # gss-http
-acl Safe_ports port 591  # filemaker
-acl Safe_ports port 777  # multiling http
-acl CONNECT method CONNECT
-http_access deny !Safe_ports
-http_access deny CONNECT !SSL_ports
-http_access allow localhost manager
-http_access deny manager
-include /etc/squid/conf.d/*
-http_access allow localhost
-http_access allow localnet
-http_access deny all
-http_port 3128
-coredump_dir /var/spool/squid
-refresh_pattern ^ftp:  1440 20% 10080
-refresh_pattern ^gopher: 1440 0% 1440
-refresh_pattern -i (/cgi-bin/|\?) 0 0% 0
-refresh_pattern \/(Packages|Sources)(|\.bz2|\.gz|\.xz)$ 0 0% 0 refresh-ims
-refresh_pattern \/Release(|\.gpg)$ 0 0% 0 refresh-ims
-refresh_pattern \/InRelease$ 0 0% 0 refresh-ims
-refresh_pattern \/(Translation-.*)(|\.bz2|\.gz|\.xz)$ 0 0% 0 refresh-ims
-refresh_pattern .  0 20% 4320
-```
-
-#### Enable it
-
-```
-systemctl enable squid
-systemctl start squid
-```
 
 ### Test the proxy
 
@@ -224,4 +184,53 @@ All packages are up to date.
 - <https://www.freecodecamp.org/news/build-your-own-wireguard-vpn-in-five-minutes/>
 - <https://linuxiac.com/how-to-use-apt-with-proxy/>
 - <https://askubuntu.com/questions/257290/configure-proxy-for-apt#257296>
+- https://tinyproxy.github.io
+
+
+## Rehome this.
+```
+nano /etc/squid/squid.conf
+```
+
+```
+# -------------------------------------------------------/etc/squid/squid.conf
+acl localnet src 192.168.31.0/24  # RFC 1918 local private network (LAN)
+acl SSL_ports port 443
+acl Safe_ports port 80  # http
+acl Safe_ports port 21  # ftp
+acl Safe_ports port 443  # https
+acl Safe_ports port 70  # gopher
+acl Safe_ports port 210  # wais
+acl Safe_ports port 1025-65535 # unregistered ports
+acl Safe_ports port 280  # http-mgmt
+acl Safe_ports port 488  # gss-http
+acl Safe_ports port 591  # filemaker
+acl Safe_ports port 777  # multiling http
+acl CONNECT method CONNECT
+http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports
+http_access allow localhost manager
+http_access deny manager
+include /etc/squid/conf.d/*
+http_access allow localhost
+http_access allow localnet
+http_access deny all
+http_port 3128
+coredump_dir /var/spool/squid
+refresh_pattern ^ftp:  1440 20% 10080
+refresh_pattern ^gopher: 1440 0% 1440
+refresh_pattern -i (/cgi-bin/|\?) 0 0% 0
+refresh_pattern \/(Packages|Sources)(|\.bz2|\.gz|\.xz)$ 0 0% 0 refresh-ims
+refresh_pattern \/Release(|\.gpg)$ 0 0% 0 refresh-ims
+refresh_pattern \/InRelease$ 0 0% 0 refresh-ims
+refresh_pattern \/(Translation-.*)(|\.bz2|\.gz|\.xz)$ 0 0% 0 refresh-ims
+refresh_pattern .  0 20% 4320
+```
+
+#### Enable it
+
+```
+systemctl enable squid
+systemctl start squid
+```
 - <https://wiki.squid-cache.org/SquidFaq/SquidAcl>

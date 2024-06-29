@@ -13,8 +13,8 @@ ExecStart=/usr/bin/gunicorn \
      --workers 3 \
      --bind 127.0.0.1:5000 \
      --reload \
-     --access-logfile /var/log/whiskey/gunicorn_access.log \
-     --error-logfile /var/log/whiskey/gunicorn_error.log \
+     --access-logfile $WorkingDirectory/logs/gunicorn_access.log \
+     --error-logfile $WorkingDirectory/logs/gunicorn_error.log \
      -m 007 wsgi:app
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
