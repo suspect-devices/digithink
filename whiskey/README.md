@@ -10,18 +10,7 @@ Three days of swimming through uwsgi, unit and 3 other overtly complicated half 
 
 
 ```
-root@guenter:~# cat /etc/uwsgi/apps-enabled/whisky.ini
-[uwsgi]
-module = wsgi:app
-
-master = true
-processes = 5
-
-socket = whiskey.sock
-chmod-socket = 660
-vacuum = true
-
-die-on-term = true
+update the stuff here for gnunicorn and other stuff.
 ```
 ## linkdump
 - https://github.com/codingforentrepreneurs/Pi-Awesome/blob/main/how-tos/Create%20a%20Minimal%20Web%20Application%20with%20Nginx%2C%20Python%2C%20Flask%20%26%20Raspberry%20Pi.md
