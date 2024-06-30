@@ -1,5 +1,6 @@
 \.AppleDouble
 **/._[a-zA-Z]*
 site/*
+whiskey/bartender/site
 .DS_Store
 .vscode
