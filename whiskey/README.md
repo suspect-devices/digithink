@@ -8,22 +8,7 @@ Gone are those days.
 
 Three days of swimming through uwsgi, unit and 3 other overtly complicated half thought out python solutions all of which require a separate standalone service I settled on a flask and gunicorn. Its still a kludgy pile. Time to go queue TurboNegros "I hate the kids" and just make it work.
 
+This part of the digithink repo contains the wsgi app that is called whenever changes are pushed to digithink.com as well as the documentation and files needed to deploy it. 
 
-```
-apt install python3-flask
-apt install python3-gunicorn
-
-apt install at
-echo www-data |tee /etc/at.allow
-www-data
-
-```
-## linkdump
-- https://github.com/codingforentrepreneurs/Pi-Awesome/blob/main/how-tos/Create%20a%20Minimal%20Web%20Application%20with%20Nginx%2C%20Python%2C%20Flask%20%26%20Raspberry%20Pi.md
-- https://www.stackovercloud.com/2020/05/27/how-to-serve-flask-applications-with-uwsgi-and-nginx-on-ubuntu-20-04/
-- https://www.digitalocean.com/community/tutorials/how-to-set-up-uwsgi-and-nginx-to-serve-python-apps-on-ubuntu-14-04
-- https://stackoverflow.com/questions/10748108/nginx-uwsgi-unavailable-modifier-requested-0#11055729
-
-```
-
+At some point I will make the bartender and the digithink.com separate repos. At that point I will probably serve more than whiskey/neat and start developing some of my other web sites.
 ```
