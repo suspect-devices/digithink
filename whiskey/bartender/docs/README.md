@@ -24,10 +24,17 @@ Three days of swimming through uwsgi, unit and 3 other overtly complicated half 
   G-->E
   D --> E[mkdocs build]
   I([Internet]) <--https://bartender.digithink.com/whisky/neat --> A
-
 ```
 
-Installing the service.
+## The source code and the results.
+
+- https://github.com/feurig/digithink/tree/main/whiskey
+  The source code for the bartender service is in the same repository as the content it serves
+- https://www.digithink.com is the target website.
+- https://bartender.digithink.com/ contains this and the other documents for the service.
+
+
+## Installing the service.
 
 ```
 apt install python3-flask
@@ -39,7 +46,7 @@ www-data
 ```
 
 
-#### Nginx.conf
+### Nginx.conf
 
 ```
 # lots of hard coded foo here
@@ -71,37 +78,27 @@ server {
     return 404; # managed by Certbot
 }
 ```
+### mkdocs plus the extensions
+
+Ubuntu really fracked up the packaging for mkdocs and mkdocs-material. I wound up removing the packages and pip3 installing most of it with --break-system-packages.
+
 ```
 apt remove mkdocs*
 apt remove markdown
 apt remove python3-markdown
 pip3 install mkdocs-material --break-system-packages
-cd /var/www/digithink/&& git pull && mkdocs build && chown -R www-data:www-data site/
-nano mkdocs.yml
-cd /var/www/digithink/&& git pull && mkdocs build && chown -R www-data:www-data site/
-pip3 install mergedeep --break-system-packages
-cd /var/www/digithink/&& git pull && mkdocs build && chown -R www-data:www-data site/
 pip3 install yaml_env_tag --break-system-packages
-apt isntall pyyaml
-apt install pyyaml
-apt install python-pyyaml
-pip3 install pyyaml
-pip3 install pyyaml --break-system-packages
-mkdocs build
+apip3 install pyyaml --break-system-packages
 pip3 install  pyyaml_env_tag --break-system-packages
-apt install python3-ghp-import
-apt install python-ghp-import
 pip3 install ghp-import --break-system-packages
 pip3 install pathspec --break-system-packages
 pip3 install watchdog --break-system-packages
-mkdocs build
 apt install python3-regex
-mkdocs build
-chown -R www-data:www-data site
-su -l www-data
 pip install mkdocs-mermaid2-plugin[test] --break-system-packages
-
+cd /var/www/digithink/&& git pull && mkdocs build && chown -R www-data:www-data site/
 ```
+
+
 ## linkdump
 
 - <https://github.com/codingforentrepreneurs/Pi-Awesome/blob/main/how-tos/Create%20a%20Minimal%20Web%20Application%20with%20Nginx%2C%20Python%2C%20Flask%20%26%20Raspberry%20Pi.md>
