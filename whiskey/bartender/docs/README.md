@@ -79,6 +79,35 @@ server {
     return 404; # managed by Certbot
 }
 ```
+
+### the WSGI app
+The actual app will grow into something with better feedback more general use (ie to make different static web sites)
+#### drink.py, A Minimum Viable Product
+
+```python
+from flask import Flask
+from markupsafe import escape
+import subprocess
+
+app = Flask(__name__)
+
+@app.route("/whiskey/<style>",methods = ['POST', 'GET'])
+def whiskey(style):
+    # break this out by style.
+    subprocess.call(['at', 'now', '-f', '/var/www/digithink/whiskey/pullandbuild.sh'])
+    return f"One Whiskey, {escape(style)}!"
+```
+
+### wsgi.py, Turning the above into a WSGI 
+```
+from drink import app
+
+if __name__ == "__main__":
+    app.run()
+```
+
+## Converting the git content to a static html site.
+
 ### mkdocs plus the extensions (move to its own doc?)
 
 Ubuntu really fracked up the packaging for mkdocs and mkdocs-material. I wound up removing the packages and pip3 installing most of it with --break-system-packages.
