@@ -18,10 +18,12 @@ Three days of swimming through uwsgi, unit and 3 other overtly complicated half 
 
 ```mermaid
   graph LR
-  A[bartender] --> B[whiskey/neat] --> C[AT] --> 200/ok
+  A[bartender] --> B[whiskey/neat] --> F[drink.py] --> C[AT]
+  F --> H[200/ok] --> N[NGinX] <--https://bartender.digithink.com/whisky/neat --> I([Internet])
   C --> D[pullandbuild.sh] --> G[github]
   G-->E
   D --> E[mkdocs build]
+  I([Internet]) <--https://bartender.digithink.com/whisky/neat --> A
 
 ```
 
