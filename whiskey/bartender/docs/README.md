@@ -12,7 +12,7 @@ Three days of swimming through uwsgi, unit and 3 other overtly complicated half 
 
 ```mermaid
     graph LR
-    B -- http://127.0.0.1:8000--> C[nginx] -- http(s)://bartender/whisky/style --> I([Internet])
+    B -- http://127.0.0.1:8000--> C[nginx] -- http(s)://bartender/whisky/style <--> I([Internet])
     A[flask] -- wsgi --> B[gunicorn];
 ```
 
