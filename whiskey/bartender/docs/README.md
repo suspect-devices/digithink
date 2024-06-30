@@ -23,7 +23,7 @@ Three days of swimming through uwsgi, unit and 3 other overtly complicated half 
   C --> D[pullandbuild.sh] --> G[github]
   G-->E
   D --> E[mkdocs build]
-  I([Internet]) <--https://bartender.digithink.com/whisky/neat --> A
+  N --> A
 ```
 
 ## The source code and the results.
@@ -36,6 +36,7 @@ Three days of swimming through uwsgi, unit and 3 other overtly complicated half 
 
 ## Installing the service.
 
+YOU ARE HERE DISCUSSING THE STUFF THAT MAKES IT WORK
 ```
 apt install python3-flask
 apt install python3-gunicorn
@@ -78,7 +79,7 @@ server {
     return 404; # managed by Certbot
 }
 ```
-### mkdocs plus the extensions
+### mkdocs plus the extensions (move to its own doc?)
 
 Ubuntu really fracked up the packaging for mkdocs and mkdocs-material. I wound up removing the packages and pip3 installing most of it with --break-system-packages.
 
