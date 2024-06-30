@@ -31,7 +31,7 @@ Three days of swimming through uwsgi, unit and 3 other overtly complicated half 
 - [https://github.com/feurig/digithink/tree/main/whiskey](https://github.com/feurig/digithink/tree/main/whiskey)
   The source code for the bartender service is in the same repository as the content it serves
 - [https://www.digithink.com](https://www.digithink.com) is the target website.
-- [https://bartender.digithink.com/(https://bartender.digithink.com/)] contains this and the other documents for the service.
+- [https://bartender.digithink.com/](https://bartender.digithink.com/) contains this and the other documents for the service.
 
 
 ## Installing the service.
