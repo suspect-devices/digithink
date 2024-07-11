@@ -13,6 +13,8 @@ theme:
   favicon: images/favicon.png
   features:
     - navigation.expand
+  extra:
+    homepage: https://www.digithink.com
 
 plugins:
     - search
