@@ -8,6 +8,6 @@ I'll be 72 when unix time ends.
 And here is my <a href=https://www.digithink.com/resume/DDelmarDavis/>resume</a>
 <br>
  <br>Did you think you'd be doing this for more than 30 years?
- <br>Maybe its time to <a href=rethinkeverything/>rethink everything</a>
+ <br>Maybe its time to <a href=rethinkeverything/>rethink everything!</a>
 </td></tr></table>
 
