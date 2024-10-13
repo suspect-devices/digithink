@@ -1,4 +1,4 @@
-# Replacing the colo router with a container (or two)
+# Replacing the colo router with a container.
 
 After working through the complexities of using headscale/tailscale I realized that I really only needed the colo router to do 2 things.
 
@@ -20,10 +20,10 @@ After working through the complexities of using headscale/tailscale I realized t
     A[Host] -- Apt Via Proxy --> B(homer/virgil);
     ```
 
-By using a container (or two) with access to both the external lan and the admin lan we can set up wireguard and squid. Wireguard allows us to securely connect to the admin lan while squid allows the servers a mechanism to recieve software updates.
+By using a container with access to both the external lan and the admin lan we can set up wireguard and tinyproxy. Wireguard allows us to securely connect to the admin lan while tinyproxy allows the servers a mechanism to recieve software updates. This will become a staging/test setup for [the colo firewall](https://www.digithink.com/rethinkeverything/norouter/using-a-tank-for-crowd-control/).
 
 ## SETTING UP THE CONTAINER
-
+To be able to do its job the container needed to be privilaged and it also would not run on 22.04. Its ok 22.04 still has a few years of support left.
 ```sh
 root@aoc2024:~# lxc init ubuntu:22.04 homer -c security.privileged=true -p susdev23 -p infra
 root@aoc2024:~# lxc config edit homer
@@ -92,7 +92,7 @@ sysctl -w net.ipv4.ip_forward=1
 ```
 
 ### Clone it
-
+Once you have a working system clone it to the other server and adjust its configuration as needed.
 ```sh
 lxc snapshot aoc2024:homer 19jun24
 lxc copy aoc2024:homer/19jun24 virgil
@@ -101,7 +101,9 @@ lxc config edit virgil
 
 ## Wireguard
 
-### Set up wireguard
+### Set up wireguard 
+
+#### Server Setup
 
 ```sh
 cd /etc/wireguard/
@@ -133,28 +135,33 @@ PublicKey = <<key from wireguard client>>
 AllowedIPs = 10.0.0.3/32
 PresharedKey = <<contents of preshared.key>>
 ```
-
-#### Enable it
+##### Enable it
 
 ```sh
 wg-quick up wg0
 systemctl enable wg-quick@wg0
 ```
 
-## ~~Squid proxy for main servers~~
+#### Client Configuration.
 
-As of this week the latest update to squid completely overwrote the working configuration file without even making a backup copy. Can you say exposure and disfunction?
+YOU ARE HERE Describing client configuration.
+##### MacOs client
+##### Linux client
+
+## No ~~Squid~~ 
+
+The last update to squid completely overwrote its working configuration file without even making a backup copy. Can you say exposure and disfunction?
 FRACK THAT. IT'S GONE.
 
 ```sh
 root@virgil:/etc/squid# apt remove --purge squid
 ```
 
-## Tiny Proxy
+## TinyProxy -- proxy for main servers
 
 ### Setting up TinyProxy
 
-This is on virgil (x.x.x.228) repeat this on homer (x.x.x.227)
+This is on virgil (x.x.x.228) repeat this on sitka (x.x.x.2)
 
 ```sh
 apt install tinyproxy -y
@@ -203,7 +210,7 @@ root@kb2018:~# curl -x 192.168.31.228:3128 http://archive.ubuntu.com/ubuntu
 ### Set up apt to use proxy
 
 ```sh
-nano /etc/apt/apt.conf.d/00proxy.conf
+nano /etc/apt/apt.conf.d/80proxy.conf
 ```
 
 ```sh
@@ -237,52 +244,3 @@ All packages are up to date.
 - <https://askubuntu.com/questions/257290/configure-proxy-for-apt#257296>
 - <https://tinyproxy.github.io>
 
-## Rehome this pile
-
-```
-nano /etc/squid/squid.conf
-```
-
-```
-# -------------------------------------------------------/etc/squid/squid.conf
-acl localnet src 192.168.31.0/24  # RFC 1918 local private network (LAN)
-acl SSL_ports port 443
-acl Safe_ports port 80  # http
-acl Safe_ports port 21  # ftp
-acl Safe_ports port 443  # https
-acl Safe_ports port 70  # gopher
-acl Safe_ports port 210  # wais
-acl Safe_ports port 1025-65535 # unregistered ports
-acl Safe_ports port 280  # http-mgmt
-acl Safe_ports port 488  # gss-http
-acl Safe_ports port 591  # filemaker
-acl Safe_ports port 777  # multiling http
-acl CONNECT method CONNECT
-http_access deny !Safe_ports
-http_access deny CONNECT !SSL_ports
-http_access allow localhost manager
-http_access deny manager
-include /etc/squid/conf.d/*
-http_access allow localhost
-http_access allow localnet
-http_access deny all
-http_port 3128
-coredump_dir /var/spool/squid
-refresh_pattern ^ftp:  1440 20% 10080
-refresh_pattern ^gopher: 1440 0% 1440
-refresh_pattern -i (/cgi-bin/|\?) 0 0% 0
-refresh_pattern \/(Packages|Sources)(|\.bz2|\.gz|\.xz)$ 0 0% 0 refresh-ims
-refresh_pattern \/Release(|\.gpg)$ 0 0% 0 refresh-ims
-refresh_pattern \/InRelease$ 0 0% 0 refresh-ims
-refresh_pattern \/(Translation-.*)(|\.bz2|\.gz|\.xz)$ 0 0% 0 refresh-ims
-refresh_pattern .  0 20% 4320
-```
-
-#### Enable it
-
-```
-systemctl enable squid
-systemctl start squid
-```
-
-- <https://wiki.squid-cache.org/SquidFaq/SquidAcl>
