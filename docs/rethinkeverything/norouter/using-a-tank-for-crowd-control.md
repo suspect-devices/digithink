@@ -6,7 +6,7 @@ Now that we [have our proof of concept](https://www.digithink.com/rethinkeveryth
 ## Hardware
 
 Our router was originally designed to be used with pfsense, a comercial product built around freebsd and its packet filtering system.
-![Sitka](./images/sitka.jpg)
+![Sitka](./images/sitka.jpeg)
 
 At home we run opnsense which is an open source replacement. At the colo we are going to strip it down to its underlying operating system and open source compontents.
 
