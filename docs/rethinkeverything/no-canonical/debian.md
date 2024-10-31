@@ -140,6 +140,13 @@ Install zfs 2.2 from bookworm-backports
 
 ```sh
 nano /etc/apt/sources.list
+...
+#deb http://ftp.us.debian.org/debian bookworm main
+deb http://deb.debian.org/debian bookworm main non-free non-free-firmware contrib
+deb http://deb.debian.org/debian bookworm-updates main non-free non-free-firmware contrib
+deb http://deb.debian.org/debian-security/ bookworm-security main non-free non-free-firmware contrib
+deb http://deb.debian.org/debian bookworm-backports main contrib non-free non-free-firmware
+...
 apt update
 apt-get install linux-headers-$(uname -r)
 apt -t bookworm-backports install zfs-dkms zfs-zed zfsutils-linux
