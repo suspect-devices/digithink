@@ -5,12 +5,14 @@ There are no polite words for the behaviour of Canonical with regards to sane he
 
 There are other issues to take up not the least of which is their destruction of LXD.
 
-I think the last straw was how unfriendly and unhelpfull the #ubuntu chanel was. They used to be wrong but friendly. 
+I think the last straw was how unfriendly and unhelpfull the #ubuntu chanel was. They used to be wrong but friendly.
 
-# Stick a fork in them and turn them over they're done.
+# Stick a fork in them and turn them over they're done
 
 YOU ARE HERE SUMMARIZING THE PLAN MOVING FORWARD
 
 ## Debian
+
+Debian not only allowed me to install a system over a virtual serial console but allowed me to install from the original ubuntu. [Replaced ubuntu server with debian](https://www.digithink.com/rethinkeverything/no-canonical/debian/) (with a dual boot pathway back) on the secondary lxd server. Will migrate the containers on the main server to and repeat it with our primary server.
 
 ## Incus
