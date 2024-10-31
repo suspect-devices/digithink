@@ -1,4 +1,12 @@
-```Using /dev/sdb
+# Debian install on kh2024
+
+Currently just the bones
+You are here fleshing this in. 
+Bouncing prompt is at.
+
+https://www.debian.org/releases/stable/amd64/apds03.en.html
+```
+parted /dev/sdb
 Welcome to GNU Parted! Type 'help' to view a list of commands.
 (parted) p
 Model: ATA TEAM T2532TB (scsi)

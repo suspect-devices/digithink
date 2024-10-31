@@ -1,3 +1,8 @@
+# incus install on kh2024
+
+Currently just the bones.
+You are here fleshing them in.
+
 ```
 apt -t bookworm-backports install incus incus-tools
 apt install bridge-utils
