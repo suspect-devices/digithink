@@ -94,8 +94,6 @@ incus image list images: bookworm
 incus image copy images:debian/12/cloud local:
 incus image list images: trixie
 incus image copy images:debian/trixie/cloud local:
-incus alias add bookworm 4ed6d8b34c84
-incus alias add trixie b0104c654d3d
 incus image alias create bookworm 4ed6d8b34c84
 incus image alias create trixie b0104c654d3d
 incus image list
