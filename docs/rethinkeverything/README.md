@@ -1,5 +1,5 @@
 # Things that need to be rethought
-
+- canonical
 - git mirroring
 - remote backups
 - vpn/tailscale
