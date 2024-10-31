@@ -128,6 +128,14 @@ Install gb ethernet firmware
 
 ```sh
 nano /etc/apt/sources.list
+...
+root@kh2024:~# cat /etc/apt/sources.list
+#deb http://ftp.us.debian.org/debian bookworm main
+deb http://deb.debian.org/debian bookworm main non-free non-free-firmware contrib
+deb http://deb.debian.org/debian bookworm-updates main non-free non-free-firmware contrib
+deb http://deb.debian.org/debian-security/ bookworm-security main non-free non-free-firmware contrib
+deb http://deb.debian.org/debian bookworm-backports main contrib non-free non-free-firmware
+...
 apt update
 apt install firmware-bnx2
 update-grub

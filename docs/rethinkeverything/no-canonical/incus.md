@@ -3,6 +3,20 @@
 Currently just the bones.
 You are here fleshing them in.
 
+
+This is on a system that has been installed as described in the debian link.
+
+This requires that you modify the /etc/apt/sources.list to include the backports.
+
+```sh
+root@kh2024:~# cat /etc/apt/sources.list
+#deb http://ftp.us.debian.org/debian bookworm main
+deb http://deb.debian.org/debian bookworm main non-free non-free-firmware contrib
+deb http://deb.debian.org/debian bookworm-updates main non-free non-free-firmware contrib
+deb http://deb.debian.org/debian-security/ bookworm-security main non-free non-free-firmware contrib
+deb http://deb.debian.org/debian bookworm-backports main contrib non-free non-free-firmware
+```
+
 Set up the network
 
 ```sh
