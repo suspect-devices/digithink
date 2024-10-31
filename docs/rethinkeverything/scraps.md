@@ -1,3 +1,12 @@
+# Misc scraps.
+Note you may need to increase systemds loglevel
+```
+journalctl --pager-end --unit networkd-dispatcher.service
+```
+
+
+
+# FREEBSD SCRAPS
 ```shell
 08:21 <+stgraber> feurig: I believe I made a video about it an MAAS some time ago
 08:21 <+stgraber> feurig: anyway, it's basically:
