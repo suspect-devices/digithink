@@ -53,12 +53,34 @@ fdisk -l /dev/sdc
 fdisk -l /dev/sdd
 fdisk -l /dev/sdb
 parted /dev/sdb
-... split off a 300G partition for infra pool ...
+(parted) rm 5
+(parted) mkpart 600GB 900GB
+(parted) mkpart 900GB 100%
+(parted) print
+Model: ATA TEAM T2532TB (scsi)
+Disk /dev/sdb: 2048GB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+Disk Flags:
+
+Number  Start   End     Size    File system     Name  Flags
+ 1      1049kB  200GB   200GB   ext4            /
+ 2      200GB   201GB   1000MB  fat32           2     boot, esp
+ 3      201GB   501GB   300GB   ext3            3
+ 4      501GB   600GB   99.0GB  linux-swap(v1)  4     swap
+ 5      600GB   900GB   300GB                   5
+ 6      900GB   2048GB  1148GB                  6
+
+(parted) quit
 ls -lsa /dev/disk/by-id/|grep sdb
-... save this for infra partition device ...
+...
+0 lrwxrwxrwx 1 root root  10 Oct 31 09:30 ata-TEAM_T2532TB_TPBF2402200040201609-part5 -> ../../sdb5
+...
 ```
 
-Install and initialize incus
+Install and initialize incus.
+- existing bridge is br0
+- zfs pool is on /dev/disk/by-id/ata-TEAM_T2532TB_TPBF2402200040201609-part5
 
 ```sh
 apt -t bookworm-backports install incus incus-tools
@@ -77,10 +99,9 @@ incus alias add trixie b0104c654d3d
 incus image alias create bookworm 4ed6d8b34c84
 incus image alias create trixie b0104c654d3d
 incus image list
-
 ```
 
-Set up a profile.
+Set up a profile. This should be edited for things that no longer matter.
 
 ```sh
 incus profile create susdev24<<EOD
