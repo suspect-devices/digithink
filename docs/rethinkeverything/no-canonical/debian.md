@@ -1,8 +1,6 @@
 # Debian install on kh2024
 
-Currently just the bones
-You are here fleshing this in.
-Bouncing prompt is at.
+Debian allows us to install an operating system on to a set of partitions on a running linux system. It also does not require a fucking vga monitor. (hey canonical you suck!)
 
 <https://www.debian.org/releases/stable/amd64/apds03.en.html>
 
@@ -53,13 +51,33 @@ Number  Start   End     Size    File system  Name  Flags
 
 (parted) q
 Information: You may need to update /etc/fstab.
+
 ```
 
-set up mounts for chroot.
+If you are on ubuntu or anoter debian based system you can install debootstrap using apt.
+Otherwise follow the bouncing prompt from the link above.
+
+```sh
+apt install debootstrap
+```
+
+set up target root filesystem
+
+```sh
+mke2fs -j /dev/sdb3
+```
+bootstrap the root file system
 
 ```sh
 mkdir /mnt/debinst
 mount /dev/sdb3 /mnt/debinst
+debootstrap --arch amd64 bookworm /mnt/debinst http://ftp.us.debian.org/debian
+```
+
+set up mounts for chroot.
+
+
+```sh
 mount -t proc proc /mnt/debinst/proc
 mount -t sysfs /sys /mnt/debinst/sys
 mount --bind /dev /mnt/debinst/dev
@@ -72,12 +90,18 @@ back on the chroot
 ```sh
 .... second stage may not be needed ....
 /debootstrap/debootstrap --second-stage
+.... if you did the above this shouldnt be needed either ....
 apt install makedev
 cd /dev
 MAKEDEV generic
 nano /etc/fstab
 mount -a
 nano /etc/adjtime
+...
+0.0 0 0.0
+0
+UTC
+...
 dpkg-reconfigure tzdata
 ip a
 nano /etc/network/interfaces
