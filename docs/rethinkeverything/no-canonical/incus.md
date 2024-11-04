@@ -96,9 +96,29 @@ Install and initialize incus.
 - existing bridge is br0
 - zfs pool is on /dev/disk/by-id/ata-TEAM_T2532TB_TPBF2402200040201609-part5
 
+To install 6.0 install from bookworm-backports.
 ```sh
 apt -t bookworm-backports install incus incus-tools
 incus admin init
+```
+
+To install the latest you need to follow the directions at https://github.com/zabbly/incus
+
+```sh
+apt install curl
+curl -fsSL https://pkgs.zabbly.com/key.asc -o /etc/apt/keyrings/zabbly.asc
+sh -c 'cat <<EOF > /etc/apt/sources.list.d/zabbly-incus-stable.sources
+Enabled: yes
+Types: deb
+URIs: https://pkgs.zabbly.com/incus/stable
+Suites: $(. /etc/os-release && echo ${VERSION_CODENAME})
+Components: main
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/zabbly.asc
+
+EOF'
+apt update
+apt install incus incus-tools
 ```
 
 Pull down the images you know you are going to use.

@@ -13,6 +13,7 @@ YOU ARE HERE SUMMARIZING THE PLAN MOVING FORWARD
 
 ## Debian
 
-Debian not only allowed me to install a system over a virtual serial console but allowed me to install from the original ubuntu. [Replaced ubuntu server with debian](https://www.digithink.com/rethinkeverything/no-canonical/debian/) (with a dual boot pathway back) on the secondary lxd server. Will migrate the containers on the main server to and repeat it with our primary server.
+Debian not only allowed me to install a system over a virtual serial console but allowed me to install from the original ubuntu. [Replaced ubuntu server with debian](https://www.digithink.com/rethinkeverything/no-canonical/debian/) (with a dual boot pathway back) 
+on the secondary lxd server. Will migrate the containers on the main server to and repeat it with our primary server.
 
 ## Incus
