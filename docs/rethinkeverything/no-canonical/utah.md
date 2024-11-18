@@ -20,6 +20,7 @@ mount /dev/nvme0n1p2 /mnt/wtfdebian/
 Somewhere along the last few ubuntu updates ubuntus netplan started becoming unusable. Sometimes the updates would overwrite the existing configuration without backing it up. When I tried to set up a fresh bridge configuration it refused. 
 
 ```
+apt install bridge-utils
 cat /mnt/ubuntu/etc/network/interfaces
 cat /mnt/ubuntu/etc/netplan/
 cat /mnt/ubuntu/etc/netplan/50-cloud-init.yaml
@@ -50,49 +51,12 @@ iface br0 inet static
         bridge_waitport 0    # no delay before a port becomes available
         bridge_fd 0          # no forwarding delay
 ```
-YOU ARE HERE!!! 
+
+## Install zfs and appletalk
+
+YOU ARE HERE CLEANING THIS UP.
+
 ```
-parted /dev/nvme0n1
-apt install parted
-nano /etc/apt/sources.list
-apt updte
-apt update
-apt install parted
-parted /dev/nvme0n1
-cd /mnt/wtfdebian/
-ls
-cat etc/network/interfaces
-df -k
-fdisk -l|grep Disk
-df -k
-parted /dev/sde
-apt install bridge-utils
-nano /usr/local/bin/update.sh
-nano /usr/local/bin/update.sh
-chmod uog+x /usr/local/bin/update.sh
-update.sh
-apt install netatalk
-update.sh
-apt install netatalk
-apt search netatalk
-apt search appletalk
-visudo
-vigr
-exit
-visudo
-exit
-vigr
-visudo
-vigr
-exit
-exit
-visudo
-su - feurig
-cd
-cat ~feurig/.ssh/authorized_keys >>.ssh/authorized_keys
-exit
-visudo
-visudo
 su - feurig
 exit
 apt install sudo
@@ -136,9 +100,6 @@ dpkg install ./netatalk_4.0.0.ds-1_amd64.deb
 dpkg --install ./netatalk_4.0.0.ds-1_amd64.deb
 systemctl enable netatalk
 ls
-apt-cache search zfs
-apt get zfsutils-linux
-apt install zfsutils-linux
 apt -t bookworm-backports install zfs-dkms zfs-zed zfsutils-linux
 zpool import
 zpool import -f tank
@@ -169,7 +130,58 @@ systemctl start avahi-daemon
 systemctl status avahi-daemon
 history|cut -c8-200
 hostname
-
+```
+## Install and initialize incus
+```
 apt update
 apt -t bookworm-backports install incus incus-tools qemu-system
+
+root@utah:~# ls -ls /dev/disk/by-id|grep nvme0
+0 lrwxrwxrwx 1 root root 13 Nov 17 16:31 nvme-eui.0000000001000000e4d25c757b395601 -> ../../nvme0n1
+0 lrwxrwxrwx 1 root root 13 Nov 17 16:31 nvme-INTEL_SSDPEKNU020TZ_PHKA314002UT2P0C -> ../../nvme0n1
+0 lrwxrwxrwx 1 root root 13 Nov 17 16:31 nvme-INTEL_SSDPEKNU020TZ_PHKA314002UT2P0C_1 -> ../../nvme0n1
+root@utah:~# ls -ls /dev/disk/by-id/nvme-INTEL_SSDPEKNU020TZ_PHKA314002UT2P0C
+0 lrwxrwxrwx 1 root root 13 Nov 17 16:31 /dev/disk/by-id/nvme-INTEL_SSDPEKNU020TZ_PHKA314002UT2P0C -> ../../nvme0n1
+root@utah:~# incus admin init
+Would you like to use clustering? (yes/no) [default=no]:
+Do you want to configure a new storage pool? (yes/no) [default=yes]:
+Name of the new storage pool [default=default]: local
+Name of the storage backend to use (dir, zfs) [default=zfs]:
+Create a new ZFS pool? (yes/no) [default=yes]:
+Would you like to use an existing empty block device (e.g. a disk or partition)? (yes/no) [default=no]: yes
+Path to the existing block device: /dev/disk/by-id/nvme-INTEL_SSDPEKNU020TZ_PHKA314002UT2P0C
+Would you like to create a new local network bridge? (yes/no) [default=yes]: no
+Would you like to use an existing bridge or host interface? (yes/no) [default=no]: yes
+Name of the existing bridge or host interface: br0
+Would you like the server to be available over the network? (yes/no) [default=no]: yes
+Address to bind to (not including port) [default=all]:
+Port to bind to [default=8443]:
+Would you like stale cached images to be updated automatically? (yes/no) [default=yes]:
+Would you like a YAML "init" preseed to be printed? (yes/no) [default=no]: yes
+config:
+  core.https_address: '[::]:8443'
+networks: []
+storage_pools:
+- config:
+    source: /dev/disk/by-id/nvme-INTEL_SSDPEKNU020TZ_PHKA314002UT2P0C
+  description: ""
+  name: local
+  driver: zfs
+profiles:
+- config: {}
+  description: ""
+  devices:
+    eth0:
+      name: eth0
+      nictype: bridged
+      parent: br0
+      type: nic
+    root:
+      path: /
+      pool: local
+      type: disk
+  name: default
+projects: []
+cluster: null
+
 ```
