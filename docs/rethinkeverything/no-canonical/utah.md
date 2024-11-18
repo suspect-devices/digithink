@@ -1,11 +1,11 @@
-# Replace ubuntu with debian on home server.
+# Replace Ubuntu with Debian on home server.
 
-Utah is my secondary home file server. It is a cheeze grater style mac with 3 2t ssds on a pci card that are the boot disks and then mirrored 8T and 14T zfs disks. Like the other 2 home servers it is an appletalk server as well as providing lxc containers and running docker processes. 
+Utah (Phillips) is my secondary home file server. It is a cheeze grater style mac with 3 2t ssds on a pci card that are the boot disks and then mirrored 8T and 14T zfs disks. Like the other 2 home servers it is an appletalk server as well as providing lxc containers and running docker processes. 
 
 *I attempted to repeat the process used at the colo on utah but since there is no ipmi interface on the old mac pro it was not possible*.
 
 ## Initial setup.
-I started with a fresh install on one of the 3 nvme disks and then referenced/copied some things around from the old os boot disk and the first attempt to install debian trixie. 
+I started with a fresh install on one of the 3 nvme disks and then referenced/copied some things around from the old os boot disk and the first attempt to install debian trixie. I won't bother you with the details. I will however reuse /dev/nvme0n1.
 
 ```
 fdisk -l|grep Disk
@@ -15,9 +15,9 @@ mount /dev/sde2 /mnt/ubuntu/
 mount /dev/nvme0n1p2 /mnt/wtfdebian/
 ```
 
-## convert from netplan back to /etc/network/interfaces
+## Convert from netplan back to /etc/network/interfaces
 
-Somewhere along the last few ubuntu updates ubuntus netplan started becoming unusable. Sometimes the updates would overwrite the existing configuration without backing it up. When I tried to set up a fresh bridge configuration it refused. 
+Somewhere along the last few ubuntu updates ubuntus netplan started becoming unusable. Sometimes the updates would overwrite the existing configuration without backing it up. When I tried to set up a fresh bridge configuration it refused. So stick a fork in it and turn it over we are done.
 
 ```
 apt install bridge-utils
@@ -27,17 +27,14 @@ cat /mnt/ubuntu/etc/netplan/50-cloud-init.yaml
 ...
 nano /etc/network/interfaces
 ...
-source /etc/network/interfaces.d/*
+#source /etc/network/interfaces.d/*
 
-# The loopback network interface
 auto lo
 iface lo inet loopback
 
-# The primary network interface
 allow-hotplug enp7s0f1
 auto enp7s0f1
 iface enp7s0f1 inet dhcp
-
 
 auto br0
 iface br0 inet static
@@ -50,88 +47,45 @@ iface br0 inet static
      bridge_stp off       # disable Spanning Tree Protocol
         bridge_waitport 0    # no delay before a port becomes available
         bridge_fd 0          # no forwarding delay
+^X
+systemctl restart networking
 ```
 
 ## Install zfs and appletalk
 
-YOU ARE HERE CLEANING THIS UP.
-
 ```
-su - feurig
-exit
-apt install sudo
-update.sh
-ip a
-dhclient enp7s0f1
-bg
-ip a
-nano /etc/network/interfaces
-systemctl restart network
-systemctl restart networking
-journalctl -xeu networking.service
-nano /etc/network/interfaces
-ip a
-systemctl restart networking
-ip a
 nano /etc/apt/sources.list
-ip a
-ip a
-systemctl status sshd
-ip a
-ping digithink.com
-reboot
-apt update
-apt-cache search netatalk
-apt-cache search appletalk
-lsmod | grep appletalk
-apt search afpd
-nano /etc/apt/sources.list
-exit
-wget https://github.com/Netatalk/netatalk/releases/download/netatalk-4-0-0/netatalk_4.0.0.ds-1_amd64.
-ls
-dpkg --install netatalk_4.0.0.ds-1_amd64.deb
-dpkg --install netatalk_4.0.0.ds-1_amd64.deb
-dpkg --help
-dpkg -I ./netatalk_4.0.0.ds-1_amd64.deb
-apt-get init-system-helpers libpam-modules netbase libacl1 libavahi-client3 perl libavahi-common3 libc6 libcrack2
-apt-get install init-system-helpers libpam-modules netbase libacl1 libavahi-client3 perl libavahi-common3 libc6 libcrack2
-apt --fix-broken install
-dpkg install ./netatalk_4.0.0.ds-1_amd64.deb
+deb-src http://security.debian.org/debian-security bookworm-security main non-free-firmware
+deb-src http://debian.osuosl.org/debian/ bookworm-updates main non-free-firmware
+deb-src http://debian.osuosl.org/debian/ bookworm main non-free-firmware
+deb http://security.debian.org/debian-security bookworm-security main non-free-firmware
+deb http://debian.osuosl.org/debian/ bookworm-updates main non-free-firmware
+deb http://debian.osuosl.org/debian/ bookworm main non-free-firmware
+deb http://deb.debian.org/debian-security/ bookworm-security main non-free non-free-firmware contrib
+deb http://deb.debian.org/debian bookworm-updates main non-free non-free-firmware contrib
+deb http://deb.debian.org/debian bookworm main non-free non-free-firmware contrib
+deb http://deb.debian.org/debian bookworm-backports main contrib non-free non-free-firmware
+^X
+wget https://github.com/Netatalk/netatalk/releases/download/netatalk-4-0-0/netatalk_4.0.0.ds-1_amd64.deb
 dpkg --install ./netatalk_4.0.0.ds-1_amd64.deb
-systemctl enable netatalk
-ls
+apt --fix-broken install
+dpkg --install ./netatalk_4.0.0.ds-1_amd64.deb
+apt install avahi-daemon
 apt -t bookworm-backports install zfs-dkms zfs-zed zfsutils-linux
 zpool import
 zpool import -f tank
 zpool import -f reddisk
 nano /etc/netatalk/afp.conf
-systemctl restart netatalk
-zpool import
-nano /etc/netatalk/afp.conf
-systemctl restart netatalk
-apt install avahi-daemon
-apt enable appletalk
-systemctl enable appletalk
-systemctl enable netatalk
-systemctl start netatalk
-systemctl status netatalk
-ls
-cd ~feurig
-ls
-cd /filebox
-ls
-zpool status
-ls /tank
-zpool list
-history|cut -c8-100
-systemctl enable avhi-daemon
 systemctl enable avahi-daemon
 systemctl start avahi-daemon
 systemctl status avahi-daemon
-history|cut -c8-200
-hostname
+systemctl enable netatalk
+systemctl start netatalk
+systemctl status netatalk
 ```
+
 ## Install and initialize incus
+
 ```
 apt update
 apt -t bookworm-backports install incus incus-tools qemu-system
