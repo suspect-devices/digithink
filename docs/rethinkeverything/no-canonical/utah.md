@@ -51,7 +51,11 @@ iface br0 inet static
 systemctl restart networking
 ```
 
-## Install zfs and appletalk
+## Install zfs and appletalk 
+
+### Add repositories from testing(trixie) 
+
+The zfs supported by bookworm will not import the filesystems created by ubuntu24.04 but the zfs packages backported from trixie will.
 
 ```
 nano /etc/apt/sources.list
@@ -66,16 +70,17 @@ deb http://deb.debian.org/debian bookworm-updates main non-free non-free-firmwar
 deb http://deb.debian.org/debian bookworm main non-free non-free-firmware contrib
 deb http://deb.debian.org/debian bookworm-backports main contrib non-free non-free-firmware
 ^X
+```
+### Install Netatalk 4 debian provided by netatalk
+
+There was no debian maintainer for a year or so which meant that debian dropped appletalk support on bookworm. This has been resolved and should be supported when trixie is released. In the mean time the fine folk at netatalk have provided a packaged version for both netatalk3 and netatalk4 for bookworm.
+
+```
 wget https://github.com/Netatalk/netatalk/releases/download/netatalk-4-0-0/netatalk_4.0.0.ds-1_amd64.deb
 dpkg --install ./netatalk_4.0.0.ds-1_amd64.deb
 apt --fix-broken install
 dpkg --install ./netatalk_4.0.0.ds-1_amd64.deb
 apt install avahi-daemon
-apt -t bookworm-backports install zfs-dkms zfs-zed zfsutils-linux
-zpool import
-zpool import -f tank
-zpool import -f reddisk
-nano /etc/netatalk/afp.conf
 systemctl enable avahi-daemon
 systemctl start avahi-daemon
 systemctl status avahi-daemon
@@ -83,8 +88,34 @@ systemctl enable netatalk
 systemctl start netatalk
 systemctl status netatalk
 ```
+### Install zfs from bookworm-backports and import existing pools.
+
+apt -t bookworm-backports install zfs-dkms zfs-zed zfsutils-linux
+zpool import
+zpool import -f tank
+zpool import -f reddisk
+nano /etc/netatalk/afp.conf
+```
 
 ## Install and initialize incus
+
+### Make some space 
+
+Unlike lxd incus does most of its work under /var/lib/incus as apposed to in the storage pools. You need to make some room there. 
+
+```
+cat /etc/fstab
+# / was on /dev/sdf2 during installation
+UUID=1403cbd4-a187-4cd2-8d83-c7c036b3e589 /               ext4    errors=remount-ro 0       1
+# /boot/efi was on /dev/sdf1 during installation
+UUID=0E04-F115  /boot/efi       vfat    umask=0077      0       1
+# /home was on /dev/sdf4 during installation
+UUID=22bbd39c-e3b8-402a-bcc2-cd05a889cecb /var/lib/incus           ext4    defaults        0       2
+# swap was on /dev/sdf3 during installation
+UUID=4f2aa57f-219d-4355-815c-3a89a613a8cb none            swap    sw              0       0
+```
+
+### Install from bookworm-backports (trixie)
 
 ```
 apt update
