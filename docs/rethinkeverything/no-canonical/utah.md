@@ -81,12 +81,6 @@ dpkg --install ./netatalk_4.0.0.ds-1_amd64.deb
 apt --fix-broken install
 dpkg --install ./netatalk_4.0.0.ds-1_amd64.deb
 apt install avahi-daemon
-systemctl enable avahi-daemon
-systemctl start avahi-daemon
-systemctl status avahi-daemon
-systemctl enable netatalk
-systemctl start netatalk
-systemctl status netatalk
 ```
 ### Install zfs from bookworm-backports and import existing pools.
 
@@ -95,7 +89,18 @@ apt -t bookworm-backports install zfs-dkms zfs-zed zfsutils-linux
 zpool import
 zpool import -f tank
 zpool import -f reddisk
+```
+
+### Configure appletalk to serve the zfs pools
+
+```
 nano /etc/netatalk/afp.conf
+systemctl enable avahi-daemon
+systemctl start avahi-daemon
+systemctl status avahi-daemon
+systemctl enable netatalk
+systemctl start netatalk
+systemctl status netatalk
 ```
 
 ## Install and initialize incus
