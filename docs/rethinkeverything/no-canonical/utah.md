@@ -90,6 +90,7 @@ systemctl status netatalk
 ```
 ### Install zfs from bookworm-backports and import existing pools.
 
+```
 apt -t bookworm-backports install zfs-dkms zfs-zed zfsutils-linux
 zpool import
 zpool import -f tank
