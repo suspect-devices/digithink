@@ -95,6 +95,24 @@ zpool import -f reddisk
 
 ```
 nano /etc/netatalk/afp.conf
+...
+[Global]
+; Global server settings
+mimic model = RackMac
+afp listen = 192.168.129.100
+
+; pretty sure this one stays.
+map acls = mode
+; Not sure about the next two
+;aclinherit = passthrough
+;aclmode = passthrough
+
+[Homes]
+basedir regex = /home
+
+[reddisk]
+path = /reddisk
+^X
 systemctl enable avahi-daemon
 systemctl start avahi-daemon
 systemctl status avahi-daemon
