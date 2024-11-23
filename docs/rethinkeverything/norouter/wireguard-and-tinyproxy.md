@@ -132,7 +132,7 @@ PresharedKey = <<contents of preshared.key>>
 # amyl dons laptop
 [Peer]
 PublicKey = <<key from wireguard client>>
-AllowedIPs = 10.0.0.3/32
+AllowedIPs = 10.0.0.6/32
 PresharedKey = <<contents of preshared.key>>
 ```
 ##### Enable it
