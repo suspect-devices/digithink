@@ -40,6 +40,8 @@ Pf is bsd's packet filter system.
 ## Configuration / setup.
 
 ### Initial setup.
+
+```
 pkg upgrade
 pkg install bind918-9.18.30
 pkg install dnsmasq
@@ -47,6 +49,22 @@ pkg wireguard-tools-1.0.20210914_3
 pkg install wireguard wireguard-tools
 pkg install tinyproxy
 nano /etc/rc.conf
+hostname="sitka"
+#ifconfig_igb4="DHCP"
+ifconfig_igb4="inet 198.202.31.141 netmask 255.255.255.128"
+defaultrouter="198.202.31.129"
+ifconfig_igb0="inet 192.168.31.2 netmask 255.255.255.0"
+sshd_enable="YES"
+moused_nondefault_enable="NO"
+# Set dumpdev to "AUTO" to enable crash dumps, "NO" to disable
+dumpdev="AUTO"
+zfs_enable="YES"
+ipv6_enable="NO"
+ipv6_network_interfaces="none"
+ip6addrctl_enable="NO"
+dnsmasq_enable="YES"
+gateway_enable="YES"
+```
 
 ### Wireguard
 
