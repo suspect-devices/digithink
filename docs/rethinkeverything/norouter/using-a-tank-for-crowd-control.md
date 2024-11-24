@@ -2,7 +2,7 @@
 
 ## Overview
 
-Now that we [have our proof of concept](https://www.digithink.com/rethinkeverything/norouter/wireguard-and-tinyproxy/) We are going to reimpliment it using physical hardware and harden it. The idea is to access the Admin lan without giving it any more access than it needs. The admin land has the servers lights out interfaces (ilo and drac) and allows direct communication between servers.
+Now that we [have our proof of concept](https://www.digithink.com/rethinkeverything/norouter/wireguard-and-tinyproxy/) We are going to reimpliment it using physical hardware and harden it. The idea is to access the Admin lan without giving it any more access than it needs. The admin land has the servers lights out interfaces (ilo and drac) and allows direct communication between servers. The router will also provide a secondary dns server. 
 
 ### Hardware
 
@@ -91,7 +91,8 @@ service pflog start
 #### Configure wireguard 
 
 Wireguard configuration comes in two pieces the local interface and peers that connect to it. 
-```
+
+```sh
 nano /usr/local/etc/wireguard/wg0
 [interface]
 Address = 10.0.0.11/32
@@ -107,9 +108,42 @@ PreSharedKey=v5NK+hY10ZFTYnmuhoYBYkTEAq+RBmSLOV05MlPJ9R8=
 service wireguard start
 ```
 
+### TinyProxy
 
+#### Configuration
 
-### Bind 9
+```sh
+nano /usr/local/etc/tinyproxy.conf
+User nobody
+Group nobody
+Port 3128
+Listen 192.168.31.2
+Timeout 600
+Allow 192.168.31.1/24
+ViaProxyName "tinyproxy"
+DefaultErrorFile "/usr/local/share/tinyproxy/default.html"
+StatFile "/usr/local/share/tinyproxy/stats.html"
+LogFile "/var/log/tinyproxy.log"
+LogLevel Info
+PidFile "/var/run/tinyproxy.pid"
+MaxClients 50
+^X
+service tinyproxy enable
+service tinyproxy start
+```
+
+#### Test the proxy.
+Note that there is only the internal interface on this box. The bridge to the outside is anonymous and only the containers have access to it.
+```sh
+root@kh2024:~# nano /etc/apt/apt.conf.d/99proxy
+Acquire::http::Proxy "http://192.168.31.2:3128/";
+^X 
+root@kh2024:~# apt update
+Hit:1 http://deb.debian.org/debian bookworm InRelease
+Hit:2 http://deb.debian.org/debian bookworm-updates InRelease
+```
+
+### Bind 9 / Secondary DNS server
 
 There are several versions of bind avaliable with Freebsd 14.1 but we are using bind9 on the primary so we install bind918.
 
@@ -139,8 +173,6 @@ Enable and start the service.
 sysrc named_enable=YES
 service named start
 ```
-
-
 
 ## References
 
