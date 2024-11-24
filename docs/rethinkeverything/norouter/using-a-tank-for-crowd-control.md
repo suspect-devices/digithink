@@ -68,6 +68,29 @@ gateway_enable="YES"
 
 ### Wireguard
 
+Wireguard on freebsd is much like wireguard on linux except that instead of iptables the work is done with freebsds packet filter pf.
+#### Use pf to pass network traffic.
+
+```sh
+service wireguard enable
+sysrc wireguard_interfaces="wg0"
+sysrc gateway_enable=YES
+sysctl -w net.inet.ip.forwarding=1
+service pf enable
+service pflog enable
+nano /etc/pf.conf
+internal_if="igb0"
+wg_net="10.0.0.0/24"
+scrub in all
+nat on $internal_if from $wg_net to any -> ($internal_if)
+pass log all
+service pf start
+service pflog start
+```
+
+#### Configure wireguard 
+
+Wireguard configuration comes in two pieces the local interface and peers that connect to it. 
 ```
 nano /usr/local/etc/wireguard/wg0
 [interface]
@@ -76,11 +99,48 @@ ListenPort = 1194
 PrivateKey = wKdjN83FosVXC1/MkG6aMnW3WJQBexdPhZrF3Ej2520=
 #Biw53AZ3wWp4mr/iWfuZWi4eFPfFIYjOLT3weE7mFmI=
 
-[amyl]
+[peer]
 PublicKey = mxU1WAMJGg3Da5D47rP5OWVYOe4+dwQQum3IFVZHAFY=
 AllowedIPs = 10.0.0.16/32
 PreSharedKey=v5NK+hY10ZFTYnmuhoYBYkTEAq+RBmSLOV05MlPJ9R8=
+^X
+service wireguard start
 ```
+
+
+
+### Bind 9
+
+There are several versions of bind avaliable with Freebsd 14.1 but we are using bind9 on the primary so we install bind918.
+
+```sh
+pkg install bind918
+```
+
+Everything not in freebsd is off of /usr/local/ so instead of /etc/named the configuration for for bind9 is under /usr/local/etc/namedb the default configuration file (/usr/local/etc/namedb/named.conf) only listens to localhost so the first change to make is to change.
+
+```sh
+    listen-on       { 127.0.0.1; };
+```
+to 
+```sh
+    listen-on       { 198.202.31.132; };
+```
+
+Then copy the zone directory from the old linux slave server and add the following to the end of the named.conf file. 
+
+```sh
+include "/usr/local/etc/namedb/zones/slave.conf";
+```
+
+Enable and start the service.
+
+```sh
+sysrc named_enable=YES
+service named start
+```
+
+
 
 ## References
 
