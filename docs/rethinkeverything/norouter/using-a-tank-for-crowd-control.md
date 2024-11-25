@@ -98,8 +98,9 @@ nano /usr/local/etc/wireguard/wg0
 Address = 10.0.0.11/32
 ListenPort = 1194
 PrivateKey = wKdjN83FosVXC1/MkG6aMnW3WJQBexdPhZrF3Ej2520=
-#Biw53AZ3wWp4mr/iWfuZWi4eFPfFIYjOLT3weE7mFmI=
+#public key Biw53AZ3wWp4mr/iWfuZWi4eFPfFIYjOLT3weE7mFmI=
 
+# note the peers public key will have to come from the client.
 [peer]
 PublicKey = mxU1WAMJGg3Da5D47rP5OWVYOe4+dwQQum3IFVZHAFY=
 AllowedIPs = 10.0.0.16/32

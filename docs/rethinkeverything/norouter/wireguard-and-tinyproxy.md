@@ -149,7 +149,9 @@ To avoid contention please reference the [ips spreadsheet](https://docs.google.c
 To add the wireguard server to macos go to manage-tunnels and hit the + ->Add empty tunnel.... \<SPLAT-N>
 ![blank](images/addempty.jpg)
 
-Flesh in the local interface and peer details. 
+You will get a form which includes the clients public key, its private key and a lot of white space.
+
+*Use the public key to fill in the peer section on the server (as pre done above)* and then flesh in the local interface and peer details. 
 
 ![tunnel](images/details.jpg)
 The interface address is the unique address of the peer on the wireguard network. The interface dns will be the local dns server.
