@@ -143,10 +143,34 @@ systemctl enable wg-quick@wg0
 ```
 
 #### Client Configuration.
+To avoid contention please reference the [ips spreadsheet](https://docs.google.com/spreadsheets/d/1KRkqdYvgRtV4vu6AGzdLWJVGTIsV2o2iSSJBEFMZJAw/edit?gid=308028290#gid=308028290) under the 10.0.0.x tab. 
 
-YOU ARE HERE Describing client configuration.
 ##### MacOs client
+To add the wireguard server to macos go to manage-tunnels and hit the + ->Add empty tunnel.... \<SPLAT-N>
+![blank](images/addempty.jpg)
+
+Flesh in the local interface and peer details. 
+
+![tunnel](images/details.jpg)
+The interface address is the unique address of the peer on the wireguard network. The interface dns will be the local dns server.
+
+The peer data can be found in the files cited above. 
+When finished press save. The AllowedIPs should include the wireguard servers wg address *and any ips routed through it* (in the above case the admin lan at the colo).
+
+![select](images/macosclient.jpg)
+
+To select the connection double click on the tunnel and press the Enable On-Demand button. 
+
+Then test it. 
+```
+feurig@Amyl ~ % ssh root@192.168.31.159
+...
+root@kb2018:~#
+```
+
+
 ##### Linux client
+YOU ARE HERE Describing linux client configuration.
 
 ## No ~~Squid~~ 
 
