@@ -1,4 +1,4 @@
-# Using a Tank for Crowd Control. -- DRAFT / Work In Progress --
+# Using a Tank for Crowd Control
 
 ## Overview
 
@@ -174,6 +174,10 @@ Enable and start the service.
 sysrc named_enable=YES
 service named start
 ```
+## Todo 
+
+- dnsmasq for internal network.
+- hardening.
 
 ## References
 

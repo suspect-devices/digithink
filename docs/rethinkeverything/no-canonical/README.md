@@ -32,10 +32,10 @@ So I am [migrating all of my lxd implimentations to the open source incus projec
 - Test incus to incus container migration.(done)
 
 #### Repeat process at colocation 
-- Migrate secondary server to debian/incus. (done)
+- Migrate secondary server to [debian](https://www.digithink.com/rethinkeverything/no-canonical/debian/)/[incus](https://www.digithink.com/rethinkeverything/no-canonical/incus/). (done)
 - Migrate primary server to incus. (done)
-- Move containers temporarily to secondary server.
-- Migrate primary server to debian.
+- Move containers temporarily to secondary server. (done)
+- Migrate primary server to debian. (in progres)
 - Migrate containers back to primary.
 - Down secondary server.
 
