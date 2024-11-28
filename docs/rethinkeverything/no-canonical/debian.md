@@ -84,7 +84,6 @@ mount --bind /dev /mnt/debinst/dev
 mount --bind /dev/pts /mnt/debinst/dev/pts
 LANG=C.UTF-8 chroot /mnt/debinst /bin/bash
 ```
-
 back on the chroot
 
 ```sh
