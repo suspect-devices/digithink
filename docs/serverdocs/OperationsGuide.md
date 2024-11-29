@@ -26,13 +26,23 @@ Phase two extends on this by integrate Ansible into system maintenance tasks.
 
 * Work on secure and efficient traffic in and out of home lans (Privoxy,DNS based ad blocking,squid etc) 
 * Continue to refine server operation/maintanance.
-* Build Gitlab and other alternatives to trac/git and evaluate workflows.
+* ~~Build Gitlab and other alternatives to trac/git and evaluate workflows.~~
 * Deploy off site backup strategy.
 * Build out content. 
 * Start new projects.
 * Distribute data and backups over the network to home servers.
 * [Document home server/network setup](edge-server-configuration/)
 
+### SMP IV 
+* Reduce colo footprint.
+  * remove the dell.
+* Dump Canonical
+  * debian
+  * incus
+* Adapt Freebsd based firewall/router
+  * wireguard
+  * dnsmasq
+  * pf
 
 ### Goals.
 
@@ -48,9 +58,9 @@ Phase two extends on this by integrate Ansible into system maintenance tasks.
 
 ## Hardware
 
-At present the environment  contains a vpn capable router (Knight) and two enterrise class servers 
+Starting in 2025 the environment contains a freebsd bassed router (Knight) and an enterprise class server 
 
-* kh2024 , a Dell PowerEdge R610 [[br]]and 
+* ~~kh2024 , a Dell PowerEdge R610 [[br]]and~~
 * tk2018 a HP ProLiant DL380 (g7) .
 
 ## Network
@@ -63,7 +73,7 @@ The network is divided into 3 segments
 
 The hosts themselves do not have any public facing interfaces and are only accessible though the admin lan. The containers which handle all public facing work do so via an anonymous bridge configuration, allowing them to access the internet directly without allowing external access to the servers.
 
-### kh2024 network config
+### kh2024 network config (temporary)
 
 |   |   |   |   |  kh2024 ports|
 |---|---|---|---|-----------------|
@@ -79,7 +89,35 @@ As Drawn|As Deployed.
 
 /etc/network/interfaces
 ```
-paste from server
+# https://ip4calculator.com
+source /etc/network/interfaces.d/*
+
+auto lo
+iface lo inet loopback
+
+iface eno1 inet manual
+iface eno2 inet manual
+iface eno3 inet manual
+iface eno4 inet manual
+
+
+auto br0
+iface br0 inet manual
+     bridge_ports eno4
+     bridge_stp off       # disable Spanning Tree Protocol
+        bridge_waitport 0    # no delay before a port becomes available
+        bridge_fd 0          # no forwarding delay
+
+auto br1
+iface br1 inet static
+     address 192.168.31.158
+     network 192.168.31.0
+     netmask 255.255.255.0
+     broadcast 192.168.31.255
+     bridge_ports eno1
+     bridge_stp off       # disable Spanning Tree Protocol
+        bridge_waitport 0    # no delay before a port becomes available
+        bridge_fd 0          # no forwarding delay
 ```
 
 ### TK2022 Network Config
@@ -99,7 +137,7 @@ As Drawn|As Deployed.
 #### As implimented in /etc/network/interfaces
 
 ```
-#-------------------------------------------------------------------/etc/network/interfaces
+#--------------------------------------------------------/etc/network/interfaces
 # 2: enp3s0f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br0 state UP group default qlen 1000
 # 3: enp3s0f1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br1 state UP group default qlen 1000
 # 4: enp4s0f0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
