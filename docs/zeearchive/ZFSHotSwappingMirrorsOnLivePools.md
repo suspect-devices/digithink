@@ -1,4 +1,3 @@
-<!-- NotesZfsHotSwappingMirrorsOnLivePools, Version: 1, Modified: 2018/12/02, Author: trac -->
 # HOLY FUCKING AWESOME!!!!
 Watch while I add a fresh disk as a mirror, resliver the pool and remove and repartition the original disk while the container using the pool is still running!!!
 ... make this into a structured document ...
@@ -164,7 +163,6 @@ root@bs2020:~# packet_write_wait: Connection to 198.202.31.242: Broken pipe
 steve:~ don$ ssh feurig@bs2020.suspectdevices.com
 Welcome to Ubuntu 16.04.5 LTS (GNU/Linux 4.4.0-96-generic x86_64)
 
-
 	* Documentation:  https://help.ubuntu.com
 	* Management:     https://landscape.canonical.com
 	* Support:        https://ubuntu.com/advantage
@@ -202,10 +200,10 @@ steve:~ don$
 steve:~ don$ ssh feurig@bs2020.suspectdevices.com
 Welcome to Ubuntu 16.04.5 LTS (GNU/Linux 4.4.0-96-generic x86_64)
 
-	 * Documentation:  https://help.ubuntu.com
-	 * Management:     https://landscape.canonical.com
-	 * Support:        https://ubuntu.com/advantage
-	
+	* Documentation:  https://help.ubuntu.com
+	* Management:     https://landscape.canonical.com
+	* Support:        https://ubuntu.com/advantage
+
 0 packages can be updated.
 0 updates are security updates.
 

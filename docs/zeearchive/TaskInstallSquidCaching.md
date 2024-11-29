@@ -16,69 +16,72 @@ The configuration below can be found on the squid containers  on both basement s
 To use this server set your web browser proxy to the http_port in the configuration file (3128).
 
 	
-	acl SSL_ports port 443
-	acl Safe_ports port 80          # http
-	acl Safe_ports port 21          # ftp
-	acl Safe_ports port 443         # https
-	acl Safe_ports port 70          # gopher
-	acl Safe_ports port 210         # wais
-	acl Safe_ports port 1025-65535  # unregistered ports
-	acl Safe_ports port 280         # http-mgmt
-	acl Safe_ports port 488         # gss-http
-	acl Safe_ports port 591         # filemaker
-	acl Safe_ports port 777         # multiling http
-	acl CONNECT method CONNECT
-	http_access deny !Safe_ports
-	http_access deny CONNECT !SSL_ports
-	http_access allow localhost manager
-	http_access deny manager
-	http_access allow localhost
-	acl my_internal_net src 192.168.0.0/24
-	http_access allow my_internal_net
-	http_port 3128
-	coredump_dir /var/spool/squid
-	refresh_pattern ^ftp:           1440    20%     10080
-	refresh_pattern ^gopher:        1440    0%      1440
-	refresh_pattern -i (/cgi-bin/|\?) 0     0%      0
-	refresh_pattern (Release|Packages(.gz)*)$      0       20%     2880
-	refresh_pattern .               0       20%     4320
-	
+```sh
+acl SSL_ports port 443
+acl Safe_ports port 80          # http
+acl Safe_ports port 21          # ftp
+acl Safe_ports port 443         # https
+acl Safe_ports port 70          # gopher
+acl Safe_ports port 210         # wais
+acl Safe_ports port 1025-65535  # unregistered ports
+acl Safe_ports port 280         # http-mgmt
+acl Safe_ports port 488         # gss-http
+acl Safe_ports port 591         # filemaker
+acl Safe_ports port 777         # multiling http
+acl CONNECT method CONNECT
+http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports
+http_access allow localhost manager
+http_access deny manager
+http_access allow localhost
+acl my_internal_net src 192.168.0.0/24
+http_access allow my_internal_net
+http_port 3128
+coredump_dir /var/spool/squid
+refresh_pattern ^ftp:           1440    20%     10080
+refresh_pattern ^gopher:        1440    0%      1440
+refresh_pattern -i (/cgi-bin/|\?) 0     0%      0
+refresh_pattern (Release|Packages(.gz)*)$      0       20%     2880
+refresh_pattern .               0       20%     4320
+```	
 
 ## reverse proxy configuration
 _Work in progress._
 ### minimal (no ssl) configuration
 With an ssh tunnel set from our local static web server coming onto the server (jules.suspectdevices.com) at port 8085 we tell squid to route all traffic on port 80 to the server on the other end of the tunnel.
 	
-	debug_options ALL,2 28,9
-	http_port 80 accel no-vhost defaultsite=jules.suspectdevices.com
-	cache_peer 127.0.0.1 parent 8085 0 no-query originserver name=corbin
-	acl theworld src all
-	acl our_sites dstdomain all
-	http_access allow theworld
-	http_access allow our_sites
-	cache_peer_access corbin allow our_sites
-	cache_peer_access corbin allow theworld
-	http_access deny all
-	
+```sh
+debug_options ALL,2 28,9
+http_port 80 accel no-vhost defaultsite=jules.suspectdevices.com
+cache_peer 127.0.0.1 parent 8085 0 no-query originserver name=corbin
+acl theworld src all
+acl our_sites dstdomain all
+http_access allow theworld
+http_access allow our_sites
+cache_peer_access corbin allow our_sites
+cache_peer_access corbin allow theworld
+http_access deny all
+```
 ### Secure reverse proxy
 ... working on it ...
 
 From: squid example configurations
 	
-	https_port 443 accel defaultsite=jules.suspectdevices.com \
-	  cert=/etc/ssl/certs/ssl-cert-snakeoil.pem \
-	  key=/etc/ssl/private/ssl-cert-snakeoil.key
-	
-	# First (HTTP) peer
-	cache_peer 127.0.0.1 parent 8086 0 no-query originserver login=PASS name=lilly
-	
-	acl pdx dstdomain jules.suspectdevices.com
-	cache_peer_access lilly allow pdx
-	http_access allow pdx
-	
-	# Security block for non-hosted sites
-	http_access deny all
-	
+```sh
+https_port 443 accel defaultsite=jules.suspectdevices.com \
+	cert=/etc/ssl/certs/ssl-cert-snakeoil.pem \
+	key=/etc/ssl/private/ssl-cert-snakeoil.key
+
+# First (HTTP) peer
+cache_peer 127.0.0.1 parent 8086 0 no-query originserver login=PASS name=lilly
+
+acl pdx dstdomain jules.suspectdevices.com
+cache_peer_access lilly allow pdx
+http_access allow pdx
+
+# Security block for non-hosted sites
+http_access deny all
+```	
 From: https://serverfault.com/questions/735535/squid-reverse-proxy-redirect-rewrite-http-to-https
 	
 	acl PORT80 myport 80

@@ -1,7 +1,12 @@
 # tk2022 -- Rebuild kb2018 using debian bookworm.
-## ---------------- ROUGH IN --------------------------
+## ----------------------- ROUGH IN --------------------------
+
+Ok. So ubuntu let me install on the old HP dl-380 with its funky raid controller and bios. (no uefi). I have not been able thus far to 
+
+### Partition the disk (this needed to be redone)
+Add a section for cloning working partition table with sgdisk
+
 ```sh
-mkdir /mnt/debinst
 parted /dev/sdg
 GNU Parted 3.6
 Using /dev/sdg
@@ -22,16 +27,30 @@ quit
 mkfs.ext4 -j /dev/sdg3
 mount /dev/sdg3 /mnt/debinst/
 apt install debootstrap
+```
 
+### Debootstrap with proxy.
+
+```sh
 export http_proxy=http://192.168.31.2:3128/
 debootstrap --arch amd64 bookworm /mnt/debinst http://ftp.us.debian.org/debian
-mount -t sysfs /sys /mnt/debinst/sys
-mount --bind /dev /mnt/debinst/dev
-mount --bind /dev/pts /mnt/debinst/dev/pts
-LANG=C.UTF-8 chroot /mnt/debinst /bin/bash
+```
+
+### Mount chroot environment.
+
+```sh
+mkdir /mnt/tktest
+mount -t sysfs /proc /mnt/tktest/proc
+mount -t sysfs /sys /mnt/tktest/sys
+mount --bind /dev /mnt/tktest/dev
+mount --bind /dev/pts /mnt/tktest/dev/pts
+LANG=C.UTF-8 chroot /mnt/tktest /bin/bash
 
 ```
-```
+
+#### Alternate way to mount
+
+```sh
 mount --make-rslave --rbind /proc /mnt/tktest/proc
 mount --make-rslave --rbind /sys /mnt/tktest/sys
 mount --make-rslave --rbind /dev /mnt/tktest/dev
@@ -39,6 +58,8 @@ mount --make-rslave --rbind /dev/pts /mnt/tktest/dev/pts
 LANG=C.UTF-8 chroot /mnt/tktest /bin/bash
 PS1='TKTEST\w\$ '
 ```
+
+### Set up apt
 
 ```sh
 cat >/etc/apt/sources.list<<EOD
@@ -53,14 +74,32 @@ EOD
 TKTEST/# cat > /etc/apt/apt.conf.d/99proxy <<EOD
 > Acquire::http::Proxy "http://192.168.31.2:3128/";
 > EOD
+```
+
+### Make devices
+
+```sh
 TKTEST/# apt install makedev
 cd /dev
 MAKEDEV generic
+```
+
+### Set up  time
+
+There should be a way to preseed the time zone.
+
+```
 cat> /etc/adjtime<<EOD
 0.0 0 0.0
 0
 UTC
 EOD
+dpkg-reconfigure tzdata
+```
+
+### Set up networking
+
+```
 cat >/etc/network/interfaces<<EOD
 #-------------------------------------------------------------------/etc/network/interfaces
 # 2: enp3s0f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br0 state UP group default qlen 1000
@@ -84,21 +123,8 @@ iface br0 inet manual
         bridge_waitport 0    # no delay before a port becomes available
         bridge_fd 0          # no forwarding delay
 
+
 auto br1
-iface br1 inet manual
-     bridge_ports enp3s0f1
-     bridge_stp off       # disable Spanning Tree Protocol
-        bridge_waitport 0    # no delay before a port becomes available
-        bridge_fd 0          # no forwarding delay
-
-auto br2
-iface br2 inet manual
-     bridge_ports enp4s0f0
-     bridge_stp off       # disable Spanning Tree Protocol
-        bridge_waitport 0    # no delay before a port becomes available
-        bridge_fd 0          # no forwarding delay
-
-auto br3
 iface br1 inet static
      address 192.168.31.159
      network 192.168.31.0
@@ -109,15 +135,38 @@ iface br1 inet static
         bridge_waitport 0    # no delay before a port becomes available
         bridge_fd 0          # no forwarding delay
 EOD
+```
+
+### Set up resolution. 
+
+This is kind of silly since you need to proxy to get anywhere and the proxies do dns. This should change to use sitka and an admin lan should be added. (proposed change below)
+
+```sh
 cat >/etc/resolv.conf<<EOD
-192.168.31.141
-search suspectdevices.com digithink.com fromhell.com
+192.168.31.2             # sitka (dnsmasq)
+192.168.31.141           # naomi's internal address
+search admin.suspectdevices.com merlot.suspectdevices.com suspectdevices.com digithink.com fromhell.com
 EOD
+```
 
+### Install the gigabyte nic drivers.
 
+```sh
+apt update
+apt install firmware-bnx2
+```
+
+### !!!! Investigate this !!!!. 
+
+```sh
 #   info -f grub -n 'Simple configuration'
 ```
-```
+
+### Update grub
+
+This currently isnt working. 
+
+```sh
 nano /etc/default/grub
 GRUB_TERMINAL=console serial
 GRUB_GFXPAYLOAD_LINUX=text
@@ -133,10 +182,8 @@ grub-install /dev/sdj
 update-grub2
 ```
 
-```
+### Install ssacli
 
-```
-### install ssacli
 ```
 apt install gpg
 apt install curl
@@ -146,14 +193,16 @@ curl -x http://192.168.31.2:3128/-fsSL https://downloads.linux.hpe.com/SDR/hpPub
 apt update
 apt install ssacli
 ```
+
 ### Using ssacli to set the primary boot disk.
+
 ```sh
 => set target ctrl slot=0
 
    "controller slot=0"
 
 => show config detail
-...
+... find the drive that coresponds to what you want
 
 => ld 1 modify bootvolume=primary
 =>
@@ -172,8 +221,16 @@ Thu Nov 28 17:04:30 2024
 
 Server resetting .......
 
-</>hpiLO-> TEXTCONS
+</>hpiLO-> vsp
 ```
+
+Wait for the eternity it takes to run through the hardware and memory on the hp. Once it gets to the actual bios change to the text console.
+
+```sh
+<ESC>(
+</>hpiLO-> textcons
+```
+
 The text console is nice because (inspite of char set differences) the function keys work. Press f8 when you get to the raid controller (after it searches for the disks)
 
 Text console will not work until it actually gets to the bios and you can switch back to the VSP by escaping out 
@@ -183,8 +240,8 @@ Text console will not work until it actually gets to the bios and you can switch
 </>hpiLO-> vsp
 
 Virtual Serial Port Active: COM2
-
 ```
+
 ## References.
 
 - https://downloads.linux.hpe.com/SDR/downloads/MCP/debian/dists/bookworm/

@@ -1,9 +1,11 @@
 <!-- TaskAddLxdContinerWithAnsible, Version: 9, Modified: 2019/03/23, Author: feurig -->
-## New Container Using Ansible 
+## New Container Using Ansible
 
-With Ansible added to kb2018 we expand on the profiles we use to create users and create a sane environment. There are two steps required to create a container on kb2018. 
+YOU ARE HERE: Evaluating whether or not this is still a good way to create containers.
 
-1. Add the name, ip_address, and purpose to the inventory file _/etc/ansible/hosts_.
+With Ansible added to kb2018 we expand on the profiles we use to create users and create a sane environment. There are two steps required to create a container on kb2018.
+
+* Add the name, ip_address, and purpose to the inventory file _/etc/ansible/hosts_.
 
 ```sh
 ...
@@ -43,12 +45,13 @@ redshirt ip_address=198.202.31.200 purpose="Disposable Debian" image_alias="debi
 And (re)run the playbook.
 
 root@kb2018:/etc/ansible# ansible-playbook /etc/ansible/playbooks/create-lxd-containers.yml
-```	
+```
 
 You can also create infrastructure servers by setting net_and_disk_profile to "infra".
 
 The ansible playbook and host file are maintained in a private bitbucket repository. If you add roles or create a host that you want to keep please update the repository.  _Ignore the errors, I will reconfigure a user for kb2018 when bitbucket really stops supporting the organization account_
-```sh	
+
+```sh
 feurig@kb2018:~$ sudo bash
 [sudo] password for feurig: 
 root@kb2018:~# cd /etc/ansible/hosts

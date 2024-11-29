@@ -1,5 +1,8 @@
 # Costello, an Ubuntu 22.04 lxd 5 home server.
 
+Costello is a portable server. I set it up to take to nyu for backing up my laptop, serving music and I wanted originally to use it to sort through my pics/data. 
+
+YOU ARE HERE. This needs to be updated for its post debian installed state.
 
 ```shell
 # snap install lxd

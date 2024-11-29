@@ -1,12 +1,10 @@
 # Things that need to be rethought
-- canonical
+- [canonical](http://www.digithink.com/rethinkeverything/no-canonical/)
 - git mirroring
 - remote backups
 - vpn/tailscale
 - file shares
 - ticketing
-
-
 
 ## Linkdump
 

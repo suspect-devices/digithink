@@ -20,37 +20,37 @@ Allowing access to the server is discussed in the [wiki:OpenWRT OpenWRT notes] s
 ## Post install configuration
 
 Make primary interface static (on admin lan)
-	
-	root@bs2020:~# nano /etc/network/interfaces
-	...
-	# The primary network interface
-	auto eno1
-	iface eno1 inet static
-		address 192.168.1.158/24
-		gateway 192.168.1.1
-		dns-nameservers 192.168.1.1 198.202.31.132 198.202.31.141
-		dns-search vpn suspectdevices.com digithink.com 
-	...
-	root@bs2020:~#
-	
+```sh
+root@bs2020:~# nano /etc/network/interfaces
+...
+# The primary network interface
+auto eno1
+iface eno1 inet static
+	address 192.168.1.158/24
+	gateway 192.168.1.1
+	dns-nameservers 192.168.1.1 198.202.31.132 198.202.31.141
+	dns-search vpn suspectdevices.com digithink.com 
+...
+root@bs2020:~#
+
 Update server
-	
-	feurig@bs2020:~$ sudo bash
-	[sudo] password for feurig: 
-	root@bs2020:~# apt-get update
-	... Done
-	root@bs2020:~# apt-get dist-upgrade
-	root@bs2020:~# apt-get install openssl-server
-	
-	
+
+feurig@bs2020:~$ sudo bash
+[sudo] password for feurig: 
+root@bs2020:~# apt-get update
+... Done
+root@bs2020:~# apt-get dist-upgrade
+root@bs2020:~# apt-get install openssl-server
+
+
 Add second admin user
-	
-	root@bs2020:~# useradd -m joe -c"Joe Dumoulin" -Gsudo,root
-	root@bs2020:~# su - joe
-	joe@bs2020:~$ nano
-	joe@bs2020:~$ mkdir .ssh
-	joe@bs2020:~$ nano .ssh/authorized_keys
-	
+
+root@bs2020:~# useradd -m joe -c"Joe Dumoulin" -Gsudo,root
+root@bs2020:~# su - joe
+joe@bs2020:~$ nano
+joe@bs2020:~$ mkdir .ssh
+joe@bs2020:~$ nano .ssh/authorized_keys
+```	
   _paste key from vpn /etc/dropbear/autorized_keys_
 
 Set initial password so that admin can sudo.
@@ -74,93 +74,94 @@ Lxd is installed but lxc is not. Install lxc lxc templates bridge utilities and 
 In the example below we leverage lxd to create the zfs pool and to point the lxc network to the the existing bridge. Once we work enough with LXC/LXD and zfs to identify the relative merits of each approach I will backfill how to do these tasks manually.
 
 	
-	root@bs2020:~# sudo apt-get install lxc  lxc-templates wget \
-	                       zfsutils-linux bridge-utils  ebtables openvswitch-common
-	...
-	root@bs2020:~# nano /etc/network/interfaces
-	
-	# The primary network interface
-	auto eno1
-	iface eno1 inet static
-	    address 192.168.1.158/24
-	    gateway 192.168.1.1
-	    dns-nameservers 192.168.1.1 198.202.31.132 198.202.31.141
-	    dns-search vpn suspectdevices.com digithink.com
-	
-	auto br0
-	iface br0 inet static
-	    address 0.0.0.0
-	    bridge_ports eno4  
-	
-	iface eno4 inet manual
-	
-	...
-	root@bs2020:~# lxd init
-	Name of the storage backend to use (dir or zfs) [default=zfs]: 
-	Create a new ZFS pool (yes/no) [default=yes]? yes
-	Name of the new ZFS pool [default=lxd]: lxd4infra
-	Would you like to use an existing block device (yes/no) [default=no]? yes
-	Path to the existing block device: /dev/sde1
-	Would you like LXD to be available over the network (yes/no) [default=no]? 
-	Do you want to configure the LXD bridge (yes/no) [default=yes]? no
-	....
-	root@bs2020:~# dpkg-reconfigure -p medium lxd
-	... no yes br0...
-	Warning: Stopping lxd.service, but it can still be activated by:
-	  lxd.socket
-	
-	root@bs2020:~# lxc-create -n naomi -t ubuntu -B zfs --zfsroot=lxd4infra
-	lxc.rootfs = /var/lib/lxc/naomi/rootfs
-	lxc.rootfs.backend = zfs
-	lxc.utsname = naomi
-	lxc.arch = amd64
-	..
-	root@bs2020:~# nano /var/lib/lxc/naomi/config
-	..... check network ....
-	# Network configuration
-	lxc.network.type = veth
-	lxc.network.link = br0
-	lxc.network.flags = up
-	lxc.network.hwaddr = 00:16:3e:dc:6d:b4
-	# Assign static IP Address (currently done by continer)
-	#lxc.network.ipv4 = 192.168.1.161/24
-	#lxc.network.ipv4.gateway = 192.168.1.1
-	..... add this ....
-	# Autostart
-	lxc.start.auto = 1
-	lxc.start.delay = 5
-	lxc.start.order = 100
-	....
-	root@bs2020~# reboot
-	
+```	root@bs2020:~# sudo apt-get install lxc  lxc-templates wget \
+						zfsutils-linux bridge-utils  ebtables openvswitch-common
+...
+root@bs2020:~# nano /etc/network/interfaces
+
+# The primary network interface
+auto eno1
+iface eno1 inet static
+	address 192.168.1.158/24
+	gateway 192.168.1.1
+	dns-nameservers 192.168.1.1 198.202.31.132 198.202.31.141
+	dns-search vpn suspectdevices.com digithink.com
+
+auto br0
+iface br0 inet static
+	address 0.0.0.0
+	bridge_ports eno4  
+
+iface eno4 inet manual
+
+...
+root@bs2020:~# lxd init
+Name of the storage backend to use (dir or zfs) [default=zfs]: 
+Create a new ZFS pool (yes/no) [default=yes]? yes
+Name of the new ZFS pool [default=lxd]: lxd4infra
+Would you like to use an existing block device (yes/no) [default=no]? yes
+Path to the existing block device: /dev/sde1
+Would you like LXD to be available over the network (yes/no) [default=no]? 
+Do you want to configure the LXD bridge (yes/no) [default=yes]? no
+....
+root@bs2020:~# dpkg-reconfigure -p medium lxd
+... no yes br0...
+Warning: Stopping lxd.service, but it can still be activated by:
+	lxd.socket
+
+root@bs2020:~# lxc-create -n naomi -t ubuntu -B zfs --zfsroot=lxd4infra
+lxc.rootfs = /var/lib/lxc/naomi/rootfs
+lxc.rootfs.backend = zfs
+lxc.utsname = naomi
+lxc.arch = amd64
+..
+root@bs2020:~# nano /var/lib/lxc/naomi/config
+..... check network ....
+# Network configuration
+lxc.network.type = veth
+lxc.network.link = br0
+lxc.network.flags = up
+lxc.network.hwaddr = 00:16:3e:dc:6d:b4
+# Assign static IP Address (currently done by continer)
+#lxc.network.ipv4 = 192.168.1.161/24
+#lxc.network.ipv4.gateway = 192.168.1.1
+..... add this ....
+# Autostart
+lxc.start.auto = 1
+lxc.start.delay = 5
+lxc.start.order = 100
+....
+root@bs2020~# reboot
+```	
 ### adding admin users and basic services (lock ubuntu user before starting network)
 	
-	root@bs2020~# lxc-attach -n naomi
-	root@naomi:~# passwd -l ubuntu 
-	root@naomi:~# vi /etc/network/interfaces
-	... add the following ...
-	auto eth0
-	iface eth0 inet static
-	        address 198.202.31.142/25
-	        gateway 198.202.31.129
-	        dns-nameservers 198.202.31.132 198.202.31.141 8.8.8.8
-	        dns-search vpn suspectdevices.com digithink.com
-	
-	root@naomi:~# ifdown eth0 && ifup eth0
-	root@naomi:~# ping digithink.com
-	root@naomi:~# apt-get update
-	root@naomi:~# apt-get install openssl-server nano
-	root@naomi:~# useradd -Gsudo,root -m -c"Donald Delmar Davis" feurig
-	root@naomi:~# useradd -Gsudo,root -m -c"Joe Dumoulin" joe
-	root@naomi:~# vipw -s
-	... paste hash from other system....
-	root@naomi:~# tail -2 /etc/passwd >passwd.add
-	root@naomi:~# tail -2 /etc/shadow >shadow.add
-	root@naomi:~# tar -czvf fnj.tgz /home
-	root@naomi:~# exit 
-	root@bs2020~# cp /var/lib/lxc/naomi/rootfs/root/*.add ~feurig/
-	root@bs2020~# cp /var/lib/lxc/naomi/rootfs/root/fnj.tgz ~feurig/
-	
+```
+root@bs2020~# lxc-attach -n naomi
+root@naomi:~# passwd -l ubuntu 
+root@naomi:~# vi /etc/network/interfaces
+... add the following ...
+auto eth0
+iface eth0 inet static
+		address 198.202.31.142/25
+		gateway 198.202.31.129
+		dns-nameservers 198.202.31.132 198.202.31.141 8.8.8.8
+		dns-search vpn suspectdevices.com digithink.com
+
+root@naomi:~# ifdown eth0 && ifup eth0
+root@naomi:~# ping digithink.com
+root@naomi:~# apt-get update
+root@naomi:~# apt-get install openssl-server nano
+root@naomi:~# useradd -Gsudo,root -m -c"Donald Delmar Davis" feurig
+root@naomi:~# useradd -Gsudo,root -m -c"Joe Dumoulin" joe
+root@naomi:~# vipw -s
+... paste hash from other system....
+root@naomi:~# tail -2 /etc/passwd >passwd.add
+root@naomi:~# tail -2 /etc/shadow >shadow.add
+root@naomi:~# tar -czvf fnj.tgz /home
+root@naomi:~# exit 
+root@bs2020~# cp /var/lib/lxc/naomi/rootfs/root/*.add ~feurig/
+root@bs2020~# cp /var/lib/lxc/naomi/rootfs/root/fnj.tgz ~feurig/
+```	
 ### tuning bs2020
 TODO:
 https://github.com/lxc/lxd/blob/master/doc/production-setup.md

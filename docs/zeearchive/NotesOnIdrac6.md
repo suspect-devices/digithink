@@ -22,22 +22,23 @@ When purchasing a dell with idrac capabilities ALWAYS opt for the "Enterprise" e
 ## remote console fun
 The latest version of java disables the graphical remote console. The console makes you jump through all of the hoops to run launches and fails to connect. The solution is to disable the disabling of ssl3.
 	
-	bash-3.2# find / -name java.security -print
-	/Applications/Arduino.app/Contents/PlugIns/JavaAppletPlugin.plugin/Contents/Home/lib/security/java.security
-	/Applications/microchip/mplabx/v3.15/sys/java/jre1.7.0_79.jre/Contents/Home/lib/security/java.security
-	/Applications/microchip/mplabx/v3.15/sys/java/jre1.8.0_60.jre/Contents/Home/lib/security/java.security
-	/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/java/lib/security/java.security
-	find: /dev/fd/3: Not a directory
-	find: /dev/fd/4: Not a directory
-	/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/lib/security/java.security
-	/Users/don/Downloads/Energia.app/Contents/PlugIns/jdk1.8.0_91.jdk/Contents/Home/jre/lib/security/java.security
-	bash-3.2# nano /Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/lib/security/java.security
-	....
-	.... change the commented out line to the one below it ....
-	#jdk.tls.disabledAlgorithms=SSLv3, RC4, MD5withRSA, DH keySize < 1024, \
-	jdk.tls.disabledAlgorithms, RC4, MD5withRSA, DH keySize < 1024, \
-	    EC keySize < 224, DES40_CBC, RC4_40, 3DES_EDE_CBC
-	....
+```sh
+bash-3.2# find / -name java.security -print
+/Applications/Arduino.app/Contents/PlugIns/JavaAppletPlugin.plugin/Contents/Home/lib/security/java.security
+/Applications/microchip/mplabx/v3.15/sys/java/jre1.7.0_79.jre/Contents/Home/lib/security/java.security
+/Applications/microchip/mplabx/v3.15/sys/java/jre1.8.0_60.jre/Contents/Home/lib/security/java.security
+/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/java/lib/security/java.security
+find: /dev/fd/3: Not a directory
+find: /dev/fd/4: Not a directory
+/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/lib/security/java.security
+/Users/don/Downloads/Energia.app/Contents/PlugIns/jdk1.8.0_91.jdk/Contents/Home/jre/lib/security/java.security
+bash-3.2# nano /Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/lib/security/java.security
+....
+.... change the commented out line to the one below it ....
+#jdk.tls.disabledAlgorithms=SSLv3, RC4, MD5withRSA, DH keySize < 1024, \
+jdk.tls.disabledAlgorithms, RC4, MD5withRSA, DH keySize < 1024, \
+	EC keySize < 224, DES40_CBC, RC4_40, 3DES_EDE_CBC
+```....
 	
 ## Enabling bios and console accèss via ssh.
 ...Unfortunately this requires a functioning console..
@@ -52,42 +53,52 @@ set console redirection to com2
 [[Image(BIOSSerialSettings.png)]]
 ## Connecting to the console
 Once you can ssh to the idrac set up the serial using racadm
-	
-	steve:~ don$ ssh -p222 feurig@198.202.31.242
-	feurig@198.202.31.242's password: 
-	/admin1-> racadm config -g cfgSerial -o cfgSerialBaudRate 115200
-	Object value modified successfully
-	/admin1-> racadm config -g cfgSerial -o cfgSerialCom2RedirEnable 1
-	Object value modified successfully
-	/admin1-> racadm config -g cfgSerial -o cfgSerialSshEnable 1
-	Object value modified successfully
-	/admin1-> racadm config -g cfgIpmiSol -o cfgIpmiSolEnable 1
-	Object value modified successfully
-	/admin1-> racadm config -g cfgIpmiSol -o cfgIpmiSolBaudRate 115200
-	Object value modified successfully
-	
+
+```sh
+steve:~ don$ ssh -p222 feurig@198.202.31.242
+feurig@198.202.31.242's password: 
+/admin1-> racadm config -g cfgSerial -o cfgSerialBaudRate 115200
+Object value modified successfully
+/admin1-> racadm config -g cfgSerial -o cfgSerialCom2RedirEnable 1
+Object value modified successfully
+/admin1-> racadm config -g cfgSerial -o cfgSerialSshEnable 1
+Object value modified successfully
+/admin1-> racadm config -g cfgIpmiSol -o cfgIpmiSolEnable 1
+Object value modified successfully
+/admin1-> racadm config -g cfgIpmiSol -o cfgIpmiSolBaudRate 115200
+Object value modified successfully
+```	
+
 Then you can connect to the console
-	
-	/admin1-> console com2
-	
-	Connected to Serial Device 2. To end type: ^\
-	
+
+```
+/admin1-> console com2
+
+Connected to Serial Device 2. To end type: ^\
+
+```
+
 ## fixing grub
 You need set the console to ttyS1 by adding a console=ttyS1,115200n8 to the end of the kernel line
-	
-	root@bs2020:~# nano /boot/grub/menu.list
-	...
-	kernel          /boot/vmlinuz-4.4.0-96-generic root=UUID=8cafbdf6-441e-4f76-b89c-017fc22253f9 ro console=hvc0 console=ttyS1,115200n8
-	
+
+```sh
+root@bs2020:~# nano /boot/grub/menu.list
+...
+kernel          /boot/vmlinuz-4.4.0-96-generic root=UUID=8cafbdf6-441e-4f76-b89c-017fc22253f9 ro console=hvc0 console=ttyS1,115200n8
+
+```
+
 Add the changes to /etc/default/grub so that it will survive updates to the kernel.
 	
-	root@bs2020:~# nano /etc/default/grub
-	...
-	GRUB_TERMINAL='serial console'
-	GRUB_CMDLINE_LINUX="console=hvc0 console=ttyS1,115200n8"
-	GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=1 --word=8 --parity=no --stop=1"
-	root@bs2020:~# update-grub
-	
+```sh
+root@bs2020:~# nano /etc/default/grub
+...
+GRUB_TERMINAL='serial console'
+GRUB_CMDLINE_LINUX="console=hvc0 console=ttyS1,115200n8"
+GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=1 --word=8 --parity=no --stop=1"
+root@bs2020:~# update-grub
+```	
+
 Reboot the server and attach to the console.
 [[Image(post0.png)]]
 
