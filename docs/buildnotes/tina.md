@@ -1,7 +1,6 @@
 # tk2022 -- Rebuild kb2018 using debian bookworm.
-## ----------------------- ROUGH IN --------------------------
 
-Ok. So ubuntu let me install on the old HP dl-380 with its funky raid controller and bios. (no uefi). I have not been able thus far to 
+The process for installing debian on the old dl380 is about the same as the dell excep that its bios and not uefi and the disks have to be set up by the controller. (flesh this in a bit)
 
 ### Partition the disk (this needed to be redone)
 Add a section for cloning working partition table with sgdisk
@@ -10,18 +9,22 @@ Add a section for cloning working partition table with sgdisk
 parted /dev/sdg
 GNU Parted 3.6
 Using /dev/sdg
-...
+...mkpart until you get the stuff below....
 (parted) print
 Model: HP LOGICAL VOLUME (scsi)
 Disk /dev/sdg: 1024GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags:
+Disk Flags: pmbr_boot
 
-Number  Start   End     Size    File system     Name  Flags
- FIX ME
- 
- quit
+Number  Start   End     Size    File system  Name   Flags
+ 1      1049kB  2097kB  1049kB  fat32                 bios_grub
+ 2      2097kB  250GB   250GB   ext4
+ 3      250GB   500GB   250GB   ext4         incus
+
+(parted)disk_set pmbr_boot on
+(parted)set 1 bios_grub on
+(parted)quit
 mkfs.ext4 -j /dev/sdg2
 mount /dev/sdg2 /mnt/tktest/
 apt install debootstrap
