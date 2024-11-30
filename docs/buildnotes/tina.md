@@ -19,13 +19,11 @@ Partition Table: gpt
 Disk Flags:
 
 Number  Start   End     Size    File system     Name  Flags
- 1      1049kB  1048MB  1046MB  fat32           boot  msftdata
- 2      1048MB  2048MB  1000MB  linux-swap(v1)  swap  swap
- 3      2048MB  300GB   298GB   ext4            root
- 4      300GB   1024GB  724GB   zfs             free
-quit
-mkfs.ext4 -j /dev/sdg3
-mount /dev/sdg3 /mnt/debinst/
+ FIX ME
+ 
+ quit
+mkfs.ext4 -j /dev/sdg2
+mount /dev/sdg2 /mnt/tktest/
 apt install debootstrap
 ```
 
@@ -36,21 +34,30 @@ export http_proxy=http://192.168.31.2:3128/
 debootstrap --arch amd64 bookworm /mnt/debinst http://ftp.us.debian.org/debian
 ```
 
-### Mount chroot environment.
+### Grab a few things from the old server.
 
 ```sh
 mkdir /mnt/tktest
+mount /dev/sdj /mnt/tktest
+incus admin init --dump>/mnt/tktest/root/incusinit.yml
+cp -rpv /etc/ssh /mnt/tktest/etc/
+cp -rpv /root/.ssh /mnt/tktest/root/
+```
+
+### Mount chroot environment.
+```
 mount -t sysfs /proc /mnt/tktest/proc
 mount -t sysfs /sys /mnt/tktest/sys
 mount --bind /dev /mnt/tktest/dev
 mount --bind /dev/pts /mnt/tktest/dev/pts
 LANG=C.UTF-8 chroot /mnt/tktest /bin/bash
-
 ```
 
 #### Alternate way to mount
 
 ```sh
+mkdir /mnt/tktest
+mount /dev/sdj /mnt/tktest
 mount --make-rslave --rbind /proc /mnt/tktest/proc
 mount --make-rslave --rbind /sys /mnt/tktest/sys
 mount --make-rslave --rbind /dev /mnt/tktest/dev
@@ -59,7 +66,7 @@ LANG=C.UTF-8 chroot /mnt/tktest /bin/bash
 PS1='TKTEST\w\$ '
 ```
 
-### Set up apt
+### Set up apt (with proxy)
 
 ```sh
 cat >/etc/apt/sources.list<<EOD
@@ -74,6 +81,17 @@ EOD
 TKTEST/# cat > /etc/apt/apt.conf.d/99proxy <<EOD
 > Acquire::http::Proxy "http://192.168.31.2:3128/";
 > EOD
+```
+
+### Install stuff you will want installed.
+
+```sh
+apt install openssh-server
+apt install ca-certificates
+apt install curl
+apt install gpg
+apt install sudo
+apt install parted
 ```
 
 ### Make devices
@@ -98,8 +116,9 @@ dpkg-reconfigure tzdata
 ```
 
 ### Set up networking
-
+Make sure you install bridge-utils otherwise the bridges wont come up.
 ```
+apt install bridge-utils 
 cat >/etc/network/interfaces<<EOD
 #-------------------------------------------------------------------/etc/network/interfaces
 # 2: enp3s0f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br0 state UP group default qlen 1000
@@ -139,7 +158,7 @@ EOD
 
 ### Set up resolution. 
 
-This is kind of silly since you need to proxy to get anywhere and the proxies do dns. This should change to use sitka and an admin lan should be added. (proposed change below)
+This is kind of silly since you need to proxy to get anywhere and the proxies do dns. However we do want resolution for the admin land so we add sitka and naomis internal address. 
 
 ```sh
 cat >/etc/resolv.conf<<EOD
@@ -150,11 +169,12 @@ EOD
 ```
 
 ### Install the gigabyte nic drivers.
-
+A linux box without network is secure but useless.
 ```sh
 apt update
 apt install firmware-bnx2
 ```
+
 
 ### !!!! Investigate this !!!!. 
 
@@ -163,10 +183,10 @@ apt install firmware-bnx2
 ```
 
 ### Update grub
-
-This currently isnt working. 
+Since the hp is bios based we install grub-pc rather than an efi based solution.
 
 ```sh
+apt install grub-pc
 nano /etc/default/grub
 GRUB_TERMINAL=console serial
 GRUB_GFXPAYLOAD_LINUX=text
@@ -204,7 +224,7 @@ apt install ssacli
 => show config detail
 ... find the drive that coresponds to what you want
 
-=> ld 1 modify bootvolume=primary
+=> ld 10 modify bootvolume=primary
 =>
 ```
 
@@ -241,6 +261,39 @@ Text console will not work until it actually gets to the bios and you can switch
 
 Virtual Serial Port Active: COM2
 ```
+### Install zfs from trixie
+```
+apt -t bookworm-backports install zfs-dkms zfs-zed zfsutils-linux
+```
+
+### Install incus from zabbly (with proxy)
+
+
+```sh
+apt install curl
+curl  -x http://192.168.31.2:3128/ -fsSL https://pkgs.zabbly.com/key.asc -o /etc/apt/keyrings/zabbly.asc
+sh -c 'cat <<EOF > /etc/apt/sources.list.d/zabbly-incus-stable.sources
+Enabled: yes
+Types: deb
+URIs: https://pkgs.zabbly.com/incus/stable
+Suites: $(. /etc/os-release && echo ${VERSION_CODENAME})
+Components: main
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/zabbly.asc
+
+EOF'
+apt update
+apt install incus
+
+incus admin init
+incus storage create devel zfs source=/dev/disk/by-id/wwn-0x600508b1001cfe22c14c918541d42c3a-part1 zfs.pool_name=devel
+ls -ls /dev/disk/by-id|grep sda
+zpool status devel
+zpool attach devel wwn-0x600508b1001cfe22c14c918541d42c3a-part1 wwn-0x600508b1001c2ad6bd48a76e9aee8e03-part1
+zpool status infra
+zpool attach infra wwn-0x600508b1001cfe22c14c918541d42c3a-part2 wwn-0x600508b1001c2ad6bd48a76e9aee8e03-part2
+```
+
 
 ## References.
 

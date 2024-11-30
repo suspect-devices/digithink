@@ -104,6 +104,7 @@ UTC
 ...
 dpkg-reconfigure tzdata
 ip a
+apt-install bridge-utils
 nano /etc/network/interfaces
 nano /etc/resolv.conf
 echo kh2024>/etc/hostname

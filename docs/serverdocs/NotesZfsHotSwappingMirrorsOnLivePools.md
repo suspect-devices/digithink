@@ -1,7 +1,9 @@
 <!-- NotesZfsHotSwappingMirrorsOnLivePools, Version: 1, Modified: 2018/12/02, Author: trac -->
-# HOLY FUCKING AWESOME!!!!
+# Hot swapping disks on live zfs pools
+*HOLY FUCKING AWESOME!!!!*
 Watch while I add a fresh disk as a mirror, resliver the pool and remove and repartition the original disk while the container using the pool is still running!!!
-... make this into a structured document ...
+
+YOU ARE HERE - making this into a structured document
 
 	
 ```sh 

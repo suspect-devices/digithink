@@ -1,6 +1,6 @@
 <!-- OperationsGuide, Version: 28, Modified: 2020/12/02, Author: feurig -->
 # Server Modernization
-## Overview 
+## Overview
 
 ![](images/ContainerShip.jpg)
 
@@ -24,16 +24,16 @@ Phase two extends on this by integrate Ansible into system maintenance tasks.
 
 ### SMP III _Make Shit Happen / Own Your Shit_
 
-* Work on secure and efficient traffic in and out of home lans (Privoxy,DNS based ad blocking,squid etc) 
+* Work on secure and efficient traffic in and out of home lans (Privoxy,DNS based ad blocking,squid etc)
 * Continue to refine server operation/maintanance.
 * ~~Build Gitlab and other alternatives to trac/git and evaluate workflows.~~
 * Deploy off site backup strategy.
-* Build out content. 
+* Build out content.
 * Start new projects.
 * Distribute data and backups over the network to home servers.
 * [Document home server/network setup](edge-server-configuration/)
 
-### SMP IV 
+### SMP IV
 * Reduce colo footprint.
   * remove the dell.
 * Dump Canonical
@@ -58,14 +58,14 @@ Phase two extends on this by integrate Ansible into system maintenance tasks.
 
 ## Hardware
 
-Starting in 2025 the environment contains a freebsd bassed router (Knight) and an enterprise class server 
+Starting in 2025 the environment will contain a freebsd based router/firwall (Sitka) and a single enterprise class server
 
 * ~~kh2024 , a Dell PowerEdge R610 [[br]]and~~
 * tk2018 a HP ProLiant DL380 (g7) .
 
 ## Network
 
-The network is divided into 3 segments 
+The network is divided into 3 segments
 
 * 192.168.31.0/24 a private administrative lan
 * 10.0.0.0/24 wireguard lan
@@ -75,7 +75,7 @@ The hosts themselves do not have any public facing interfaces and are only acces
 
 ### kh2024 network config (temporary)
 
-|   |   |   |   |  kh2024 ports|
+|   |   |  |   |  kh2024 ports |
 |---|---|---|---|-----------------|
 |port| Interface| IP Address/mask |  linux device| purpose|
 | 4 |  br0  |  0.0.0.0/0 | eno4 |Public Interface for dev/deploymant servers|
@@ -88,6 +88,7 @@ As Drawn|As Deployed.
 ![](images/IMG_1402.jpg) | ![](images/r610Network.jpg)
 
 /etc/network/interfaces
+
 ```
 # https://ip4calculator.com
 source /etc/network/interfaces.d/*
@@ -179,18 +180,18 @@ See: ​[https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts](htt
 The servers are both running a standard install Ubuntu Server LTS, along with the Canonical supported LXD "snap". Outside of zfs not much is added to the stock installation. This is intentional. Since the real work is done by the containers the host os is considered disposable and can be rebuilt without effecting production.
 
 ### Disk Layout
-The system disks on both servers use hardware raid 1+0 mirroring. The containers are able to take advantage of zfs mirroring and caching. 
+The system disks on both servers use hardware raid 1+0 mirroring. The containers are able to take advantage of zfs mirroring and caching.
 
 |   |   |   |   |   |    bs2020 disks|
-|---|---|---|---|---|-----------------|
-|disk|device/pool | bay |  type|mount point(s)|purpose/notes| 
+|---|---|---|---|---|-----------------:|
+|disk|device/pool | bay |  type|mount point(s)|purpose/notes|
 .... YOU ARE HERE FLESHING THIS IN ......
 
 On kb2018 the second pair of disks are Solid State. The first partition on each is a mirrored pair for the infrastructure zfs pool. The remaining partitions are for zfs caching.
 
-|   |   |   |   |   |   kb2018 disks|
-|---|---|---|---|---|-----------------|
-| disk| device/pool | bay |  type| mount point(s)| purpose/notes| 
+|   |   |   |   |              |   kb2018 disks|
+|---|---|---|---|--------------|-----------------:|
+| disk| device/pool | bay |  type| mount point(s)| purpose/notes|
 ... YOU ARE HERE ...
 
 
@@ -210,16 +211,17 @@ Ansible is used to make most tasks reasonable including.
 * creating containers
 * updating containers
 * updating admin passwords and ssh keys.
-* accessing 
+* accessing
 
 # Tasks: Accessing Hosts
 ### bs2020/kb2020 ssh access
 The host machines for the containers can be accessed through the admin lan. This is done via wirguard on either [sitka](norouter/using-a-tank-for-crowd-control/) or [virgil](norouter/wireguard-and-tinyproxy/)
- 
- 
+
+
 _note: as of a few updates ago you have to tell apples ssh client to use ssh-dss as below_
 
-YOU ARE HERE updating this. 
+YOU ARE HERE updating this.
+
 ```sh
 steve:~ don$ ssh -p22 -oHostKeyAlgorithms=+ssh-dss feurig@bs2020.suspectdevices.com
 User:feurig logged-in to kb2018.suspectdevices.com(192.168.31.119 / FE80::9E8E:99FF:FE0C:BAD8)
@@ -256,7 +258,8 @@ _ if the serial port is still in use do the following _
 
 Virtual Serial Port is currently in use by another session.
 </>hpiLO-> stop /system1/oemhp_vsp1
-```	
+```
+
 ### bs2020/kb2018 graphical console access
 
 
@@ -265,24 +268,25 @@ tk2022 allows console access using the on board described on the [ilo 3 notes pa
 ### ssh access to containers
 
 The susdev profile adds ssh keys and sudo passwords for admin users allowing direct ssh access to the container.
-	
+
 ```sh
 steve:~ don$ ssh feurig@ian.suspectdevices.com
 ...
 feurig@ian:~$ 
-```	
+```
 
 The containers can be accessed directly from the incus host as root
-	
+
 ```sh
 root@bs2020:~# incus exec harvey bash
 root@harvey:~# apt-get update&&apt-get -y dist-upgrade&& apt-get -y autoremove
-```	
+```
 
 ## Updating dns
 
 Dns is provided by bind , The zone files have been consolidated into a single directory under /etc/bind/zones  on naomi (dns.suspectdevices.com).
 YOU ARE HERE (update and add zone/config file checks)
+
 ```sh
 root@naomi:/etc/bind/zones# nano suspectdevices.hosts
 ...
@@ -301,21 +305,22 @@ Sep  3 08:10:04 naomi named[178]: zone suspectdevices.com/IN: sending notifies (
 Sep  3 08:10:04 naomi named[178]: client 198.202.31.132#56120 (suspectdevices.com): transfer of 'suspectdevices.com/IN': AXFR-style IXFR started (serial 2018080300)
 Sep  3 08:10:04 naomi named[178]: client 198.202.31.132#56120 (suspectdevices.com): transfer of 'suspectdevices.com/IN': AXFR-style IXFR ended
 Sep  3 08:10:04 naomi named[178]: client 198.202.31.132#47381: received notify for zone 'suspectdevices.com'
-```	
-	
+```
+
 ## Updating Hosts / Containers
 
-When updates are available Apticron sends us an email. We prefer this to autoupdating our hosts as it helps us maintain awareness of what issues are being addressed and does not stop working when there are issues. All hosts in /etc/asnsible/hosts on kb2018 shoul be updated using the following add hoc command. 
+When updates are available Apticron sends us an email. We prefer this to autoupdating our hosts as it helps us maintain awareness of what issues are being addressed and does not stop working when there are issues. All hosts in /etc/asnsible/hosts on kb2018 shoul be updated using the following add hoc command.
 
 UPDATE WITH CURRENT bash.
-	
+
 ```sh
 root@kb2018:~# ansible pets -m raw -a "update.sh"
-```	
+```
+
 https://bitbucket.org/suspectdevicesadmin/ansible/src/master/files/update.sh
 
 ## Creating containers
-	
+
 	ansible-playbook playbooks/create-lxd-containers.yml 
 	
 https://bitbucket.org/suspectdevicesadmin/ansible/src/master/roles/create_lxd_containers/tasks/main.yml
