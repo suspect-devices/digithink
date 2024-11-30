@@ -25,8 +25,14 @@ Number  Start   End     Size    File system  Name   Flags
 (parted)disk_set pmbr_boot on
 (parted)set 1 bios_grub on
 (parted)quit
+```
+Create the root filesystem. You can save yourself some time by copying down the UUID for later.
+
+```
 mkfs.ext4 -j /dev/sdg2
 mount /dev/sdg2 /mnt/tktest/
+```
+
 apt install debootstrap
 ```
 
@@ -86,6 +92,19 @@ TKTEST/# cat > /etc/apt/apt.conf.d/99proxy <<EOD
 > EOD
 ```
 
+### Set up the fstab.
+We want to use the uuid for the mounts. *The hp raid controller shuffles the /dev/sdx quite a bit.*
+```
+blkid|grep sdb|sed 's/^/# /' >>/etc/fstab
+nano /etc/fstab
+UUID=c51cb56b-9da4-479b-ba11-dfaac580df64 / ext4 rw,relatime 0 0
+UUID=5456b1ce-999f-43a1-b13f-d507321f3ed8 /var/lib/incus ext4 rw,relatime 0 0
+# /dev/sdb2: UUID="c51cb56b-9da4-479b-ba11-dfaac580df64" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="ad01a32f-edc1-4f85-a8e3-b27b2e92fd03"
+# /dev/sdb3: UUID="5456b1ce-999f-43a1-b13f-d507321f3ed8" BLOCK_SIZE="4096" TYPE="ext4" PARTLABEL="incus" PARTUUID="998a853e-da55-453a-a936-65d559454ef7"
+# /dev/sdb1: PARTUUID="ce1294c5-8fb4-4c82-a3ea-40b6f9872efd"
+
+```
+
 ### Install stuff you will want installed.
 
 ```sh
@@ -95,6 +114,7 @@ apt install curl
 apt install gpg
 apt install sudo
 apt install parted
+apt install htop
 ```
 
 ### Make devices
@@ -287,8 +307,8 @@ Signed-By: /etc/apt/keyrings/zabbly.asc
 EOF'
 apt update
 apt install incus
-
 incus admin init
+
 incus storage create devel zfs source=/dev/disk/by-id/wwn-0x600508b1001cfe22c14c918541d42c3a-part1 zfs.pool_name=devel
 ls -ls /dev/disk/by-id|grep sda
 zpool status devel
@@ -303,4 +323,4 @@ zpool attach infra wwn-0x600508b1001cfe22c14c918541d42c3a-part2 wwn-0x600508b100
 - https://downloads.linux.hpe.com/SDR/downloads/MCP/debian/dists/bookworm/
 - https://sleeplessbeastie.eu/2017/06/26/how-to-fix-the-missing-hpes-public-keys/
 - https://serverfault.com/questions/1142235/-debian-12-live-grub-installerror-boot-efi-doesnt-look-like-an-efi-partition
-- 
+- https://linuxopsys.com/mount-partitions-using-uuid-in-linux
