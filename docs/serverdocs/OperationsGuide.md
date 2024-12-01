@@ -13,55 +13,9 @@ The network is divided into 3 segments
 * 10.0.0.0/24 wireguard lan
 * 198.202.31.129/25 A public facing lan.
 
-The hosts themselves do not have any public facing interfaces and are only accessible though the admin lan. The containers which handle all public facing work do so via an anonymous bridge configuration, allowing them to access the internet directly without allowing external access to the servers.
-
-### kh2024 network config (temporary)
-
-|   |   |  |   |  kh2024 ports |
-|---|---|---|---|-----------------|
-|port| Interface| IP Address/mask |  linux device| purpose|
-| 4 |  br0  |  0.0.0.0/0 | eno4 |Public Interface for dev/deploymant servers|
-| 3 | N/A | N/A | eno3 | unused |
-| 1 |  br1  | 192.168.31.158/24 | eno1 |internal / admin lan|
-| idrac |   |  192.168.31.121/24 | |remote console|
-
-As Drawn|As Deployed.
----|---
-![](images/IMG_1402.jpg) | ![](images/r610Network.jpg)
-
-/etc/network/interfaces
-
-```
-# https://ip4calculator.com
-source /etc/network/interfaces.d/*
-
-auto lo
-iface lo inet loopback
-
-iface eno1 inet manual
-iface eno2 inet manual
-iface eno3 inet manual
-iface eno4 inet manual
+The host itself does not have any public facing interfaces. It only accessible though the admin lan. The containers which handle all public facing work do so via an anonymous bridge configuration, allowing them to access the internet directly without allowing external access to the servers.
 
 
-auto br0
-iface br0 inet manual
-     bridge_ports eno4
-     bridge_stp off       # disable Spanning Tree Protocol
-        bridge_waitport 0    # no delay before a port becomes available
-        bridge_fd 0          # no forwarding delay
-
-auto br1
-iface br1 inet static
-     address 192.168.31.158
-     network 192.168.31.0
-     netmask 255.255.255.0
-     broadcast 192.168.31.255
-     bridge_ports eno1
-     bridge_stp off       # disable Spanning Tree Protocol
-        bridge_waitport 0    # no delay before a port becomes available
-        bridge_fd 0          # no forwarding delay
-```
 
 ### TK2022 Network Config
 
@@ -85,6 +39,8 @@ As Drawn|As Deployed.
 # 3: enp3s0f1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br1 state UP group default qlen 1000
 # 4: enp4s0f0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
 # 5: enp4s0f1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq master br3 state UP group default qlen 1000
+# https://ip4calculator.com
+
 source /etc/network/interfaces.d/*
 
 auto lo
@@ -119,33 +75,33 @@ EOD
 See: ​[https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts](https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts) which is built referencing [a google doc with proposed allocations](https://docs.google.com/spreadsheets/d/1KRkqdYvgRtV4vu6AGzdLWJVGTIsV2o2iSSJBEFMZJAw/edit#gid=0)
 
 ## Server OS, Filesystems and Disk layout
-The servers are both running a standard install Ubuntu Server LTS, along with the Canonical supported LXD "snap". Outside of zfs not much is added to the stock installation. This is intentional. Since the real work is done by the containers the host os is considered disposable and can be rebuilt without effecting production.
+The server runs Debian bookworm along with zabbly supported version of [incus](https://linuxcontainers.org/incus/). Outside of zfs not much is added to the stock installation. This is intentional. The real work is done by the containers the host os is considered disposable.
 
 ### Disk Layout
-The system disks on both servers use hardware raid 1+0 mirroring. The containers are able to take advantage of zfs mirroring and caching.
+The incus server uses hardware raid 1 for the boot disk. The containers and other data are a able to take advantage of zfs mirroring and caching.
 
-|   |   |   |   |   |    bs2020 disks|
-|---|---|---|---|---|-----------------:|
-|disk|device/pool | bay |  type|mount point(s)|purpose/notes|
-.... YOU ARE HERE FLESHING THIS IN ......
-
-On kb2018 the second pair of disks are Solid State. The first partition on each is a mirrored pair for the infrastructure zfs pool. The remaining partitions are for zfs caching.
 
 |   |   |   |   |              |   kb2018 disks|
 |---|---|---|---|--------------|-----------------:|
 | disk| device/pool | bay |  type| mount point(s)| purpose/notes|
-... YOU ARE HERE ...
+| sdb | /dev/sdb  | 2C:1:3 | raid1+0  | /, /var/lib/incus | os and incus data |
+|  |   | 2C:1:4 | raid1+0  |  |  |
+| sda  | infra, devel  | 3C:1:7 | zfs  |  | incus storage pools  |
+| sdg  |   | 3C:1:8| zfs mirror  |  |  |
+| sdd  | tank  | 3C:1:5 | zfs  | /tank | space for stuff  |
+| sdc  |   | 3C:1:6| zfs mirror  |  |  |
 
 
 ### Hardware raid on the DL380
 
 The raid controller on the Dell allows a mixing of hardware raid and direct hot swappable connections. The HP 420i does only hardware raid or direct connections (HBA) but not both. Since we use the hardware raid the remaining disks need to be configured using the ssacli or the raid controllers bios.
-See: DudeWhereAreMyDisks
+
+See: [Dude Where Are My Disks](/zeearchive/DL380RaidController)
 
 ## Containers
 
-Work previously done by standalone servers is now done though incus managed containers. [#fn1 (1)]
-An up to date list of containers is maintained at  https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts''
+Work previously done by standalone servers is now done though incus managed containers. 
+An up to date list of containers is somewhat maintained at  https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts
 
 ## Ansible
 
@@ -158,12 +114,12 @@ Ansible is used to make most tasks reasonable including.
 The host machines for the containers can be accessed through the admin lan. This is done via wirguard on either [sitka](norouter/using-a-tank-for-crowd-control/) or [virgil](norouter/wireguard-and-tinyproxy/)
 
 
-_note: as of a few updates ago you have to tell apples ssh client to use ssh-dss as below_
+*note: as of a few updates ago you have to tell apples ssh client to use ssh-dss as below*
 
 YOU ARE HERE updating this.
 
 ```sh
-steve:~ don$ ssh -p22 -oHostKeyAlgorithms=+ssh-dss feurig@bs2020.suspectdevices.com
+steve:~ don$ ssh -p22 -oHostKeyAlgorithms=+ssh-dss feurig@tinas-ilo.admin.suspectdevices.com
 User:feurig logged-in to kb2018.suspectdevices.com(192.168.31.119 / FE80::9E8E:99FF:FE0C:BAD8)
 iLO 3 Advanced for BladeSystem 1.88 at  Jul 13 2016
 Server Name: kb2018
@@ -200,10 +156,7 @@ Virtual Serial Port is currently in use by another session.
 </>hpiLO-> stop /system1/oemhp_vsp1
 ```
 
-### bs2020/kb2018 graphical console access
-
-
-tk2022 allows console access using the on board described on the [ilo 3 notes page](NotesOnILO3) This a requires access to the admin lan.
+See: [ilo 3 notes page](NotesOnILO3) 
 
 ### ssh access to containers
 
