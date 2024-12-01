@@ -209,12 +209,10 @@ An up to date list of containers is maintained at  https://bitbucket.org/suspect
 
 Ansible is used to make most tasks reasonable including.
 * creating containers
-* updating containers
 * updating admin passwords and ssh keys.
-* accessing
 
 # Tasks: Accessing Hosts
-### bs2020/kb2020 ssh access
+### tk2022 ssh access
 The host machines for the containers can be accessed through the admin lan. This is done via wirguard on either [sitka](norouter/using-a-tank-for-crowd-control/) or [virgil](norouter/wireguard-and-tinyproxy/)
 
 
@@ -309,9 +307,41 @@ Sep  3 08:10:04 naomi named[178]: client 198.202.31.132#47381: received notify f
 
 ## Updating Hosts / Containers
 
-When updates are available Apticron sends us an email. We prefer this to autoupdating our hosts as it helps us maintain awareness of what issues are being addressed and does not stop working when there are issues. All hosts in /etc/asnsible/hosts on kb2018 shoul be updated using the following add hoc command.
+When updates are available Apticron sends us an email. We prefer this to autoupdating our hosts as it helps us maintain awareness of what issues are being addressed and does not stop working when there are issues. All running containers can be updated using the following update script.
 
-UPDATE WITH CURRENT bash.
+```
+nano /usr/local/bin/update.sh
+#!/bin/bash
+# update.sh for debian/ubuntu/centos/suse  (copyleft) don@suspecdevices.com
+echo --------------------- begin updating `uname -n` ----------------------
+if [ -x "$(command -v apt-get)" ]; then
+   apt-get update
+   apt-get -y dist-upgrade
+   apt-get -y autoremove
+fi
+if  [ -x "$(command -v yum)" ]; then
+   echo yum upgrade.
+   yum -y upgrade
+fi
+if  [ -x "$(command -v zypper)" ]; then
+   echo zypper dist-upgrade.
+   zypper -y dist-upgrade
+fi
+echo ========================== done ==============================
+^X
+chmod +x /usr/local/bin/update.sh
+```
+pushing the update script to containers.
+```sh
+incus file push /usr/local/bin/update.sh virgil/usr/local/bin/
+incus exec virgil chmod +x /usr/local/bin/update.sh
+```
+you can run this against all running containers as follows.
+```
+for c in `incus list -cn -f compact|grep -v NAME`; do incus exec $c update.sh; done ; update.sh
+```
+
+This could also be used as an ansible ad hoc container.
 
 ```sh
 root@kb2018:~# ansible pets -m raw -a "update.sh"

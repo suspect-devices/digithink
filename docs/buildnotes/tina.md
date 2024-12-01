@@ -224,7 +224,30 @@ GRUB_DISABLE_OS_PROBER=false
 grub-install /dev/sdj
 update-grub2
 ```
+### Add update script.
 
+```sh
+nano /usr/local/bin/update.sh
+#!/bin/bash
+# update.sh for debian/ubuntu/centos/suse  (copyleft) don@suspecdevices.com
+echo --------------------- begin updating `uname -n` ----------------------
+if [ -x "$(command -v apt-get)" ]; then
+   apt-get update
+   apt-get -y dist-upgrade
+   apt-get -y autoremove
+fi
+if  [ -x "$(command -v yum)" ]; then
+   echo yum upgrade.
+   yum -y upgrade
+fi
+if  [ -x "$(command -v zypper)" ]; then
+   echo zypper dist-upgrade.
+   zypper -y dist-upgrade
+fi
+echo ========================== done ==============================
+^X
+chmod +x /usr/local/bin/update.sh
+```
 ### Install ssacli
 
 ```
