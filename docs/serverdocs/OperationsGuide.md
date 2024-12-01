@@ -1,64 +1,6 @@
-<!-- OperationsGuide, Version: 28, Modified: 2020/12/02, Author: feurig -->
-# Server Modernization
-## Overview
-
-![](images/ContainerShip.jpg)
-
-### Phase I
-
-Phase one of the server modernization shifted away from multipurposed servers and kvms to lxc/lxd based containers.
-
-* Moving all legacy system functions onto separate linux containers isolated from each other.
-* Use mirrored disk systems to insure that disk corruption does not lead to data corruption.
-* Start giving a shit about the systems, code, and sites on them.
-* Own your code/data. (If your free code hosting system is shutdown or taken over by Microsoft is it really free)
-
-### Server Modernization Phase II
-
-Phase two extends on this by integrate Ansible into system maintenance tasks.
-
-* Integrate Ansible into system maintenance tasks
-* Reevaluate Centos and other RPM based containers built using playbooks vs profiles/scripts/cloud-init _while maintaining current security model_
-* Develop off site backup strategy.
-* Clean up the cruft (If it doesn't bring you joy DTMFA)
-
-### SMP III _Make Shit Happen / Own Your Shit_
-
-* Work on secure and efficient traffic in and out of home lans (Privoxy,DNS based ad blocking,squid etc)
-* Continue to refine server operation/maintanance.
-* ~~Build Gitlab and other alternatives to trac/git and evaluate workflows.~~
-* Deploy off site backup strategy.
-* Build out content.
-* Start new projects.
-* Distribute data and backups over the network to home servers.
-* [Document home server/network setup](edge-server-configuration/)
-
-### SMP IV
-* Reduce colo footprint.
-  * remove the dell.
-* Dump Canonical
-  * debian
-  * incus
-* Adapt Freebsd based firewall/router
-  * wireguard
-  * dnsmasq
-  * pf
-
-### Goals.
-
-* Security
-* Flexibility
-* Simplification
-
-### Isolation
-
-* network
-* performance
-* disk
-
 ## Hardware
 
-Starting in 2025 the environment will contain a freebsd based router/firwall (Sitka) and a single enterprise class server
+Starting in December the environment will contains a freebsd based router/firwall (Sitka) and a single enterprise class server
 
 * ~~kh2024 , a Dell PowerEdge R610 [[br]]and~~
 * tk2018 a HP ProLiant DL380 (g7) .
@@ -341,7 +283,7 @@ you can run this against all running containers as follows.
 for c in `incus list -cn -f compact|grep -v NAME`; do incus exec $c update.sh; done ; update.sh
 ```
 
-This could also be used as an ansible ad hoc container.
+This could also be used as an ansible ad hoc command.
 
 ```sh
 root@kb2018:~# ansible pets -m raw -a "update.sh"
