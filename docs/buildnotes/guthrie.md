@@ -133,10 +133,13 @@ zpool detach bpool zpool detach bpool 1f1027f1-c44d-7f42-a71b-8bdff56b3a51
 ```
 get rid of any zfs stuff. 
 The debian installer (for bookworm anyways)tends to freak out and not want to install on anything with zfs on it.
+
 ```sh
 wipefs -fa /dev/nvme0n1
 ```
+
 save some stuff for later
+
 ```sh
 df -k
 parted /dev/nvme0n1 print
@@ -146,3 +149,179 @@ cp -rpv /etc/ssh /tank/oldguthrie/
 mkdir /tank/oldguthrie/root
 cp -rpv .bash_history .bashrc .config .local .profile .selected_editor .ssh zplan go /tank/oldguthrie/root/
 ```
+
+### Install stuff you will want installed.
+
+
+```sh
+apt install openssh-server
+apt install ca-certificates
+apt install curl
+apt install gpg
+apt install sudo
+apt install parted
+apt install htop
+apt install bridge-utils
+```
+
+start the sshd and go upstairs to finish this.
+
+```sh
+systemctl enable sshd
+systemctl start sshd
+```
+
+get rid of the graphical runtime before the system goes to sleep.
+
+```sh
+systemctl set-default multi-user.target
+reboot
+
+```
+set up sudo
+```
+visudo
+.... add feurig ....
+```
+
+### Install zfs from trixie
+
+```sh
+apt -t bookworm-backports install zfs-dkms zfs-zed zfsutils-linux
+modprobe zfs
+```
+
+Import the data pools.
+
+```sh
+zpool import
+zpool import -f archive
+zpool import -f home
+zpool import -f tank
+zpool import -f filebox
+```
+
+### Set up networking as it was before
+
+Forgot a few things mount the old ubuntu root
+
+```sh
+mkdir /tmp/mnt
+zpool import
+zpool import -f rpool orpool
+zfs set mountpoint=/tmp/mnt orpool/ROOT/ubuntu_lrmg80
+zfs mount orpool/ROOT/ubuntu_lrmg80 
+cp /tmp/mnt/etc/netplan/00-merlot.yaml /tank/oldguthrie/
+```
+
+Set /etc/network/interfaces
+
+```sh
+cat /etc/network/interfaces|sed
+ip a|sed 's/^/# /'
+ip a|sed 's/^/# /'>/etc/network/interfaces
+nano /etc/network/interfaces
+auto lo
+iface lo inet loopback
+
+allow-hotplug enp9s0
+auto enp9s0
+#iface enp10s0 inet dhcp
+iface enp9s0 inet manual
+
+auto br0
+iface br0 inet static
+     address 192.168.129.182
+     network 192.168.128.0
+     netmask 255.255.128.0
+     broadcast 192.168.255.255
+     gateway 192.168.128.1
+     mtu 9000
+     bridge_ports enp10s0
+     bridge_stp off       # disable Spanning Tree Protocol
+        bridge_waitport 0    # no delay before a port becomes available
+        bridge_fd 0          # no forwarding delay
+^X
+reboot
+```
+
+### Install incus from zabbly repo.
+
+```sh
+curl  -fsSL https://pkgs.zabbly.com/key.asc -o /etc/apt/keyrings/zabbly.asc
+sh -c 'cat <<EOF > /etc/apt/sources.list.d/zabbly-incus-stable.sources
+Enabled: yes
+Types: deb
+URIs: https://pkgs.zabbly.com/incus/stable
+Suites: $(. /etc/os-release && echo ${VERSION_CODENAME})
+Components: main
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/zabbly.asc
+EOF'
+apt update
+apt install incus
+```
+
+Clear all of the zfs data from ubuntu disk otherwise incus will bitch about the old local pool
+
+```sh
+ls -ls /dev/disk/by-id|grep nvme1n1
+zpool export orpool
+wipefs -af /dev/disk/by-id/nvme-T-CREATE_TM8FPE002T_112108250100368
+```
+Initialize incus 
+- create new local pool (with above device)
+- use existing bridge (br0)
+
+```sh
+
+incus admin init
+systemctl enable incus
+systemctl start incus
+
+```
+Add utah to /etc/hosts and generate trust key 
+
+```sh
+nano /etc/hosts
+incus config trust add utah
+```
+
+on utah remove old remote, generate trust key, and re add guthrie as a remote
+
+```sh
+incus remote remove guthrie
+incus config trust add guthrie
+incus remote add guthrie
+incus list guthrie:
+```
+
+Add utah as a remote.
+
+```sh
+incus remote add utah
+incus list utah:
+```
+
+### Install netatalk 4 from netatalk.io
+
+```sh
+wget https://github.com/Netatalk/netatalk/releases/download/netatalk-4-0-0/netatalk_4.0.0.ds-1_amd64.deb
+apt install ./netatalk_4.0.0.ds-1_amd64.deb
+cp /tank/oldguthrie/afp.conf /etc/netatalk/afp.conf.new
+nano /etc/netatalk/afp.conf
+systemctl enable netatalk
+systemctl start netatalk
+systemctl status netatalk
+apt install avahi-daemon
+apt enable avahi-daemon
+systemctl enable avahi-daemon
+systemctl restart avahi-daemon
+systemctl status avahi-daemon
+systemctl restart netatalk
+```
+
+### Wrapup
+
+- test backups on girlfriends system
+- test containers

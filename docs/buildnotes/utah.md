@@ -14,6 +14,14 @@ mkdir /mnt/wtfdebian
 mount /dev/sde2 /mnt/ubuntu/
 mount /dev/nvme0n1p2 /mnt/wtfdebian/
 ```
+ 
+get rid of the graphical runtime before the system goes to sleep.
+
+```sh
+systemctl set-default multi-user.target
+reboot
+```
+
 
 ## Convert from netplan back to /etc/network/interfaces
 

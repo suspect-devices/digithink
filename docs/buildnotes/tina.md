@@ -342,8 +342,9 @@ zpool attach infra wwn-0x600508b1001cfe22c14c918541d42c3a-part2 wwn-0x600508b100
 
 
 ## References.
-
+- https://www.debian.org/releases/stable/amd64/apds03.en.html
 - https://downloads.linux.hpe.com/SDR/downloads/MCP/debian/dists/bookworm/
 - https://sleeplessbeastie.eu/2017/06/26/how-to-fix-the-missing-hpes-public-keys/
 - https://serverfault.com/questions/1142235/-debian-12-live-grub-installerror-boot-efi-doesnt-look-like-an-efi-partition
 - https://linuxopsys.com/mount-partitions-using-uuid-in-linux
+-https://www.cyberciti.biz/faq/linux-finding-using-uuids-to-update-fstab/

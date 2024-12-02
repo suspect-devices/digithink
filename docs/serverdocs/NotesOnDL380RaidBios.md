@@ -1,11 +1,11 @@
 <!-- NotesOnDL380RaidBios, Version: 1, Modified: 2018/12/10, Author: feurig -->
 # Dl380 Raid Bios notes
-
+Flesh this out with new 
 ## Configuring the disks using the raid controller bios
-_... use some words here ..._ "Also reattach the images"
+
 	
 ```sh
-steve:~ don$ ssh -p 22222 feurig@vpn.suspectdevices.com
+steve:~ don$ ssh kates-ilo.suspectdevices.com
 User:feurig logged-in to kb2018.suspectdevices.com(192.168.31.119 / FE80::9E8E:99FF:FE0C:BAD8)
 iLO 3 Advanced for BladeSystem 1.88 at  Jul 13 2016
 Server Name: kb2018
@@ -124,3 +124,6 @@ The <ESC> key will walk you back out so you can continue to boot.
 	Disk /dev/sde: 279.4 GiB, 299966445568 bytes, 585871964 sectors
 	root@kb2018:~# 
 	
+### References
+- https://www.n0tes.fr/2024/03/04/CLI-HPE-ssacli-and-hpssacli-tools/
+- https://gist.github.com/ameiji/bfb738ec5edd6ab701b2095ed05e138e
