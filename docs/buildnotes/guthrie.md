@@ -19,6 +19,10 @@ Signed-By: /etc/apt/keyrings/zabbly.asc
 EOF'
 apt update
 apt install incus
+systemctl start incus
+lxd-to-incus --ignore-version-check --yes
+systemctl restart incus
+incus storage list
 ```
 
 ### establishing remotes and trust between nodes
