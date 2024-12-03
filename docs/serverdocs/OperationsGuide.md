@@ -224,7 +224,7 @@ for c in `incus list -cn -f compact|grep -v NAME`; do incus exec $c update.sh; d
 This could also be used as an ansible ad hoc command.
 
 ```sh
-root@kb2018:~# ansible pets -m raw -a "update.sh"
+ansible pets -m raw -a "update.sh"
 ```
 
 https://bitbucket.org/suspectdevicesadmin/ansible/src/master/files/update.sh
