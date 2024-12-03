@@ -27,9 +27,10 @@ The host itself does not have any public facing interfaces. It only accessible t
 | 1 |  br1  | 192.168.31.159/24 | enp4s0f1 |internal / admin lan |
 | ilo |   |  192.168.31.119/24 | |remote console|
 
-As Drawn|As Deployed.
----|---
-![](images/IMG_1401.jpg) | ![](images/DL380Network.jpg)
+#### As Drawn
+![](images/IMG_1401.jpg) 
+
+ ![](images/AsDeployed.png)
 
 #### As implimented in /etc/network/interfaces
 
