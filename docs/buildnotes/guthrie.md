@@ -284,7 +284,7 @@ systemctl enable incus
 systemctl start incus
 
 ```
-Add utah to /etc/hosts and generate trust key 
+Add utah to /etc/hosts and generate trust key as above. 
 
 ```sh
 nano /etc/hosts
@@ -307,13 +307,14 @@ incus remote add utah
 incus list utah:
 ```
 
+Move containers back as above.
+
 ### Install netatalk 4 from netatalk.io
 
 ```sh
 wget https://github.com/Netatalk/netatalk/releases/download/netatalk-4-0-0/netatalk_4.0.0.ds-1_amd64.deb
 apt install ./netatalk_4.0.0.ds-1_amd64.deb
-cp /tank/oldguthrie/afp.conf /etc/netatalk/afp.conf.new
-nano /etc/netatalk/afp.conf
+cp /tank/oldguthrie/afp.conf /etc/netatalk/afp.conf
 systemctl enable netatalk
 systemctl start netatalk
 systemctl status netatalk
