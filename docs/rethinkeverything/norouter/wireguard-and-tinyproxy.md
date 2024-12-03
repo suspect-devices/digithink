@@ -1,4 +1,6 @@
-# Replacing the colo router with a container.
+# Wireguard and Tinyproxy
+
+( add the freebsd configuration sections )
 
 After working through the complexities of using headscale/tailscale I realized that I really only needed the colo router to do 2 things.
 
@@ -8,7 +10,7 @@ After working through the complexities of using headscale/tailscale I realized t
     graph LR
     D([192.168.31.0/24])<-->A[Host interface]
     D<-->E[Host Drac/ILO]
-    C[laptop] <-- Wireguard --> B(homer/virgil);
+    C[laptop] <-- Wireguard --> B(sitka/virgil);
     B <-- Wireguard -->D;
     ```
 
@@ -17,12 +19,20 @@ After working through the complexities of using headscale/tailscale I realized t
     ```mermaid
     graph LR
     B --> I([internet])
-    A[Host] -- Apt Via Proxy --> B(homer/virgil);
+    A[Host] -- Apt Via Proxy --> B(sitka/virgil);
     ```
+ 
+To do this and to provide redundant routes to the admin lan we take two approaches.
+
+1) Replace the router with a container.
+2) Replace the router with a better one.
+
+## Replacing the colo router with a container.
+
 
 By using a container with access to both the external lan and the admin lan we can set up wireguard and tinyproxy. Wireguard allows us to securely connect to the admin lan while tinyproxy allows the servers a mechanism to recieve software updates. This will become a staging/test setup for [the colo firewall](https://www.digithink.com/rethinkeverything/norouter/using-a-tank-for-crowd-control/).
 
-## SETTING UP THE CONTAINER
+### SETTING UP THE CONTAINER
 To be able to do its job the container needed to be privilaged and it also would not run on 22.04. Its ok 22.04 still has a few years of support left.
 ```sh
 root@aoc2024:~# lxc init ubuntu:22.04 homer -c security.privileged=true -p susdev23 -p infra
@@ -73,11 +83,11 @@ root@homer:~# ip a
        valid_lft forever preferred_lft forever
 45: eth0@if46: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
     link/ether 00:16:3e:ba:f0:be brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet 198.202.31.227/25 brd 198.202.31.255 scope global eth0
+    inet 198.202.31.228/25 brd 198.202.31.255 scope global eth0
        valid_lft forever preferred_lft forever
 47: eth1@if48: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
     link/ether 00:16:3e:2e:6f:d8 brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet 192.168.31.227/24 brd 192.168.31.255 scope global eth1
+    inet 192.168.31.228/24 brd 192.168.31.255 scope global eth1
        valid_lft forever preferred_lft forever
 ```
 
@@ -91,13 +101,7 @@ apt install resolvconf
 sysctl -w net.ipv4.ip_forward=1
 ```
 
-### Clone it
-Once you have a working system clone it to the other server and adjust its configuration as needed.
-```sh
-lxc snapshot aoc2024:homer 19jun24
-lxc copy aoc2024:homer/19jun24 virgil
-lxc config edit virgil
-```
+
 
 ## Wireguard
 

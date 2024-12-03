@@ -2,8 +2,7 @@
 
 The process for installing debian on the old dl380 is about the same as the dell excep that its bios and not uefi and the disks have to be set up by the controller. (flesh this in a bit)
 
-### Partition the disk (this needed to be redone)
-Add a section for cloning working partition table with sgdisk
+### Partition the disk 
 
 ```sh
 parted /dev/sdg
@@ -196,13 +195,6 @@ A linux box without network is secure but useless.
 ```sh
 apt update
 apt install firmware-bnx2
-```
-
-
-### !!!! Investigate this !!!!. 
-
-```sh
-#   info -f grub -n 'Simple configuration'
 ```
 
 ### Update grub

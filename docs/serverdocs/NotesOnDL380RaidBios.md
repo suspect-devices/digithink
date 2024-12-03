@@ -1,6 +1,5 @@
-<!-- NotesOnDL380RaidBios, Version: 1, Modified: 2018/12/10, Author: feurig -->
 # Dl380 Raid Bios notes
-Flesh this out with new 
+YOU ARE HERE Flesh this out with new stuff we learned...
 ## Configuring the disks using the raid controller bios
 
 	

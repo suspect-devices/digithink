@@ -7,14 +7,14 @@ Utah (Phillips) is my secondary home file server. It is a cheeze grater style ma
 ## Initial setup.
 I started with a fresh install on one of the 3 nvme disks and then referenced/copied some things around from the old os boot disk and the first attempt to install debian trixie. I won't bother you with the details. I will however reuse /dev/nvme0n1.
 
-```
+```sh
 fdisk -l|grep Disk
 mkdir /mnt/ubuntu
 mkdir /mnt/wtfdebian
 mount /dev/sde2 /mnt/ubuntu/
 mount /dev/nvme0n1p2 /mnt/wtfdebian/
 ```
- 
+
 get rid of the graphical runtime before the system goes to sleep.
 
 ```sh
@@ -22,12 +22,11 @@ systemctl set-default multi-user.target
 reboot
 ```
 
-
 ## Convert from netplan back to /etc/network/interfaces
 
 Somewhere along the last few ubuntu updates ubuntus netplan started becoming unusable. Sometimes the updates would overwrite the existing configuration without backing it up. When I tried to set up a fresh bridge configuration it refused. So stick a fork in it and turn it over we are done.
 
-```
+```sh
 apt install bridge-utils
 cat /mnt/ubuntu/etc/network/interfaces
 cat /mnt/ubuntu/etc/netplan/
@@ -59,9 +58,9 @@ iface br0 inet static
 systemctl restart networking
 ```
 
-## Install zfs and appletalk 
+## Install zfs and appletalk
 
-### Add repositories from testing(trixie) 
+### Add repositories from testing(trixie)
 
 The zfs supported by bookworm will not import the filesystems created by ubuntu24.04 but the zfs packages backported from trixie will.
 
