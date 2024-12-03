@@ -116,10 +116,11 @@ The host machines for the containers can be accessed through the admin lan. This
 
 *note: as of a few updates ago you have to tell apples ssh client to use ssh-dss as below*
 
-YOU ARE HERE updating this.
+YOU ARE HERE update the ilo settings so they report the right server.
 
 ```sh
-steve:~ don$ ssh -p22 -oHostKeyAlgorithms=+ssh-dss feurig@tinas-ilo.admin.suspectdevices.com
+steve:~ don$ ssh -p22 -oHostKeyAlgorithms=+ssh-dss feurig@tinas-ilo.suspectdevices.com
+feurig@192.168.31.119's password:
 User:feurig logged-in to kb2018.suspectdevices.com(192.168.31.119 / FE80::9E8E:99FF:FE0C:BAD8)
 iLO 3 Advanced for BladeSystem 1.88 at  Jul 13 2016
 Server Name: kb2018
@@ -132,23 +133,8 @@ Virtual Serial Port Active: COM2
 Starting virtual serial port.
 Press 'ESC (' to return to the CLI Session.
 
-Ubuntu 18.04.1 LTS kb2018 ttyS1
-
-kb2018 login: <ESC> (
+tk2022 login: <ESC> (
 </>hpiLO-> exit
-steve:~ don$ ssh -p 222 feurig@vpn.suspectdevices.com
-...
-/admin1-> console com2
-Connected to Serial Device 2. To end type: ^\
-
-Ubuntu 18.04.1 LTS bs2020 ttyS1
-
-bs2020 login: <CTL> \
-/admin1-> exit
-CLP Session terminated
-Connection to vpn.suspectdevices.com closed.
-steve:~ don$ 
-
 
 _ if the serial port is still in use do the following _
 
@@ -178,7 +164,6 @@ root@harvey:~# apt-get update&&apt-get -y dist-upgrade&& apt-get -y autoremove
 ## Updating dns
 
 Dns is provided by bind , The zone files have been consolidated into a single directory under /etc/bind/zones  on naomi (dns.suspectdevices.com).
-YOU ARE HERE (update and add zone/config file checks)
 
 ```sh
 root@naomi:/etc/bind/zones# nano suspectdevices.hosts
@@ -245,15 +230,17 @@ root@kb2018:~# ansible pets -m raw -a "update.sh"
 https://bitbucket.org/suspectdevicesadmin/ansible/src/master/files/update.sh
 
 ## Creating containers
-
-	ansible-playbook playbooks/create-lxd-containers.yml 
-	
+```sh
+cd /etc/ansible
+nano hosts
+... add new host ...
+ansible-playbook playbooks/create-lxd-containers.yml
+```
 https://bitbucket.org/suspectdevicesadmin/ansible/src/master/roles/create_lxd_containers/tasks/main.yml
-.....YOU ARE HERE.....
-_documenting the ansible script to create containers_.
+.....YOU ARE HERE..... *documenting the ansible script to create containers*
 
 ## Backing Up Containers
 
-YOU ARE HERE REWORKING THIS
+YOU ARE HERE RETHINKING THIS
 
 #  links.... (tbd)
