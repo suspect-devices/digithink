@@ -1,6 +1,15 @@
 # tk2022 -- Rebuild kb2018 using debian bookworm.
 
 The process for installing debian on the old dl380 is about the same as the dell excep that its bios and not uefi and the disks have to be set up by the controller. (flesh this in a bit)
+## Prep
+
+For reference see [Build notes for guthrie](/BuildNotes/guthrie.md)
+
+- back up all containers to /tank
+- convert all lxd containers to incus with lxd-to-incus
+- migrate all incus containers to temporary server
+
+## Rebuild
 
 ### Partition the disk 
 
@@ -114,6 +123,7 @@ apt install gpg
 apt install sudo
 apt install parted
 apt install htop
+apt install git
 ```
 
 ### Make devices
@@ -331,6 +341,31 @@ zpool attach devel wwn-0x600508b1001cfe22c14c918541d42c3a-part1 wwn-0x600508b100
 zpool status infra
 zpool attach infra wwn-0x600508b1001cfe22c14c918541d42c3a-part2 wwn-0x600508b1001c2ad6bd48a76e9aee8e03-part2
 ```
+
+### Migrate containers back from spare server.
+
+Again see [Build notes for guthrie](/BuildNotes/guthrie/)
+
+
+### Install ansible and set up bitbicket repository
+
+Create an access key on bitbucket with write access to the SusdevAdmin/ansible repo. 
+
+Copy the key somewhere safe.
+
+```sh
+git config --global http.proxy http://192.168.31.2:3128
+git clone https://x-token-auth:<Token from above>@bitbucket.org/suspectdevicesadmin/ansible.git
+ls
+cd ansible/
+ls
+nano ansible.cfg
+nano hosts
+git config user.email <username provided above>@bots.bitbucket.org
+git commit -a -m"test through proxy"
+git push
+```
+
 
 
 ## References.
