@@ -3,7 +3,7 @@
 The process for installing debian on the old dl380 is about the same as the dell excep that its bios and not uefi and the disks have to be set up by the controller. (flesh this in a bit)
 ## Prep
 
-For reference see [Build notes for guthrie](/BuildNotes/guthrie.md)
+For reference see [Build notes for guthrie](/buildnotes/guthrie/)
 
 - back up all containers to /tank
 - convert all lxd containers to incus with lxd-to-incus
@@ -344,7 +344,7 @@ zpool attach infra wwn-0x600508b1001cfe22c14c918541d42c3a-part2 wwn-0x600508b100
 
 ### Migrate containers back from spare server.
 
-Again see [Build notes for guthrie](/BuildNotes/guthrie/)
+Again see [Build notes for guthrie](/buildnotes/guthrie/)
 
 
 ### Install ansible and set up bitbicket repository
