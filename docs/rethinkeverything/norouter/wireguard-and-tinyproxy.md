@@ -176,7 +176,55 @@ root@kb2018:~#
 
 
 ##### Linux client
-YOU ARE HERE Describing linux client configuration.
+
+Example setup using virgil as server....
+
+On the client generate the pub/private keys.
+
+```sh
+apt install wireguard resolvconf
+cd /etc/wireguard/
+wg genkey > private.key
+wg pubkey < private.key > public.key
+chmod o-rwx *
+```
+
+on the server add the client as a peer.
+
+```sh
+nano /etc/wireguiard/wg0.conf
+...
+# otto
+[Peer]
+PublicKey = <public key from above>
+AllowedIPs = 10.0.0.8/32
+PresharedKey = <preshared key from server setup>
+...
+^X
+systemctl restart 
+```
+
+On the client create configuration with server as peer.
+
+```
+cd /etc/wireguard
+nano wg0.conf
+[Interface]
+PrivateKey = OGn0b2s4f5UMg8pRl/aRwlXJ61AO1doQy2bGoBWLO1U=
+Address = 10.0.0.8/32
+DNS = 198.202.31.141
+
+[Peer]
+PublicKey = <public key from server>
+PresharedKey = <preshared key from server setup>
+AllowedIPs = 10.0.0.4/32, 192.168.31.0/24
+Endpoint = virgil.suspectdevices.com:1194
+PersistentKeepalive = 25
+^X
+wg-quick up wg0
+ping 192.168.31.2
+```
+
 
 ## No ~~Squid~~ 
 
