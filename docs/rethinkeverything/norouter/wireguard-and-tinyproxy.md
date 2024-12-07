@@ -201,7 +201,7 @@ AllowedIPs = 10.0.0.8/32
 PresharedKey = <preshared key from server setup>
 ...
 ^X
-systemctl restart 
+systemctl restart wg-quick@wg0
 ```
 
 On the client create configuration with server as peer.
@@ -210,7 +210,7 @@ On the client create configuration with server as peer.
 cd /etc/wireguard
 nano wg0.conf
 [Interface]
-PrivateKey = OGn0b2s4f5UMg8pRl/aRwlXJ61AO1doQy2bGoBWLO1U=
+PrivateKey = <private key from above>
 Address = 10.0.0.8/32
 DNS = 198.202.31.141
 
