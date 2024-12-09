@@ -30,7 +30,7 @@ To do this and to provide redundant routes to the admin lan we take two approach
 ## Replacing the colo router with a container.
 
 
-By using a container with access to both the external lan and the admin lan we can set up wireguard and tinyproxy. Wireguard allows us to securely connect to the admin lan while tinyproxy allows the servers a mechanism to recieve software updates. This will become a staging/test setup for [the colo firewall](https://www.digithink.com/rethinkeverything/norouter/using-a-tank-for-crowd-control/).
+By using a container with access to both the external lan and the admin lan we can set up wireguard and tinyproxy. Wireguard allows us to securely connect to the admin lan while tinyproxy allows the servers a mechanism to recieve software updates. This will become a staging/test setup for [the colo firewall](https://www.digithink.com/rethinkeverything/buildnotes/using-a-tank-for-crowd-control/).
 
 ### SETTING UP THE CONTAINER
 To be able to do its job the container needed to be privilaged and it also would not run on 22.04. Its ok 22.04 still has a few years of support left.
@@ -93,7 +93,7 @@ root@homer:~# ip a
 
 ### Install prerequisites and enable ip forwarding
 
-The next few sections are done on the gateway container (homer)
+The next few sections are done on the gateway container (virgil)
 
 ```sh
 apt install wireguard
@@ -235,11 +235,11 @@ FRACK THAT. IT'S GONE.
 root@virgil:/etc/squid# apt remove --purge squid
 ```
 
-## TinyProxy -- proxy for main servers
+## TinyProxy -- proxy for main server and router.
 
 ### Setting up TinyProxy
 
-This is on virgil (x.x.x.228) repeat this on sitka (x.x.x.2)
+The example below is on virgil (x.x.x.228) sitka is described in [her build notes](https://www.digithink.com/rethinkeverything/buildnotes/using-a-tank-for-crowd-control/) (x.x.x.2)
 
 ```sh
 apt install tinyproxy -y

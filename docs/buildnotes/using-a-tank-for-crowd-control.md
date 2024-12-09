@@ -1,13 +1,13 @@
-# Using a Tank for Crowd Control
+# Sitka -- Using a Tank for Crowd Control
 
 ## Overview
 
-Now that we [have our proof of concept](https://www.digithink.com/rethinkeverything/norouter/wireguard-and-tinyproxy/) We are going to reimpliment it using physical hardware and harden it. The idea is to access the Admin lan without giving it any more access than it needs. The admin land has the servers lights out interfaces (ilo and drac) and allows direct communication between servers. The router will also provide a secondary dns server. 
+Before retiring our openwrt router we used a [container as a proof of concept](https://www.digithink.com/rethinkeverything/norouter/wireguard-and-tinyproxy/) We are going to reimpliment it using physical hardware and harden it. The idea is to access the Admin lan without giving it any more access than it needs. The admin land has the servers lights out interfaces (ilo and drac) and allows direct communication between servers. The router will also provide a secondary dns server. 
 
 ### Hardware
 
 Our router was originally designed to be used with pfsense, a comercial product built around freebsd and its packet filtering system.
-![Sitka](./images/sitka.jpeg)
+![Sitka](../images/sitka.jpeg)
 
 At home we run opnsense which is an open source replacement. At the colo we are going to strip it down to its underlying operating system and open source compontents.
 
@@ -35,13 +35,13 @@ When talking to isolated internal machines its nice to have local dns. (also a d
 
 Pf is bsd's packet filter system.
 
-### Redundancy and remote control.
+### Redundancy and remote control
 
-## Configuration / setup.
+## Configuration / setup
 
-### Initial setup.
+### Initial setup
 
-```
+```sh
 pkg upgrade
 pkg install bind918-9.18.30
 pkg install dnsmasq
@@ -66,10 +66,11 @@ dnsmasq_enable="YES"
 gateway_enable="YES"
 ```
 
-### Wireguard
+### Wireguard setup
 
 Wireguard on freebsd is much like wireguard on linux except that instead of iptables the work is done with freebsds packet filter pf.
-#### Use pf to pass network traffic.
+
+#### Use pf to pass network traffic
 
 ```sh
 service wireguard enable
@@ -109,7 +110,7 @@ PreSharedKey= REDACTED =
 service wireguard start
 ```
 
-### TinyProxy
+### TinyProxy setup
 
 #### Configuration
 
@@ -133,7 +134,8 @@ service tinyproxy enable
 service tinyproxy start
 ```
 
-#### Test the proxy.
+#### Test the proxy
+
 Note that there is only the internal interface on this box. The bridge to the outside is anonymous and only the containers have access to it.
 ```sh
 root@kh2024:~# nano /etc/apt/apt.conf.d/99proxy
@@ -174,6 +176,7 @@ Enable and start the service.
 sysrc named_enable=YES
 service named start
 ```
+
 ## Todo 
 
 - dnsmasq for internal network.
@@ -187,7 +190,8 @@ service named start
 - https://vlads.me/post/create-a-wireguard-server-on-freebsd-in-15-minutes/
 - https://freebsdsoftware.org/www/tinyproxy.html
 
-### Wireguard
+### Wireguard references
+
 - https://herrbischoff.com/2023/04/freebsd-how-to-set-up-a-simple-and-actually-working-wireguard-server/
 - https://forums.freebsd.org/threads/simple-and-secure-vpn-in-freebsd-introducing-wireguard.78628/
 - https://www.zenarmor.com/docs/network-security-tutorials/how-to-install-wireguard-on-freebsd
