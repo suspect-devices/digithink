@@ -33,11 +33,11 @@ Three days of swimming through uwsgi, unit and 3 other overtly complicated half 
 - [https://www.digithink.com](https://www.digithink.com) is the target website.
 - [https://bartender.digithink.com/](https://bartender.digithink.com/) contains this and the other documents for the service.
 
-
 ## Installing the service.
 
 YOU ARE HERE DISCUSSING THE STUFF THAT MAKES IT WORK
-```
+
+```sh
 apt install python3-flask
 apt install python3-gunicorn
 
@@ -46,10 +46,9 @@ echo www-data |tee /etc/at.allow
 www-data
 ```
 
-
 ### Nginx.conf
 
-```
+```sh
 # lots of hard coded foo here
 server {
     server_name bartender.digithink.com;
@@ -65,8 +64,15 @@ server {
         include proxy_params;
         proxy_pass http://bartender/whiskey;
     }
+    # point the error page to the one created by mkdocs
+    error_page 404 /404.html;
+    location  /404.html {
+          internal;
+    }
+
 }
 
+# redirect http to https
 server {
     root /var/www/digithink/whiskey/bartender;
     index index.html;
@@ -108,7 +114,7 @@ if __name__ == "__main__":
 
 ## Converting the git content to a static html site.
 
-### mkdocs plus the extensions (move to its own doc?)
+### mkdocs plus the extensions
 
 Ubuntu really fracked up the packaging for mkdocs and mkdocs-material. I wound up removing the packages and pip3 installing most of it with --break-system-packages.
 
@@ -118,7 +124,7 @@ apt remove markdown
 apt remove python3-markdown
 pip3 install mkdocs-material --break-system-packages
 pip3 install yaml_env_tag --break-system-packages
-apip3 install pyyaml --break-system-packages
+pip3 install pyyaml --break-system-packages
 pip3 install  pyyaml_env_tag --break-system-packages
 pip3 install ghp-import --break-system-packages
 pip3 install pathspec --break-system-packages
