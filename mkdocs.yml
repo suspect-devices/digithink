@@ -12,6 +12,7 @@ theme:
   logo: images/think2t.png.svg
   favicon: images/favicon.png
   features:
+    - navigation.sections
     - navigation.expand
     - navigation.tabs
 
