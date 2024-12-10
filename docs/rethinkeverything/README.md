@@ -1,5 +1,5 @@
 # Things that need to be rethought
-- [canonical](http://www.digithink.com/rethinkeverything/no-canonical/)
+- [canonical](https://www.digithink.com/rethinkeverything/no-canonical/)
 - git mirroring
 - remote backups
 - vpn/tailscale

@@ -26,7 +26,7 @@ Phase two extends on this by integrate Ansible into system maintenance tasks.
 - Work on secure and efficient traffic in and out of home lans (Privoxy,DNS based ad blocking,squid etc)
 - Continue to refine server operation/maintanance.
 - Build out content.
-  - [git to markdown automation](bartender.digithink.com)
+  - [git to markdown automation](https://bartender.digithink.com)
 - Rethink openwrt based routing.
   - explore opnsense
 - [Document original home server/network setup](/zeearchive/edge-server-configuration/)
