@@ -17,7 +17,7 @@ theme:
 extra:
   homepage: https://www.digithink.com
   copyright: Copyright &copy; 2016 - 2025 D. Delmar Davis
-  generator: false
+#  generator: false
 
 plugins:
     - search
