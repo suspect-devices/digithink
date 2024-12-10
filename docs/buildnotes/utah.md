@@ -1,4 +1,4 @@
-# Replace Ubuntu with Debian on home server.
+# Utah - Replace Ubuntu with Debian on home server.
 
 Utah (Phillips) is my secondary home file server. It is a cheeze grater style mac with 3 2t ssds on a pci card that are the boot disks and then mirrored 8T and 14T zfs disks. Like the other 2 home servers it is an appletalk server as well as providing lxc containers and running docker processes. 
 

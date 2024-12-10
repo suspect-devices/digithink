@@ -1,4 +1,4 @@
-# Guthrie rebuild 
+# Guthrie rebuild -- Rinse Lather Repeat.
 
 Guthrie is Utah's partner in home service.
 It is also the last ubuntu server and since it does my girlfriends backup its probably the most important.
@@ -136,7 +136,7 @@ zpool detach rpool zpool status bpool -L
 zpool detach bpool zpool detach bpool 1f1027f1-c44d-7f42-a71b-8bdff56b3a51
 ```
 get rid of any zfs stuff. 
-The debian installer (for bookworm anyways)tends to freak out and not want to install on anything with zfs on it.
+The debian installer (for bookworm anyways) tends to freak out and not want to install on anything with zfs on it.
 
 ```sh
 wipefs -fa /dev/nvme0n1
