@@ -14,10 +14,10 @@ theme:
   features:
     - navigation.expand
   
-  extra:
-    homepage: https://www.digithink.com
-    copyright: Copyright &copy; 2016 - 2025 D. Delmar Davis
-    generator: false
+extra:
+  homepage: https://www.digithink.com
+  copyright: Copyright &copy; 2016 - 2025 D. Delmar Davis
+  generator: false
 
 plugins:
     - search
