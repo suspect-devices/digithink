@@ -11,13 +11,13 @@ theme:
 #    text: Share Tech Mono
   logo: images/think2t.png.svg
   favicon: images/favicon.png
+  features:
+    - navigation.expand
+  
   extra:
     homepage: https://www.digithink.com
     copyright: Copyright &copy; 2016 - 2025 D. Delmar Davis
     generator: false
-  features:
-    - navigation.expand
-  
 
 plugins:
     - search
