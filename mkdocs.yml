@@ -13,7 +13,6 @@ theme:
   favicon: images/favicon.png
   features:
     - navigation.expand
-    - navigation.sections
     - navigation.tabs
 
 plugins:
