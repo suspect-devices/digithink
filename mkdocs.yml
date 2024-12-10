@@ -16,6 +16,12 @@ theme:
     - navigation.expand
     - navigation.tabs
 
+extra:
+  homepage: https://www.digithink.com
+  generator: false
+
+copyright: Copyright &copy; 2016 - 2025 D. Delmar Davis
+
 plugins:
     - search
     - with-pdf
