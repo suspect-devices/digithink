@@ -12,4 +12,3 @@ And here is my <a href=https://www.digithink.com/resume/DDelmarDavis/>resume</a>
 </td></tr></table>
 
 - [Download site as a pdf](https://www.digithink.com/pdf/document.pdf)
-
