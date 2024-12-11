@@ -111,18 +111,21 @@ When you are finished you can view the logical drives.
 The <ESC> key will walk you back out so you can continue to boot. 
 
 ## success
-	
-	root@kb2018:~# fdisk -l|grep Disk\ \/
-	Disk /dev/loop0: 86.9 MiB, 91099136 bytes, 177928 sectors
-	Disk /dev/loop1: 87.9 MiB, 92164096 bytes, 180008 sectors
-	Disk /dev/loop2: 63.4 MiB, 66486272 bytes, 129856 sectors
-	Disk /dev/sda: 136.7 GiB, 146778685440 bytes, 286677120 sectors
-	Disk /dev/sdb: 223.6 GiB, 240021504000 bytes, 468792000 sectors
-	Disk /dev/sdc: 223.6 GiB, 240021504000 bytes, 468792000 sectors
-	Disk /dev/sdd: 279.4 GiB, 299966445568 bytes, 585871964 sectors
-	Disk /dev/sde: 279.4 GiB, 299966445568 bytes, 585871964 sectors
-	root@kb2018:~# 
-	
+
+```sh
+root@kb2018:~# fdisk -l|grep Disk\ \/
+Disk /dev/loop0: 86.9 MiB, 91099136 bytes, 177928 sectors
+Disk /dev/loop1: 87.9 MiB, 92164096 bytes, 180008 sectors
+Disk /dev/loop2: 63.4 MiB, 66486272 bytes, 129856 sectors
+Disk /dev/sda: 136.7 GiB, 146778685440 bytes, 286677120 sectors
+Disk /dev/sdb: 223.6 GiB, 240021504000 bytes, 468792000 sectors
+Disk /dev/sdc: 223.6 GiB, 240021504000 bytes, 468792000 sectors
+Disk /dev/sdd: 279.4 GiB, 299966445568 bytes, 585871964 sectors
+Disk /dev/sde: 279.4 GiB, 299966445568 bytes, 585871964 sectors
+root@kb2018:~# 
+```
+
 ### References
+
 - https://www.n0tes.fr/2024/03/04/CLI-HPE-ssacli-and-hpssacli-tools/
 - https://gist.github.com/ameiji/bfb738ec5edd6ab701b2095ed05e138e
