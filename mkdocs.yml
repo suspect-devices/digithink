@@ -13,12 +13,12 @@ theme:
   favicon: images/favicon.png
   features:
     - navigation.sections
-    - navigation.expand
+    #- navigation.expand
     - navigation.tabs
 
 extra:
   homepage: https://www.digithink.com
-  generator: false
+  generator: true
 
 copyright: Copyright &copy; 2016 - 2025 D. Delmar Davis
 
