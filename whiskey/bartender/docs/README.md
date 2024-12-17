@@ -122,6 +122,8 @@ Ubuntu really fracked up the packaging for mkdocs and mkdocs-material. I wound u
 apt remove mkdocs*
 apt remove markdown
 apt remove python3-markdown
+apt install python3-regex
+apt install libvips-dev
 pip3 install mkdocs-material --break-system-packages
 pip3 install yaml_env_tag --break-system-packages
 pip3 install pyyaml --break-system-packages
@@ -129,8 +131,10 @@ pip3 install  pyyaml_env_tag --break-system-packages
 pip3 install ghp-import --break-system-packages
 pip3 install pathspec --break-system-packages
 pip3 install watchdog --break-system-packages
-apt install python3-regex
 pip install mkdocs-mermaid2-plugin[test] --break-system-packages
+pip install mkdocs-with-pdf --break-system-packages
+
+
 cd /var/www/digithink/&& git pull && mkdocs build && chown -R www-data:www-data site/
 ```
 
