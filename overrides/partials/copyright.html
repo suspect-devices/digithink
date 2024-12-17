@@ -2,10 +2,14 @@
   Credit the bartender.
 -#}
   <div class="md-copyright">
-      {{ config.copyright }}
-      Site made by 
+    {% if config.copyright %}
+      <!-- div class="md-copyright__highlight" -->
+        {{ config.copyright }}
+      <!-- /div -->
+    {% endif %}
+      Made by 
       <a href=https://bartender.digithink.com/>
-        Bartender
+        bartender.digithink.com
       </a> with
       <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
         Material for MkDocs. 
