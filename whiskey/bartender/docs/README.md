@@ -124,6 +124,63 @@ apt remove markdown
 apt remove python3-markdown
 apt install python3-regex
 apt install libvips-dev
+apt install python3-pip
+pip3 install mkdocs-material --break-system-packages
+pip3 install yaml_env_tag --break-system-packages
+pip3 install pyyaml --break-system-packages
+pip3 install  pyyaml_env_tag --break-system-packages
+pip3 install ghp-import --break-system-packages
+pip3 install pathspec --break-system-packages
+pip3 install watchdog --break-system-packages
+pip install mkdocs-mermaid2-plugin[test] --break-system-packages
+pip install mkdocs-with-pdf --break-system-packages
+pip3 install mkdocs-material --break-system-packages
+pip3 install yaml_env_tag --break-system-packages
+pip3 install pyyaml --break-system-packages
+pip3 install  pyyaml_env_tag --break-system-packages
+pip3 install ghp-import --break-system-packages
+pip3 install pathspec --break-system-packages
+pip3 install watchdog --break-system-packages
+pip install mkdocs-mermaid2-plugin[test] --break-system-packages
+pip install mkdocs-with-pdf --break-system-packages
+
+pip3 install mkdocs-material --break-system-packages
+pip3 install yaml_env_tag --break-system-packages
+pip3 install pyyaml --break-system-packages
+pip3 install  pyyaml_env_tag --break-system-packages
+pip3 install ghp-import --break-system-packages
+pip3 install pathspec --break-system-packages
+pip3 install watchdog --break-system-packages
+pip install mkdocs-mermaid2-plugin[test] --break-system-packages
+pip install mkdocs-with-pdf --break-system-packages
+pip3 install mkdocs-material --break-system-packages
+pip3 install yaml_env_tag --break-system-packages
+pip3 install pyyaml --break-system-packages
+pip3 install  pyyaml_env_tag --break-system-packages
+pip3 install ghp-import --break-system-packages
+pip3 install pathspec --break-system-packages
+pip3 install watchdog --break-system-packages
+pip install mkdocs-mermaid2-plugin[test] --break-system-packages
+pip install mkdocs-with-pdf --break-system-packages
+pip3pip3 install mkdocs-material --break-system-packages
+pip3 install yaml_env_tag --break-system-packages
+pip3 install pyyaml --break-system-packages
+pip3 install  pyyaml_env_tag --break-system-packages
+pip3 install ghp-import --break-system-packages
+pip3 install pathspec --break-system-packages
+pip3 install watchdog --break-system-packages
+pip install mkdocs-mermaid2-plugin[test] --break-system-packages
+pip install mkdocs-with-pdf --break-system-packages
+ install mkdocs-material --break-system-packages
+pip3 install yaml_env_tag --break-system-packages
+pip3 install pyyaml --break-system-packages
+pip3 install  pyyaml_env_tag --break-system-packages
+pip3 install ghp-import --break-system-packages
+pip3 install pathspec --break-system-packages
+pip3 install watchdog --break-system-packages
+pip install mkdocs-mermaid2-plugin[test] --break-system-packages
+pip install mkdocs-with-pdf --break-system-packages
+
 pip3 install mkdocs-material --break-system-packages
 pip3 install yaml_env_tag --break-system-packages
 pip3 install pyyaml --break-system-packages
