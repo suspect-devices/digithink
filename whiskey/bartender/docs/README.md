@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
 ### mkdocs plus the extensions
 
-Ubuntu really fracked up the packaging for mkdocs and mkdocs-material. I wound up removing the packages and pip3 installing most of it with --break-system-packages.
+Ubuntu (... ok, debian really...) fracked up the packaging for mkdocs and mkdocs-material. I wound up removing the packages and pip3 installing most of it with --break-system-packages.
 
 ```
 apt remove mkdocs*
@@ -126,73 +126,13 @@ apt install python3-regex
 apt install libvips-dev
 apt install python3-pip
 pip3 install mkdocs-material --break-system-packages
-pip3 install yaml_env_tag --break-system-packages
-pip3 install pyyaml --break-system-packages
-pip3 install  pyyaml_env_tag --break-system-packages
-pip3 install ghp-import --break-system-packages
-pip3 install pathspec --break-system-packages
-pip3 install watchdog --break-system-packages
-pip install mkdocs-mermaid2-plugin[test] --break-system-packages
-pip install mkdocs-with-pdf --break-system-packages
-pip3 install mkdocs-material --break-system-packages
-pip3 install yaml_env_tag --break-system-packages
-pip3 install pyyaml --break-system-packages
-pip3 install  pyyaml_env_tag --break-system-packages
-pip3 install ghp-import --break-system-packages
-pip3 install pathspec --break-system-packages
-pip3 install watchdog --break-system-packages
-pip install mkdocs-mermaid2-plugin[test] --break-system-packages
-pip install mkdocs-with-pdf --break-system-packages
-
-pip3 install mkdocs-material --break-system-packages
-pip3 install yaml_env_tag --break-system-packages
-pip3 install pyyaml --break-system-packages
-pip3 install  pyyaml_env_tag --break-system-packages
-pip3 install ghp-import --break-system-packages
-pip3 install pathspec --break-system-packages
-pip3 install watchdog --break-system-packages
-pip install mkdocs-mermaid2-plugin[test] --break-system-packages
-pip install mkdocs-with-pdf --break-system-packages
-pip3 install mkdocs-material --break-system-packages
-pip3 install yaml_env_tag --break-system-packages
-pip3 install pyyaml --break-system-packages
-pip3 install  pyyaml_env_tag --break-system-packages
-pip3 install ghp-import --break-system-packages
-pip3 install pathspec --break-system-packages
-pip3 install watchdog --break-system-packages
-pip install mkdocs-mermaid2-plugin[test] --break-system-packages
-pip install mkdocs-with-pdf --break-system-packages
-pip3pip3 install mkdocs-material --break-system-packages
-pip3 install yaml_env_tag --break-system-packages
-pip3 install pyyaml --break-system-packages
-pip3 install  pyyaml_env_tag --break-system-packages
-pip3 install ghp-import --break-system-packages
-pip3 install pathspec --break-system-packages
-pip3 install watchdog --break-system-packages
-pip install mkdocs-mermaid2-plugin[test] --break-system-packages
-pip install mkdocs-with-pdf --break-system-packages
- install mkdocs-material --break-system-packages
-pip3 install yaml_env_tag --break-system-packages
-pip3 install pyyaml --break-system-packages
-pip3 install  pyyaml_env_tag --break-system-packages
-pip3 install ghp-import --break-system-packages
-pip3 install pathspec --break-system-packages
-pip3 install watchdog --break-system-packages
-pip install mkdocs-mermaid2-plugin[test] --break-system-packages
-pip install mkdocs-with-pdf --break-system-packages
-
-pip3 install mkdocs-material --break-system-packages
-pip3 install yaml_env_tag --break-system-packages
-pip3 install pyyaml --break-system-packages
-pip3 install  pyyaml_env_tag --break-system-packages
-pip3 install ghp-import --break-system-packages
-pip3 install pathspec --break-system-packages
-pip3 install watchdog --break-system-packages
-pip install mkdocs-mermaid2-plugin[test] --break-system-packages
-pip install mkdocs-with-pdf --break-system-packages
-
-
-cd /var/www/digithink/&& git pull && mkdocs build && chown -R www-data:www-data site/
+```
+#### pull dependencies based on the current mkdocs install and mkdocs.yml
+```
+cd /var/www/digithink/&& git pull 
+mkdocs-get-deps > requirements.txt
+pip3 install $(mkdocs-get-deps) --break-system-packages
+mkdocs build && chown -R www-data:www-data site/
 ```
 
 
@@ -202,6 +142,7 @@ cd /var/www/digithink/&& git pull && mkdocs build && chown -R www-data:www-data 
 - <https://www.stackovercloud.com/2020/05/27/how-to-serve-flask-applications-with-uwsgi-and-nginx-on-ubuntu-20-04/>
 - <https://www.digitalocean.com/community/tutorials/how-to-set-up-uwsgi-and-nginx-to-serve-python-apps-on-ubuntu-14-04>
 - <https://stackoverflow.com/questions/10748108/nginx-uwsgi-unavailable-modifier-requested-0#11055729>
+- https://github.com/mkdocs/get-deps
 
 ```
 
