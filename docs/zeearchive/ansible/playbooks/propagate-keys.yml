@@ -1,0 +1,23 @@
+# propogate joe and dons authorized keys for containers 
+# HACK HACK. (Not very generalized)
+
+- hosts: managedbykate
+  gather_facts: false
+  become: true  
+  tasks:
+   - name: Update Joes Keys
+     authorized_key:
+       user: joe
+       state: present
+       key: '{{ item }}'
+       exclusive: True
+     with_file:
+      - /home/joe/.ssh/authorized_keys
+   - name: Update Dons Keys
+     authorized_key:
+       user: feurig
+       state: present
+       key: '{{ item }}'
+       exclusive: True
+     with_file:
+       - /home/feurig/.ssh/authorized_keys

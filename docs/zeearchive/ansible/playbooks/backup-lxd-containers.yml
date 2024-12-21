@@ -1,0 +1,8 @@
+#-------------------------------------------------------playbooks/backup-lxd-containers.yml
+# (c)2019 suspectdevices.com 
+#
+- hosts: localhost
+  connection: local
+  roles:
+    - snapshot_lxd_containers
+    - archive_lxd_snapshots

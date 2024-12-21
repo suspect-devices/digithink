@@ -1,0 +1,74 @@
+#----------------------------------------------------------roles/create_lxd_containers/tasks/main.yml
+# (c) 2019 Suspect Devices 
+#
+#   variables used by playbooks to create/maintain containers
+#   Host Variables
+#     ip_address
+#     purpose#
+#   Lan Variables
+#     ip_netmask
+#     ip_gateway
+#     ip_dns_server (default server)
+#   Base Image alias to create container
+#     image_alias
+#   Profiles
+#     net_and_disk_profile - profile defining disk pool and network connection
+#     system_profile       - base users and other cloud-config items
+#
+# issues: 
+#   hangs when cloud-init not present
+#   only apt-get and yum are supported
+#   doesnt really work to create containers on bs2020
+#
+- name: Create LXD Container
+  connection: local
+  become: false
+  lxd_container:
+    name: "{{item}}"
+    state: started
+    source:
+      type: image
+      alias: "{{ hostvars[item]['image_alias'] }}"
+    profiles: ["{{ hostvars[item]['system_profile'] }}","{{ hostvars[item]['net_and_disk_profile'] }}"]
+    config:
+      user.network-config: |
+        version: 1
+        config:
+          - type: physical
+            name: eth0
+            subnets:
+              - type: static
+                ipv4: true
+                address: {{ hostvars[item]['ip_address'] }}
+                netmask: {{ hostvars[item]['ip_netmask'] }}
+                gateway: {{ hostvars[item]['ip_gateway'] }}
+                control: auto
+          - type: nameserver
+            address: 
+              - {{ hostvars[item]['ip_dns_server'] }}
+              - 8.8.8.8
+    wait_for_ipv4_addresses: true
+    timeout: 600
+  with_inventory_hostnames:
+    - local_containers
+
+- name: Wait Until Cloud Init is Finished.
+  delegate_to: "{{item}}"
+  raw: ls /run/cloud-init/result.json
+  register: cloud_init_is_finished
+  changed_when: cloud_init_is_finished.rc not in [0,1]
+  until: cloud_init_is_finished.rc in [0,1]
+  retries: 30
+  delay: 15
+  with_inventory_hostnames:
+    - local_containers
+
+- name: Check if Python is installed in Container.
+  delegate_to: "{{item}}"
+  raw: python --version || apt-get -y install python || yum -y install python
+  register: python_install_check
+  changed_when:  python_install_check.rc not in [0, 1]
+  with_inventory_hostnames:
+    - containers
+
+

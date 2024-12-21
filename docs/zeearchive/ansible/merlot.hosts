@@ -1,0 +1,42 @@
+#--------------------------------------------------------------------------/etc/ansible/hosts
+#
+#   Author don@suspectdevices.com  (c) 2019 suspectdevices.com 
+#   - 
+[all:vars]
+ip_netmask=255.255.255.0
+ip_gateway=192.168.129.1
+ip_dns_server=192.168.129.1
+#image_alias=ubuntu-lts
+image_alias=ubuntu/focal/cloud
+system_profile=susdev20
+net_and_disk_profile=default
+
+
+[pets:children]
+servers
+containers
+#remote-servers
+
+[servers]
+annie   ip_address=192.168.129.69 purpose="Home Server" ansible_connection=local
+joey	ip_address=192.168.129.65 purpose="Local Cloud Server"  ansible_host=joey.lan ansible_user='annie' ansible_become=yes ansible_become_user=root ansible_become_pass='W3r3N3ts!'
+
+[containers:children]
+local_containers
+remote_containers
+[containers:vars]
+ansible_connection=lxd
+
+[local_containers]
+viva   ip_address=192.168.0.77 purpose="Model Container for SMPhase II" image_alias=ubuntu/focal/cloud
+woz    ip_address=192.168.129.81 purpose="AFS Server 3.12" 
+herbert  ip_address=192.168.129.82 purpose="AFS Server for Time Machine" 
+dinero ip_address=192.168.0.254 purpose="Filtering DNS"
+#[remote-servers]
+#userlandtest ansible_host=54.67.123.108 ip_address=54.67.123.108 purpose="Userland Test Remote" ansible_user=ansible ansible_become=yes ansible_become_user=root
+
+[remote_containers]
+lilly  ip_address=192.168.129.67 purpose="Local Documentation Server" image_alias=ubuntu/focal/cloud ansible_host=joey:lilly
+squid	ip_address=192.168.0.252 purpose="Local Caching Server"   ansible_host=joey:squid
+pacino ip_address=192.168.129.254 purpose="House PiHole Server"  ansible_host=joey:pacino
+nina   ip_address=192.168.129.59 purpose="New Edgy Thing" ansible_host=joey:nina

@@ -1,0 +1,117 @@
+config:
+  user.network-config: |
+    version: 1
+    config:
+      - type: physical
+        name: eth0
+        subnets:
+          - type: static
+            ipv4: true
+            address: 198.202.31.200
+            netmask: 255.255.255.128
+            gateway: 198.202.31.129
+            control: auto
+      - type: nameserver
+        address:
+          - 198.202.31.132
+          - 8.8.8.8
+  user.user-data: |
+    #cloud-config
+    timezone: America/Vancouver
+    users:
+      - name: feurig
+        passwd: "$6$kE/4K.qV$GP12UXA2upmLvXiyBggolkZNn9cM/4TwQnUeFa8QTDUC8LTninFcUGvA6bwLu8pjDk/2DI4VeKZREaA0YS7/1."
+        gecos: Donald Delmar Davis
+        ssh-authorized-keys:
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDlxmPQI1YmNuW+DNZy7BuG+rwgjtF0zjbFevB8m93RP5PwzGJOEDpqF9pClvmfKwNIGyP0s6tui1kvLO3IjThAey3zYI3WINQ72jw/HaHlSxKaP5N9xJvgPIw1IV6Cap6uJif9QkhIOcOY1MXerR3+zpQmUs2jcQH/C62j7yOPZY6zij+tgE03EC+ibfenEUp+N7jppKc3Qt/DKXv2Uvb8bLYd8O3RqI0Ej7MD56LAFmuBh4mK83T/Gz/0cKigWSw5ptUn3gyfoa46HqiL9RTnQbLipKum1nwlTLjdi3uTM+HPMGvlSM4zdf9zewg27qrcezskyc+ZhbyBzmEuj4SL don@annie
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyd7IqccvP8v+KN1dzy7jAqxby/WnNvVPsccht6N9Px41U/3hPEovRpbbzh991WO+ycZhnHUZRMPfwGd5N8w8SD7k2NU2RlpodIYussSLeq9xSB/a1oinFmjoJjq6YI8FX4D16EAEzGBc26B1UKRjtaGKbcem9Pmkb30BeVMyzT3WbEVS39NNp0EfQNJG5BfXPonyPsWEgZ6N1sZKV5ZIkC5gd3zhmojcf/VdTdwqFNJjkJJO0LhZv853rINchkIzIDtJV3s+n1n2f63UExkUhkvOXzoPyisiIuCZDEE0JMsNpcBLPG2V6K/F8xhdXK4r1MQgZYymcdNprIwmFMNNn don@hoffa.local
+        groups: sudo,root,wheel
+        shell: /bin/bash
+      - name: joe
+        passwd: "$6$sFfdg6cU$F2p2kD.oP4J2v2a20wF3TeQWpOxxecBs.zYn4vfjEEH1uWl8T8BkPhp.U5IltJGQDXP35D0qgej4K9DjPd1ZM1"
+        gecos: Joseph Wayne Dumoulin
+        ssh-authorized-keys:
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDc+GIGnafiHDQ+syvApP8b7UcqN0zPWvVIfNCB0DQc50+RthI60yZkXY4mWiC3uBW4/4+vEuAGZfr77wMoBrSdc9y0dSdeTEnsByNDGM+Box2+ivLd9YZsobezt3b6QAliamh7Y0xEuS1oplLJc7+qOW9goKpZLwdhlk4yGRggIsXVBpf/B9GHIRPM8lmLnSwdtr11qr7fUmakbU3Q8/euPaeVU4/8ymL69vGiIgSr8Jzx/waCjm/TnYNBDQJLnO2zR+Z4KUmwDG2fVZYEvV1lvOSYJ5aX8W9xSRlFEznQho2xlv5F8R8CKb5mb38kbZ7rxuc4gOrJD8oWyfx5cw62al3D9f4zQvm+IgglptDu9zRpYRHOHVMxchSM/jBFwkbi0oiqo6HNDq4a5xJ8JqvqMuCc75McGRCIKZxSCDH31na9QiZ2ewO/QOF2jW7rNwoJZ2srhJHf3A7CmHv9FXRBrCQ7clNjMI5N29udZCP0X4FKZRpfs0mGTlvYEB3QD0GFsWmdqDuYHVl5zYzR1sM0mmwWJ7kNp3pCjLF6IbVmLnwqvTjTLs3MwGz0arLAOKshoRTQCsW1KCxczNR46QygzIWv6IGfGAAQlebH5oWd1fEkeRwj19jaKqA89AO/D5cNStFBKoI7TKuHQHhRGJ/6HWlygoCOO2GG8aqlgkOKgQ== joe@fafnir
+        groups: sudo,root,wheel
+        shell: /bin/bash
+    manage_resolv_conf: true
+    packages:
+    - python3
+    - python-is-python3
+    - python2
+    - nano
+    - openssh-server
+    - less
+    package_update: true
+    package_upgrade: true
+    write_files:
+    - path: /etc/resolv.conf.static
+      permissions: '0644'
+      owner: root:root
+      content: |
+        nameserver 198.202.31.132
+        nameserver 8.8.4.4
+        search suspectdevices.com fromhell.com vpn
+    - path: /usr/local/bin/update.sh
+      permissions: '0774'
+      owner: root:root
+      content: |
+        #!/bin/bash
+        # update.sh for debian/ubuntu/centos  (copyleft) don@suspecdevices.com
+        echo --------------------- begin updating `uname -n` ----------------------
+        if [ -x "$(command -v apt-get)" ]; then
+          apt-get update
+          apt-get -y dist-upgrade
+          apt-get -y autoremove
+        fi
+        if  [ -x "$(command -v pihole)" ]; then
+          echo update pihole.
+          pihole -up
+        fi
+        if  [ -x "$(command -v yum)" ]; then
+          echo yum upgrade.
+          yum -y upgrade
+        fi
+        if  [ -x "$(command -v zypper)" ]; then
+          echo zypper dist-upgrade.
+          zypper -y dist-upgrade
+        fi
+        echo ========================== done ==============================
+    runcmd:
+    # fix stupid subtle things
+    # sudo needs to be able to resolve itself to authenticate users
+    # and the users are locked by default
+    # cloud cart blanch accounts are inexcusable
+    - sed -i "s/^127.0.0.1/#127.0.0.1/" /etc/hosts
+    - echo 127.0.0.1 `hostname` localhost >>/etc/hosts
+    - passwd joe -u
+    - passwd feurig -u
+    - userdel -f ubuntu
+    - userdel -f centos
+    - userdel -f opensuse
+    - mv /etc/resolv.conf /etc/resolv.conf.foobarred
+    - ln -s /etc/resolv.conf.static /etc/resolv.conf
+    - netplan apply
+    - apt-get install -y openssh-server nano less
+    - apt-get install -y python-is-python3
+    - apt-get install -y python
+    power_state:
+       mode: reboot
+       message: See You Soon...
+       condition: True
+description: Try to create a sane environment for cloud-init based operating systems
+devices: {}
+name: susdev20
+used_by:
+- /1.0/containers/ian
+- /1.0/containers/ernest
+- /1.0/containers/kurt
+- /1.0/containers/naomi
+- /1.0/containers/douglas
+- /1.0/containers/herbert
+- /1.0/containers/jules
+- /1.0/containers/vasily
+- /1.0/containers/kernigan
+- /1.0/containers/guenter
+- /1.0/containers/redshirt
+- /1.0/containers/sandbox

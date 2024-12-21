@@ -1,0 +1,89 @@
+config:
+  user.network-config: |
+    version: 1
+    config:
+      - type: physical
+        name: eth0
+        subnets:
+          - type: static
+            ipv4: true
+            address: 198.202.31.200
+            netmask: 255.255.255.128
+            gateway: 198.202.31.129
+            control: auto
+      - type: nameserver
+        address: 198.202.31.141
+  user.user-data: |
+    #cloud-config
+    timezone: America/Vancouver
+    users:
+      - name: feurig
+        passwd: "$6$2Pf0ittl$nlHskmZtYBY7RyAOL5LeveaXfwA7j6QPQR1xNDN3dq74mDpGe/yfTf.cnnskNHKBLngneehSIyDVdI/FyCXtu."
+        gecos: Donald Delmar Davis
+        ssh-authorized-keys:
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDlxmPQI1YmNuW+DNZy7BuG+rwgjtF0zjbFevB8m93RP5PwzGJOEDpqF9pClvmfKwNIGyP0s6tui1kvLO3IjThAey3zYI3WINQ72jw/HaHlSxKaP5N9xJvgPIw1IV6Cap6uJif9QkhIOcOY1MXerR3+zpQmUs2jcQH/C62j7yOPZY6zij+tgE03EC+ibfenEUp+N7jppKc3Qt/DKXv2Uvb8bLYd8O3RqI0Ej7MD56LAFmuBh4mK83T/Gz/0cKigWSw5ptUn3gyfoa46HqiL9RTnQbLipKum1nwlTLjdi3uTM+HPMGvlSM4zdf9zewg27qrcezskyc+ZhbyBzmEuj4SL don@annie
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyd7IqccvP8v+KN1dzy7jAqxby/WnNvVPsccht6N9Px41U/3hPEovRpbbzh991WO+ycZhnHUZRMPfwGd5N8w8SD7k2NU2RlpodIYussSLeq9xSB/a1oinFmjoJjq6YI8FX4D16EAEzGBc26B1UKRjtaGKbcem9Pmkb30BeVMyzT3WbEVS39NNp0EfQNJG5BfXPonyPsWEgZ6N1sZKV5ZIkC5gd3zhmojcf/VdTdwqFNJjkJJO0LhZv853rINchkIzIDtJV3s+n1n2f63UExkUhkvOXzoPyisiIuCZDEE0JMsNpcBLPG2V6K/F8xhdXK4r1MQgZYymcdNprIwmFMNNn don@haifisch.local
+        groups: sudo,root,wheel
+        shell: /bin/bash
+      - name: joe
+        passwd: "$6$o14Dp3uu$J2wx6dQ4Vp463OGhmnaT0vBJ/fKw7m.PTp7g7oxgiOppjE6wbE1/AzXS.aU4mYquWCDSJXAwG.BpD3vLrS1vX."
+        gecos: Joseph Wayne Dumoulin
+        ssh-authorized-keys:
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMnT+3ihYIcxNNsltZ0WZsCVb9suKOEatmT3SUtLD27xK3feslp+pxDWK3IxcCWSSaN0w/7drxX4lNszyTvlX5qbqDn7UzgDou5rf0XjrcI7BtwnVXbLJqNbkVEhFWSOtGPZVvwAb0iN8L6cCm7+dc+qOwFQebr2jnnqw0z3Ft+SHp4wBLW3n28xqo1gcn1wBQ8tOt97b+3arxhPH8aWNpJis5aRaYn7RWj18bN9ja3Sbf3d5ql98ONmiOHtj4g3727eAMAipmNN2EQNX6dtj5XII13EZ6mIsu+4dZqaP/VeinunmNlXh79QhEs+Hka+YlyWa+hhP3R+0r6Y/ZePpr jdumoulin@nextit.com
+        groups: sudo,root,wheel
+        shell: /bin/bash
+    manage_resolv_conf: false
+    packages:
+    - python
+    package_update: true
+    package_upgrade: true
+    write_files:
+    - path: /etc/systemd/resolved.conf
+      permissions: '0644'
+      owner: root:root
+      content: |
+        # resolved because that wasnt broken either
+        [Resolve]
+        DNS= 198.202.31.141 198.202.31.132 8.8.4.4
+    - path: /usr/local/bin/update.sh
+      permissions: '0774'
+      owner: root:root
+      content: |
+        #!/bin/bash
+        # update.sh for debian/ubuntu/centos  (copyleft) don@suspecdevices.com
+        echo --------------------- begin updating `uname -n` ----------------------
+        if [ -x "$(command -v apt-get)" ]; then
+          apt-get update
+          apt-get -y dist-upgrade
+          apt-get -y autoremove
+        fi
+        if  [ -x "$(command -v yum)" ]; then
+          echo yum upgrade.
+          yum -y upgrade
+        fi
+        if  [ -x "$(command -v zypper)" ]; then
+          echo zypper dist-upgrade.
+          zypper -y dist-upgrade
+        fi
+        echo ========================== done ==============================
+    runcmd:
+    # fix stupid subtle things
+    # sudo needs to be able to resolve itself to authenticate users
+    # and the users are locked by default
+    # cloud cart blanch accounts are inexcusable
+    - sed -i "s/^127.0.0.1/#127.0.0.1/" /etc/hosts
+    - echo 127.0.0.1 `hostname` localhost >>/etc/hosts
+    - passwd joe -u
+    - passwd feurig -u
+    - userdel -f ubuntu
+    - userdel -f centos
+    - userdel -f opensuse
+    #- netplan apply
+    power_state:
+       mode: reboot
+       message: See You Soon...
+       condition: True
+description: Try to create a sane environment for cloud-init based operating systems
+devices: {}
+name: susdev19
+used_by:

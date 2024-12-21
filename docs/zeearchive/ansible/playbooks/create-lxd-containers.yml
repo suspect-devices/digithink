@@ -1,0 +1,7 @@
+#-------------------------------------------------------playbooks/create-lxd-containers.yml
+# (c)2019 suspectdevices.com 
+#
+- hosts: localhost
+  connection: local
+  roles:
+    - create_lxd_containers

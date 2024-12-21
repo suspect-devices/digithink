@@ -1,0 +1,78 @@
+#--------------------------------------------------------------------------/etc/ansible/hosts
+#
+#   Author don@suspectdevices.com  (c) 2019 suspectdevices.com 
+#  
+#   variables used by playbooks to create/maintain containers
+#   Host Variables
+#     ip_address
+#     purpose#
+#   Lan Variables
+#     ip_netmask
+#     ip_gateway
+#     ip_dns_server (default server)
+#   Base Image alias to create container
+#     image_alias
+#   Profiles
+#     net_and_disk_profile - profile defining disk pool and network connection
+#     system_profile       - base users and other cloud-config items
+
+
+# default values for ansible playbooks
+[all:vars]
+ip_netmask=255.255.255.128
+ip_gateway=198.202.31.129
+ip_dns_server=198.202.31.141
+image_alias=ubuntu-lts
+system_profile=susdev19
+net_and_disk_profile=default
+
+[pets:children]
+servers
+containers
+
+[servers]
+kb2018 ip_address=192.168.31.159 purpose="Main LXD Server"   ansible_connection=local
+bs2020 ip_address=192.168.31.158 purpose="Secondary LXD Server"  ansible_host=bs2020.suspectdevices.com ansible_user='{{ bs2020_unprivilaged_user }}' ansible_become=yes ansible_become_user=root ansible_become_pass='{{ bs2020_become_pass }}'
+#bs2020   ansible_connection=ssh ansible_ssh_user=kb2018 
+
+
+[containers:children]
+local_containers
+remote_containers
+[containers:vars]
+ansible_connection=lxd
+
+
+[local_containers]
+emile    ip_address=198.202.31.232 purpose="Redmine/Git Code Development Server"
+#jules    ip_address=198.202.31.135 purpose="Squid Server" 
+#ernest   ip_address=198.202.31.225 purpose="Bresgal Web Content"
+#guenter  ip_address=198.202.31.134 purpose="Infrastructure Dev"
+herbert  ip_address=198.202.31.233 purpose="Serverdocs / Sysadmin Trac Server"
+ian      ip_address=198.202.31.222 purpose="SuspectDevices Wordpress Site"
+kurt     ip_address=198.202.31.222 purpose="Static Web Sites (busholini/digithink)"
+#morgan   ip_address=198.202.31.224 purpose="Infrastucture Test Machine" net_and_disk_profile="infra"
+naomi    ip_address=198.202.31.142 purpose="DNS E-mail"
+#hopper   ip_address=198.202.31.159 purpose="Cobol is not dead"
+#sandbox  ip_address=198.202.31.191 purpose="Sandbox"
+#redshirt ip_address=198.202.31.200 purpose="Disposable Ubuntu"
+#keynes   ip_address=198.202.31.178 purpose="Centos Container"    image_alias=centos/7c
+#redshirt ip_address=198.202.31.200 purpose="Disposable Centos" image_alias="centos/7c" 
+#oldtrac
+
+[remote_containers]
+#goethe   ip_address=198.202.31.180 purpose="OpenSuse Container"   ansible_host=bs2020:goethe
+#kernigan ip_address=198.202.31.179 purpose="Debian 9 Container"   ansible_host=bs2020:kernigan image_alias=bs2020:debian/9c
+#kundara  ip_address=198.202.31.177 purpose="Fedora Container"     ansible_host=bs2020:kundara
+#phillip  ip_address=198.202.31.223 purpose="Bleading Edge Ubuntu" ansible_host=bs2020:phillip
+#teddy    ip_address=198.202.31.132 purpose="Secondary DNS"        ansible_host=bs2020:teddy
+
+# infrastructure servers are on a separate network adapter (br1) and use the ssd disks pool (infra) 
+[infrastructure]
+jules
+guenter
+naomi
+
+[infrastructure:vars]
+net_and_disk_profile="infra"
+

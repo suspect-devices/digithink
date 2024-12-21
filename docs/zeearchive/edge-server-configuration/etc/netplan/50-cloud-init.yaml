@@ -1,0 +1,32 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens6:
+        match:
+          macaddress: 30:85:a9:38:cc:11
+        mtu: 7000
+        dhcp4: no
+        dhcp6: no
+    enp1s0:
+        dhcp4: no
+        dhcp6: no
+  bridges:
+    br1:
+        dhcp4: no
+        dhcp6: no
+        mtu: 7000
+        addresses:
+            - 192.168.129.65/17
+        gateway4: 192.168.129.1
+        nameservers:
+            addresses:
+                - 192.168.129.1
+                - 198.202.31.132
+        interfaces:
+            - ens6
+    br0:
+        dhcp4: no
+        dhcp6: no
+        interfaces:
+            - enp1s0

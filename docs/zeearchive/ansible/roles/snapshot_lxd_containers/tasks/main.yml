@@ -1,0 +1,30 @@
+#----------------------------------------------------------roles/backup_lxd_containers/tasks/main.yml
+# (c) 2019 Suspect Devices 
+# 
+# take a snapshot
+# (move the snapshot)
+# publish to an image.
+# export the image.
+# clean up the copies
+# 
+
+- name: Create Snapshot of LXD Continer
+  vars: 
+    container: "{{ (hostvars[item]['ansible_host']) if hostvars[item]['ansible_host'] is defined else (item)}}"
+  local_action: "shell lxc snapshot {{container}} snapshot-{{ ansible_date_time.date }}"
+  register: snap_error
+  connection: local
+  ignore_errors: true
+  with_items:
+    - "{{groups['containers']}}"
+
+- name: Move Snapshot to BS2020
+  vars: 
+    container: "{{ (hostvars[item]['ansible_host']) if hostvars[item]['ansible_host'] is defined else (item)}}"
+  local_action: "shell lxc move {{container}}/snapshot-{{ ansible_date_time.date }} bs2020:Snapshot-{{item}}-{{ ansible_date_time.date}} && lxc stop bs2020:Snapshot-{{item}}-{{ ansible_date_time.date }}"
+  register: mv_error
+  connection: local
+  ignore_errors: true
+  with_items:
+    - "{{groups['local_containers']}}"
+

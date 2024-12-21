@@ -1,0 +1,40 @@
+#----------------------------------------------------------roles/archive_lxd_snapshots/tasks/main.yml
+# (c) 2019 Suspect Devices 
+# 
+# publish to an image.
+# export the image.
+# clean up the copies
+# 
+
+- name: Publish Snapshot of LXD Container
+  delegate_to: bs2020
+  shell: "lxc publish Snapshot-{{item}}-{{ansible_date_time.date}} --compression=none --alias={{item}}-{{ ansible_date_time.date }}"
+  register: publish_error
+  ignore_errors: true
+  with_items:
+    - "{{groups['local_containers']}}"
+
+- name: Export Image of Snapshot of LXD Container
+  delegate_to: bs2020
+  shell: "lxc image export {{item}}-{{ ansible_date_time.date }} /archive/{{item}}-{{ ansible_date_time.date }}.tar.gz"
+  register: publish_error
+  ignore_errors: true
+  with_items:
+    - "{{groups['local_containers']}}"
+
+- name: Delete Image of Snapshot of LXD Continer
+  delegate_to: bs2020
+  shell: "lxc image delete {{item}}-{{ ansible_date_time.date }}"
+  register: ignore_me
+  ignore_errors: false
+  with_items:
+    - "{{groups['local_containers']}}"
+
+
+- name: Delete Snapshot of LXD Continer
+  shell: "lxc delete {{item}}/snapshot-{{ ansible_date_time.date }}"
+  register: ignore_me
+  ignore_errors: true
+  with_items:
+    - "{{groups['local_containers']}}"
+

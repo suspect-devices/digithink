@@ -1,0 +1,55 @@
+#----------------------------------------------------------roles/backup_lxd_containers/tasks/main.yml
+# (c) 2019 Suspect Devices 
+#********************************* STUBB -- Original From Home Test ********************************* 
+# replaced by: 
+# roles/snapshot_lxd_containers
+# roles/archive_lxd_snapshots
+#********************************* STUBB -- Original From Home Test ********************************* 
+# take a snapshot
+# (move the snapshot)
+# publish to an image.
+# export the image.
+# clean up the copies
+# 
+
+- name: Create Snapshot of LXD Continer
+  local_action: "shell lxc snapshot {{item}} snapshot-{{ ansible_date_time.date }}"
+  register: snap_error
+  connection: local
+  ignore_errors: true
+  with_items:
+    - "{{groups['containers']}}"
+
+- name: Publish Snapshot of LXD Container
+  local_action: "shell lxc publish {{item}}/snapshot-{{ ansible_date_time.date }} --compression=none --alias={{item}}-{{ ansible_date_time.date }}"
+  register: publish_error
+  connection: local
+  ignore_errors: true
+  with_items:
+    - "{{groups['containers']}}"
+
+- name: Export Image of Snapshot of LXD Container
+  local_action: "shell lxc image export {{item}}-{{ ansible_date_time.date }} /archive/pets/{{item}}-{{ ansible_date_time.date }}.tar.gz"
+  register: publish_error
+  connection: local
+  ignore_errors: true
+  with_items:
+    - "{{groups['containers']}}"
+
+- name: Delete Image of Snapshot of LXD Continer
+  local_action: "shell lxc image delete {{item}}-{{ ansible_date_time.date }}"
+  register: ignore_me
+  connection: local
+  ignore_errors: true
+  with_items:
+    - "{{groups['containers']}}"
+
+
+- name: Delete Snapshot of LXD Continer
+  local_action: "shell lxc delete {{item}}/snapshot-{{ ansible_date_time.date }}"
+  register: ignore_me
+  connection: local
+  ignore_errors: true
+  with_items:
+    - "{{groups['containers']}}"
+

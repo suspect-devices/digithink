@@ -1,0 +1,8 @@
+- hosts: all  
+  gather_facts: false
+  become: true  
+  tasks:
+
+  - name: Display Relevant Facts
+    debug: msg="{{ inventory_hostname }}, {{ hostvars[inventory_hostname]['ip_address'] }}, {{ hostvars[inventory_hostname]['image_alias'] }}, {{ hostvars[inventory_hostname]['purpose'] }}"
+
