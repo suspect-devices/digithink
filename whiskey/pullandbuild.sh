@@ -1,4 +1,5 @@
 #!/bin/sh
+# Lots of hard coded foo here. This is very digithink.com specific.
 {   echo "====================== Start Build `date`==================="
     cd /var/www/digithink
     git pull && mkdocs build -d stage
