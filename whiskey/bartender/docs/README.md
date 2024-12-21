@@ -43,7 +43,33 @@ apt install python3-gunicorn
 
 apt install at
 echo www-data |tee /etc/at.allow
-www-data
+nano /etc/systemd/system/whiskey.service
+[Unit]
+Description=Gunicorn instance to serve whiskey
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/digithink/whiskey
+#Environment="PATH=/home/sammy/myproject/myprojectenv/bin"
+#     --bind unix:/run/whiskey.sock  \
+
+ExecStart=/usr/bin/gunicorn \
+     --workers 3 \
+     --bind 127.0.0.1:5000 \
+     --reload \
+     --access-logfile /var/www/digithink/whiskey/logs/gunicorn_access.log \
+     --error-logfile /var/www/digithink/whiskey/logs/gunicorn_error.log \
+     -m 007 wsgi:app
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+^X
+systemctl enable whiskey
+systemctl start whiskey
 ```
 
 ### Nginx.conf

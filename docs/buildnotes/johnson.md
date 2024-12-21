@@ -171,8 +171,12 @@ server {
     error_page 404 /404.html;
     location  /404.html {
           internal;
-    #     root  /var/www/digithink/site;
     }
+
+    location /lacuenta {
+        root /var/www/digithink/whiskey/logs;
+    }
+
 
 }
 
@@ -227,4 +231,13 @@ server {
 cd /etc/nginx/sites-enabled/
 ln -s /etc/nginx/sites-available/digithink .
 nginx -t
+```
+#### Install the parts that the bartender needs
+
+```sh
+apt install python3-flask
+apt install python3-gunicorn
+
+apt install at
+echo www-data |tee /etc/at.allow
 ```
