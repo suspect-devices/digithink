@@ -31,7 +31,7 @@ So I am [migrating all of my lxd implimentations to the open source incus projec
 - Migrate lxd to incus on first two home servers. (done)
 - Test incus to incus container migration.(done)
 
-#### Repeat process at colocation 
+#### Repeat process at colocation (done) 
 - Migrate secondary server to [debian](https://www.digithink.com/rethinkeverything/no-canonical/debian/)/[incus](https://www.digithink.com/rethinkeverything/no-canonical/incus/). (done)
 - Migrate primary server to incus. (done)
 - Move containers temporarily to secondary server. (done)
@@ -41,6 +41,7 @@ So I am [migrating all of my lxd implimentations to the open source incus projec
 
 ### Firewall/Router.
 This work is described at [https://www.digithink.com/rethinkeverything/norouter/using-a-tank-for-crowd-control/](https://www.digithink.com/rethinkeverything/norouter/using-a-tank-for-crowd-control/)
+
 - Set up wireguard (done)
 - Set up secondary dns (done)
 - Set up tinyproxy (done)
