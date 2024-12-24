@@ -8,7 +8,7 @@ Gone are those days.
 
 Three days of swimming through uwsgi, unit and 3 other overtly complicated half thought out python solutions all of which require a separate standalone service I settled on a flask and gunicorn. Its still a kludgy pile. Time to go queue TurboNegros "I hate the kids" and just make it work.
 
-This part of the digithink repo contains the wsgi app that is called whenever changes are pushed to digithink.com as well as the documentation and files needed to deploy it. 
+This part of the digithink repo contains the wsgi app that is called whenever changes are pushed to digithink.com as well as the documentation and files needed to deploy it. At present it is a truely bare bones POC.
 
 At some point I will make the bartender and the digithink.com separate repos. At that point I will probably serve more than whiskey/neat and start developing some of my other web sites.
 ```
