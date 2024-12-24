@@ -2,7 +2,6 @@
 #  Signature code stolen directly from Lukas Pühringer 
 #     https://gist.github.com/lukpueh/498ff3489321bdc7106c05a2fd5b941c
 #  https://blog.gitguardian.com/how-to-handle-secrets-in-python/
-
 from flask import Flask , request, abort
 from markupsafe import escape
 from dotenv import load_dotenv
@@ -16,11 +15,11 @@ import subprocess
 app = Flask(__name__)
 
 load_dotenv()
-GITHUB_SECRET = os.environ["GITHUB_SECRET"]
+GITHUB_SECRET = os.getenv("GITHUB_SECRET")
 
 @app.route("/whiskey/<style>",methods = ['POST', 'GET'])
 def whiskey(style):
-  '''
+  
   # Extract signature header
   signature = request.headers.get("X-Hub-Signature")
   if not signature or not signature.startswith("sha1="):
@@ -32,10 +31,9 @@ def whiskey(style):
 
   # Verify signature
   if not hmac.compare_digest(signature, "sha1=" + digest):
-    abort(400, "Invalid signature")
-  '''
+    abort(400, "I am going to need to see some id.")
 
-    # After we have detemined that this is legit.
+  # After we have detemined that this is legit.
   match style:
     case "neat":
       subprocess.call(['at', 'now', '-f', '/var/www/digithink/whiskey/pullandbuild.sh'])
