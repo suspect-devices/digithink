@@ -32,8 +32,8 @@ def whiskey(style):
 
   # Verify signature
   if not hmac.compare_digest(signature, "sha1=" + digest):
-    abort(400, signature+"<>sha1="+digest)
-    # abort(400, "I am going to need to see some id.")
+    #abort(400, signature+"<>sha1="+digest)
+    abort(400, "I am going to need to see some id.")
 
   # After we have detemined that this is legit.
   match style:
