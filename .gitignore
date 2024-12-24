@@ -5,3 +5,4 @@ whiskey/bartender/site
 whiskey/bartender/logs
 .DS_Store
 .vscode
+.env
