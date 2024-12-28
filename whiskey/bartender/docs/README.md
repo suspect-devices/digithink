@@ -12,17 +12,18 @@ Three days of swimming through uwsgi, unit and 3 other overtly complicated half 
 
 ```mermaid
     graph LR
-    B -- http://127.0.0.1:8000--> C[nginx] -- http(s)://bartender/whisky/style <--> I([Internet])
+    B -- http:\//127.0.0.1:8000 --> C[nginx] -- http(s)://bartender/whisky/\<style\> <--> I([Internet])
     A[flask] -- wsgi --> B[gunicorn];
 ```
 
 ```mermaid
   graph LR
   A[bartender] --> B[whiskey/neat] --> F[drink.py] --> C[AT]
-  F --> H[200/ok] --> N[NGinX] <--https://bartender.digithink.com/whisky/neat --> I([Internet])
+  F --> H[200/ok] --> N[NGinX] <-- https:\//bartender.digithink.com/whisky/\<style\> --> I([Internet])
   C --> D[pullandbuild.sh] --> G[github]
   G-->E
   D --> E[mkdocs build]
+  E --> O[(Site)] -->N
   N --> A
 ```
 
