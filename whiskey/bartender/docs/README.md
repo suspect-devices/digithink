@@ -18,13 +18,13 @@ Three days of swimming through uwsgi, unit and 3 other overtly complicated half 
 
 ```mermaid
   graph LR
-  A[bartender] --> B[whiskey/neat] --> F[drink.py] --> C[AT]
-  F --> H[200/ok] --> N[NGinX] <-- https:\//bartender.digithink.com/whisky/\<style\> --> I([Internet])
+  A[bartender app] --> F[drink.py] --> C[AT]
+  F -- 200 ok --> N[NGinX] <-- https:\//bartender.digithink.com/whisky/\<style\> --> I([Internet])
   C --> D[pullandbuild.sh] --> G[github]
   G-->E
   D --> E[mkdocs build]
   E --> O[(Site)] -->N
-  N --> A
+  N -- bartender/\<style\> --> A
 ```
 
 ## The source code and the results.
