@@ -1,4 +1,4 @@
-# Bare Bones POC Needs to at least check the github secret
+# Bare Bones POC 
 #  Signature code stolen directly from Lukas Pühringer 
 #     https://gist.github.com/lukpueh/498ff3489321bdc7106c05a2fd5b941c
 #     NOTE: Rquires payload to be set to json

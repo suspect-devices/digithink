@@ -1,29 +1,26 @@
 # Bartender: a wsgi server
 
-I wanted to do a simple git hook for a static website or two where the content was pulled down and converted from markdown with a little mermaid to static html. I have been doing this manually for a while but it gets to be a pain and besides all the kids are doing ci-cd and I thought it might help me actually write more.
-
-Once apon a time when apache was really the best way to serve http writing interactive sites in python was a matter of enableing mod_wsgi and throwing up 20 lines of python.
-
-Gone are those days.
-
-Three days of swimming through uwsgi, unit and 3 other overtly complicated half thought out python solutions all of which require a separate standalone service I settled on a flask and gunicorn. Its still a kludgy pile. Time to go queue TurboNegros "I hate the kids" and just make it work.
+This impliments a wsgi server that is called by a github webhook. When called it validates the request, schedules an at job, and returns a status. The at job pulls the "docs" off of github, builds the site, and moves it into place.
 
 ## The Stack
 
 ```mermaid
-    graph LR
+graph LR
     B -- http:\//127.0.0.1:8000 <--> C[nginx] -- http(s)://bartender/whisky/STYLE <--> I([Internet])
     A[flask] -- wsgi <--> B[gunicorn];
 ```
 
+The implimentation
+
 ```mermaid
-  graph LR
-  A[bartender app] --> C[AT]
-  A -- 200 ok --> N[NGinX] <-- bartender.digithink.com --> I([Internet])
-  G[(github)] -- pull --> D
-  C --> D[pullandbuild.sh]
-  D -- mkdocks build --> O[(site)] -->N
-  N -- whiskey/STYLE --> A
+graph LR 
+   A[bartender app] --> C[AT]
+   A -- 200 ok / 400 bad id / 404  --> N[NGinX]
+   N <-- bartender.digithink.com --> I([Internet])
+   G[(github)] -- pull --> D
+   C --> D[pullandbuild.sh]
+   D -- mkdocks build --> O[(site)] -->N
+   N -- whiskey/STYLE --> A
 ```
 
 ## The source code and the results.
@@ -35,7 +32,6 @@ Three days of swimming through uwsgi, unit and 3 other overtly complicated half 
 
 ## Installing the service.
 
-YOU ARE HERE DISCUSSING THE STUFF THAT MAKES IT WORK
 
 ```sh
 apt install python3-flask
@@ -95,7 +91,6 @@ server {
     location  /404.html {
           internal;
     }
-
 }
 
 # redirect http to https
@@ -113,8 +108,12 @@ server {
 ```
 
 ### the WSGI app
+
 The actual app will grow into something with better feedback more general use (ie to make different static web sites)
-#### drink.py, A Minimum Viable Product
+
+#### drink.py, 
+
+Minimum Viable Product 
 
 ```python
 from flask import Flask
@@ -123,14 +122,16 @@ import subprocess
 
 app = Flask(__name__)
 
-@app.route("/whiskey/<style>",methods = ['POST', 'GET'])
+@app.route("/whiskey/<style>",methods = ['POST'])
 def whiskey(style):
     # break this out by style.
     subprocess.call(['at', 'now', '-f', '/var/www/digithink/whiskey/pullandbuild.sh'])
     return f"One Whiskey, {escape(style)}!"
 ```
 
-### wsgi.py, Turning the above into a WSGI 
+The actual [drink.py](https://github.com/suspect-devices/digithink/blob/main/whiskey/drink.py) is slightly more developed.
+
+#### wsgi.py, Turning the above into a WSGI app
 ```
 from drink import app
 
