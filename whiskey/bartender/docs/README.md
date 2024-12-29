@@ -23,15 +23,14 @@ graph LR
    N -- whiskey/STYLE --> A
 ```
 
-## The source code and the results.
+## The source code and the results
 
 - [https://github.com/feurig/digithink/tree/main/whiskey](https://github.com/feurig/digithink/tree/main/whiskey)
   The source code for the bartender service is in the same repository as the content it serves
 - [https://www.digithink.com](https://www.digithink.com) is the target website.
 - [https://bartender.digithink.com/](https://bartender.digithink.com/) contains this and the other documents for the service.
 
-## Installing the service.
-
+### Installing the service
 
 ```sh
 apt install python3-flask
@@ -68,7 +67,7 @@ systemctl enable whiskey
 systemctl start whiskey
 ```
 
-### Nginx.conf
+### nginx.conf
 
 ```sh
 # lots of hard coded foo here
@@ -111,7 +110,7 @@ server {
 
 The actual app will grow into something with better feedback more general use (ie to make different static web sites)
 
-#### drink.py, 
+#### drink.py
 
 Minimum Viable Product 
 
@@ -132,7 +131,8 @@ def whiskey(style):
 The actual [drink.py](https://github.com/suspect-devices/digithink/blob/main/whiskey/drink.py) is slightly more developed.
 
 #### wsgi.py, Turning the above into a WSGI app
-```
+
+```python
 from drink import app
 
 if __name__ == "__main__":
@@ -145,7 +145,7 @@ if __name__ == "__main__":
 
 Ubuntu (... ok, debian really...) fracked up the packaging for mkdocs and mkdocs-material. I wound up removing the packages and pip3 installing most of it with --break-system-packages.
 
-```
+```sh
 apt remove mkdocs*
 apt remove markdown
 apt remove python3-markdown
@@ -154,14 +154,15 @@ apt install libvips-dev
 apt install python3-pip
 pip3 install mkdocs-material --break-system-packages
 ```
+
 #### pull dependencies based on the current mkdocs install and mkdocs.yml
-```
+
+```sh
 cd /var/www/digithink/&& git pull 
 mkdocs-get-deps > requirements.txt
 pip3 install $(mkdocs-get-deps) --break-system-packages
 mkdocs build && chown -R www-data:www-data site/
 ```
-
 
 ## linkdump
 
@@ -170,7 +171,3 @@ mkdocs build && chown -R www-data:www-data site/
 - <https://www.digitalocean.com/community/tutorials/how-to-set-up-uwsgi-and-nginx-to-serve-python-apps-on-ubuntu-14-04>
 - <https://stackoverflow.com/questions/10748108/nginx-uwsgi-unavailable-modifier-requested-0#11055729>
 - https://github.com/mkdocs/get-deps
-
-```
-
-```

@@ -9,8 +9,6 @@ from dotenv import load_dotenv
 import hmac
 import hashlib
 import os
-
-
 import subprocess
 
 app = Flask(__name__)
