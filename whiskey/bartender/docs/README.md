@@ -33,10 +33,12 @@ graph LR
 ### Installing the service
 
 ```sh
+apt install nginx
+apt install certbot python3-certbot-nginx
 apt install python3-flask
 apt install python3-gunicorn
-
 apt install at
+
 echo www-data |tee /etc/at.allow
 nano /etc/systemd/system/whiskey.service
 [Unit]
