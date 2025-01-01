@@ -1,6 +1,6 @@
 # Server Modernization
 
-This is an ongoing project that hosts several domains. (please refer to the operations guide for current setup and maintainence)
+This is an ongoing project that hosts several domains. (please refer to the [operations guide](./OperationsGuide.md) for current setup and maintainence)
 
 ## Overview 
 
