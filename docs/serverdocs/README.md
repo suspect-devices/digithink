@@ -1,6 +1,6 @@
 # Server Modernization
 
-This is an ongoing project that hosts several domains. 
+This is an ongoing project that hosts several domains. (please refer to the operations guide for current setup and maintainence)
 
 ## Overview 
 
@@ -61,4 +61,3 @@ Phase two extends on this by integrate Ansible into system maintenance tasks.
 * network
 * performance
 * disk
-

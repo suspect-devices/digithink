@@ -1,9 +1,9 @@
 ## Hardware
 
-Starting in December the environment will contains a freebsd based router/firwall (Sitka) and a single enterprise class server
+Starting in December the environment will contains a freebsd based router/firwall and a single enterprise class server
 
-* ~~kh2024 , a Dell PowerEdge R610 [[br]]and~~
-* tk2018 a HP ProLiant DL380 (g7) .
+* sitka -- a RiverBed Stealhead CX-770 
+* tk2018 -- a HP ProLiant DL380 (g7) .
 
 ## Network
 
@@ -13,7 +13,7 @@ The network is divided into 3 segments
 * 10.0.0.0/24 wireguard lan
 * 198.202.31.129/25 A public facing lan.
 
-The host itself does not have any public facing interfaces. It only accessible though the admin lan. The containers which handle all public facing work do so via an anonymous bridge configuration, allowing them to access the internet directly without allowing external access to the servers.
+The host itself does not have any public facing interfaces. It only accessible though the wireguard protected admin lan. The containers, which handle all public facing work do so via an anonymous bridge configuration, allowing them to access the internet directly without allowing external access to the underlying servers.
 
 
 
@@ -28,8 +28,7 @@ The host itself does not have any public facing interfaces. It only accessible t
 | ilo |   |  192.168.31.119/24 | |remote console|
 
 #### As Drawn
-![](images/as-drawn2.jpeg)
- 
+![](images/as-drawn2.jpeg) 
 #### As Deployed
 ![](images/asdeployed2024a.jpeg)
 ![](images/asdeployed2024b.jpeg)
