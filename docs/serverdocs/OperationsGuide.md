@@ -28,9 +28,11 @@ The host itself does not have any public facing interfaces. It only accessible t
 | ilo |   |  192.168.31.119/24 | |remote console|
 
 #### As Drawn
-![](images/IMG_1401.jpg) 
-
- ![](images/AsDeployed.png)
+![](images/as-drawn2.jpeg)
+ 
+#### As Deployed
+![](images/asdeployed2024a.jpeg)
+![](images/asdeployed2024b.jpeg)
 
 #### As implimented in /etc/network/interfaces
 

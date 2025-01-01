@@ -1,5 +1,7 @@
 # Server Modernization
- (separate this out from the operations guide)
+
+This is an ongoing project that hosts several domains. 
+
 ## Overview 
 
 ![](images/ContainerShip.jpg)
