@@ -6,7 +6,7 @@ This impliments a wsgi server that is called by a github webhook. When called it
 
 ```mermaid
 graph LR
-    B -- http:\//127.0.0.1:8000 <--> C[nginx] -- http(s)://bartender/whisky/STYLE <--> I([Internet])
+    B -- http(s)://127.0.0.1:8000 <--> C[nginx] -- http(s)://bartender/whisky/STYLE <--> I([Internet])
     A[flask] -- wsgi <--> B[gunicorn];
 ```
 
