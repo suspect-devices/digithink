@@ -15,13 +15,28 @@ The network is divided into 3 segments
 
 The host itself does not have any public facing interfaces. It only accessible though the wireguard protected admin lan. The containers, which handle all public facing work do so via an anonymous bridge configuration, allowing them to access the internet directly without allowing external access to the underlying servers.
 
+As we move forward the unfiltered interface used by the public facing containers will eventually be replaced by a filtered interface through the firewall.
+
+### Sitka Network Config
+
+|   |   |      |    sitka ports|
+|-----|---|------|------------------|
+|port | Interface|IP Address/mask |   purpose |
+| igb0 | bridge0| 192.168.31.159/24 | internal / admin lan |
+| igb1 | bridge0|                   |  |
+| igb2 |  N/A  | N/A | N/A | unused |  
+| igb3 |  igb3  |  ?.?.?.?/?? | TBD|
+| igb4 | igb4  |   198.202.31.132/25     |  |
+| igb5 | igb5  |   0.0.0.0/32     | firewalled public interface |
+
 ### TK2022 Network Config
 
 |   |   |   |   |    tk2022 ports|
 |---|---|---|---|-----------------|
 |port| Interface|IP Address/mask |  linux device| purpose |
-| 4 |  br0  | 0.0.0.0/32    | enp4s0f1 | public interface for containers|
-| 3 |  N/A  | ?.?.?.?/?? | N/A | unused |  
+| 1 |  br0  | 0.0.0.0/32    | enp3s0f0 | unfiltered public interface|
+| 2 |  br2  | 0.0.0.0/32    | enp3s0f1 | firewalled public interface|
+| 3 |  N/A  | ?.?.?.?/?? | enp4s0f0 | TBD |  
 | 1 |  br1  | 192.168.31.159/24 | enp4s0f1 |internal / admin lan |
 | ilo |   |  192.168.31.119/24 | |remote console|
 
