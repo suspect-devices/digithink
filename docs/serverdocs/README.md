@@ -2,7 +2,7 @@
 
 This is an ongoing project that hosts several domains. (please refer to the [operations guide](./OperationsGuide.md) for current setup and maintainence)
 
-## Overview 
+## Overview
 
 ![](images/ContainerShip.jpg)
 
@@ -25,32 +25,33 @@ Phase two extends on this by integrate Ansible into system maintenance tasks.
 
 ### SMP III Own Your Shit (2022-2023)
 
-- Work on secure and efficient traffic in and out of home lans (Privoxy,DNS based ad blocking,squid etc)
-- Continue to refine server operation/maintanance.
-- Build out content.
-  - [git to markdown automation](https://bartender.digithink.com)
-- Rethink openwrt based routing.
-  - explore opnsense
-- [Document original home server/network setup](/zeearchive/edge-server-configuration/)
-- [Rethink everything](/rethinkeverything/)
+* Work on secure and efficient traffic in and out of home lans (Privoxy,DNS based ad blocking,squid etc)
+* Continue to refine server operation/maintanance.
+* Build out content.
+  * [git to markdown automation](https://bartender.digithink.com)
+* Rethink openwrt based routing.
+  * explore opnsense
+* [Document original home server/network setup](/zeearchive/edge-server-configuration/)
+* [Rethink everything](/rethinkeverything/)
 
-### SMP IV Keep going (2024-).
-- Reduce colo footprint.
-  - remove the dell.
-- Dump Canonical
-  - debian
-  - incus
-- Adapt Freebsd based firewall/router
-  - wireguard
-  - dnsmasq
-  - pf
+### SMP IV Keep going (2024-)
 
-- Make shit happen
-  - Build out content.
-  - Start new projects.
-  - Distribute data and backups over the network to home servers.
+* Reduce colo footprint.
+  * remove the dell.
+* Dump Canonical
+  * debian
+  * incus
+* Adapt Freebsd based firewall/router
+  * wireguard
+  * dnsmasq
+  * pf
 
-### Goals.
+* Make shit happen
+  * Build out content.
+  * Start new projects.
+  * Distribute data and backups over the network to home servers.
+
+### Goals
 
 * Security
 * Flexibility
