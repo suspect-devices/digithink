@@ -66,6 +66,19 @@ dnsmasq_enable="YES"
 gateway_enable="YES"
 ```
 
+### Creating a bridge network for the admin lan.
+
+*Note:* The initial configuration assumed that an external hub would bridge between the admin facing interfaces and the lights out cards on both servers. With the reduction of the colo footprint to a single server this is handled by bridging ibg0 and igb1.
+The above /etc/rc.conf is changed by replacing ifconfig_igb0 with the following.
+
+```sh
+#ifconfig_igb0="inet 192.168.31.2 netmask 255.255.255.0"
+cloned_interfaces="bridge0"
+ifconfig_bridge0="inet 192.168.31.2 netmask 255.255.255.0 addm igb0 addm igb1 up"
+ifconfig_igb0="up"
+ifconfig_igb1="up"
+```
+
 ### Wireguard setup
 
 Wireguard on freebsd is much like wireguard on linux except that instead of iptables the work is done with freebsds packet filter pf.
@@ -80,7 +93,7 @@ sysctl -w net.inet.ip.forwarding=1
 service pf enable
 service pflog enable
 nano /etc/pf.conf
-internal_if="igb0"
+internal_if="bridge0"
 wg_net="10.0.0.0/24"
 scrub in all
 nat on $internal_if from $wg_net to any -> ($internal_if)
@@ -89,7 +102,7 @@ service pf start
 service pflog start
 ```
 
-#### Configure wireguard 
+#### Configure wireguard
 
 Wireguard configuration comes in two pieces the local interface and peers that connect to it. 
 

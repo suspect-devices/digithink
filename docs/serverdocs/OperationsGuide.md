@@ -15,8 +15,6 @@ The network is divided into 3 segments
 
 The host itself does not have any public facing interfaces. It only accessible though the wireguard protected admin lan. The containers, which handle all public facing work do so via an anonymous bridge configuration, allowing them to access the internet directly without allowing external access to the underlying servers.
 
-
-
 ### TK2022 Network Config
 
 |   |   |   |   |    tk2022 ports|
