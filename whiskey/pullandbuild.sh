@@ -5,9 +5,9 @@
     git pull && mkdocs build 
     rm -rf ../osite
     mv ../site ../osite
-    mv site
+    mv site ..
     cd /var/www/digithink/repo/whiskey/bartender
-    git pull && mkdocs build
+    mkdocs build
     cp -rpvf site/. /var/www/digithink/whiskey/bartender/
     echo "=========================== Done: `date` ===================="
 }| tee logs/pullandbuild.out
