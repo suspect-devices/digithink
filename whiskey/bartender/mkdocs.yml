@@ -1,0 +1,34 @@
+site_name: Bartender, Whiskey is served here.
+
+theme:
+  name: material
+  palette:
+    primary: white
+    accent: red
+  font:
+#    text: Courier Prime
+    text: JetBrains Mono
+#    text: Share Tech Mono
+  logo: images/think2t.png.svg
+  favicon: images/favicon.png
+  features:
+    - navigation.expand
+  custom_dir: overrides
+  
+extra:
+  homepage: https://www.digithink.com
+  generator: true
+copyright: Copyright &copy; 2016 - 2025 D. Delmar Davis
+
+plugins:
+    - search
+    - with-pdf
+    - mermaid2
+
+markdown_extensions:
+  - pymdownx.superfences:
+        # make exceptions to highlighting of code:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
