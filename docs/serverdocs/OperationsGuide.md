@@ -17,7 +17,7 @@ The host itself does not have any public facing interfaces. It only accessible t
 
 As we move forward the unfiltered interface used by the public facing containers will eventually be replaced by a filtered interface through the firewall.
 
-### Sitka Network Config
+### Sitka's Network Config
 
 |   |   |      |    sitka ports|
 |-----|---|------|------------------|
@@ -29,7 +29,7 @@ As we move forward the unfiltered interface used by the public facing containers
 | igb4 | igb4  |   198.202.31.132/25     |  |
 | igb5 | igb5  |   0.0.0.0/32     | firewalled public interface |
 
-### TK2022 Network Config
+### TK2022's Network Config
 
 |   |   |   |   |    tk2022 ports|
 |---|---|---|---|-----------------|
