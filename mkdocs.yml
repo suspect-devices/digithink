@@ -16,6 +16,8 @@ theme:
     - navigation.sections
     #- navigation.expand
     - navigation.tabs
+  custom_dir: overrides
+
 
 extra:
   homepage: https://www.digithink.com
