@@ -14,11 +14,12 @@ import subprocess
 app = Flask(__name__)
 
 load_dotenv()
+
 GITHUB_SECRET = os.getenv("GITHUB_SECRET")
 
 @app.route("/whiskey/<style>",methods = ['POST', 'GET'])
 def whiskey(style):
-  
+
   # Extract signature header
   signature = request.headers.get("X-Hub-Signature")
   if not signature or not signature.startswith("sha1="):

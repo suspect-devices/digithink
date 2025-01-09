@@ -27,11 +27,14 @@ copyright: Copyright &copy; 2016 - 2025 D. Delmar Davis
 
 plugins:
     - search
-    - with-pdf
-      #render_js: true
-      #exclude_pages:
-      #      - 'zeearchive/'
-      #cover_subtitle: Notes on Systems
+    - with-pdf:
+        cover_subtitle: Notes on Systems
+        render_js: true
+        #relaxedjs_path: /usr/local/bin/relaxed
+        headless_chrome_path: google-chrome
+        exclude_pages:
+            - 'zeearchive/'
+
     - mermaid2
 
 markdown_extensions:
