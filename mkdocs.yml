@@ -28,10 +28,10 @@ copyright: Copyright &copy; 2016 - 2025 D. Delmar Davis
 plugins:
     - search
     - with-pdf
-      render_js: true
-      exclude_pages:
-            - 'zeearchive/'
-      cover_subtitle: Notes on Systems
+      #render_js: true
+      #exclude_pages:
+      #      - 'zeearchive/'
+      #cover_subtitle: Notes on Systems
     - mermaid2
 
 markdown_extensions:
