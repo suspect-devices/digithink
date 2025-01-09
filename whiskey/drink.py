@@ -36,7 +36,7 @@ def whiskey(style):
   # After we have detemined that this is legit.
   match style:
     case "neat":
-      subprocess.call(['at', 'now', '-f', '/var/www/digithink/whiskey/pullandbuild.sh'])
+      subprocess.call(['at', 'now', '-f', '/var/www/digithink/repo/makesite.sh'])
     case "sour":
       subprocess.call(['at', 'now', '-f', '/var/www/3dangst/repo/makesite.sh'])
     case _: abort(404,"We Don't Serve That Here!")
