@@ -24,8 +24,8 @@ After working through the complexities of using headscale/tailscale I realized t
  
 To do this and to provide redundant routes to the admin lan we take two approaches.
 
-1) Replace the router with a container.
-2) Replace the router with a better one.
+1. Replace the router with a container.
+2. Replace the router with a better one.
 
 ## Replacing the colo router with a container.
 
