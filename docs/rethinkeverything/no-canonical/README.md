@@ -1,4 +1,5 @@
 # Stick a fork in them and turn them over they're done
+
 Recently we had to rebuild one of our servers because the hardware raided boot disk that had behaved perfectly for years shat on the boot disk. I tried to remotely (via ipmi/virtualized serial)install a zfs rooted ubuntu (24.04) I waisted 2 man weeks. Then I spent an entire weekend and more money than a surplus dell r7xx driving to the colo (6 hrs away) and installing it (desktop install converted to zfs/server because thats the only pathway provided only to have it implode when implimenting the mirrors. We finally (with remote hands) installed 24.04 server on a single disk but at this point I was very much done. After a over a decade of using ubuntu as my primary server operating system Canonical has driven it into the dirt.
 
 There are no polite words for the behaviour of Canonical with regards to sane headless installs with redundant root volumes. 
@@ -13,7 +14,7 @@ We are in the process of reducing our colo presence from 2 servers to one server
 
 ### Debian
 
-In this particular use case, Debian not only allowed me to install a system over a virtual serial console but allowed me to install from the original ubuntu. [So, I replaced ubuntu server with debian](https://www.digithink.com/rethinkeverything/no-canonical/debian/) on the secondary lxd server (with a temporary dual boot pathway back). Then I migrated the containers on the main server to the secondary server and repeated the process.
+In this particular use case, Debian not only allowed me to install a system over a virtual serial console but allowed me to install from the original ubuntu. [So, I replaced ubuntu server with debian](https://www.digithink.com/rethinkeverything/no-canonical/debian/) on the secondary lxd server (with a temporary dual boot pathway back). Then I migrated the containers on the main server to theand repeated the process on our primary server.
 
 
 ### Incus
