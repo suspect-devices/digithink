@@ -3,11 +3,11 @@
 
 Moving to incus pretty much broke the cloud.init+ansible pattern I developed when I started working with lxd. On the otherhand these patterns are pretty disfunctional *(unusable by others, tempermental, usw)*
 
-## The point.
-Looking at this provides the opportunity to do two things.
+## Get to the point.
+Looking at this issue provides the opportunity to move forward by learning from our mistakes, trying new tools and putting them into practice.
 
 ## Fix the pattern.
-
+*(we look at the problem but we're part of the problem)*
 - Define what we are trying to achieve.
     - Update containers in our environment centrally.
     - Maintain the best security model.
@@ -19,6 +19,7 @@ Looking at this provides the opportunity to do two things.
         - Update the containers
 - Impliment the desired outcomes using each of the tools based on the goals above.
 - Select the best toolset and patterns and start using them. 
+
 ## Getting to it.
 ### Ansible and lxd.
 ### Use Cases.
