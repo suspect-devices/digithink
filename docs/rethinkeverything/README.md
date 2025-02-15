@@ -1,6 +1,6 @@
 # Things that need to be rethought
 - [canonical](https://www.digithink.com/rethinkeverything/no-canonical/)
-- ansible
+- [ansible](https://www.digithink.com/rethinkeverything/ansible/)
 - git mirroring
 - remote backups
 - vpn/tailscale
