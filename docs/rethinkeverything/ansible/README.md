@@ -6,15 +6,19 @@ Moving to incus pretty much broke the cloud.init+ansible pattern I developed whe
 ## The point.
 Looking at this provides the opportunity to do two things.
 
-1. Fix the pattern.
+## Fix the pattern.
 
-    1. Look at alternative toolsets
-    2. Define what we are trying to achieve.
-        1. Update containers in our environment centrally.
-        2. Maintain the best security model.
-        3. Initialize containers with the tools/configurations we want universally (python3, nano, ssh, usw/ssh-keys,admin user, usw)
-    3. Impliment the desired outcomes using each of the tools based on the goals above.
-    4. Select the best toolset and patterns. 
+- Define what we are trying to achieve.
+    - Update containers in our environment centrally.
+    - Maintain the best security model.
+        - for the colo
+        - for the house lan
+    - Look at alternative toolsets
+    - test each of tool sets
+        - Initialize and update containers with the tools/configurations we want universaly (python3, nano, ssh, usw/ssh-keys,admin user, usw)
+        - Update the containers
+- Impliment the desired outcomes using each of the tools based on the goals above.
+- Select the best toolset and patterns and start using them. 
 ## Getting to it.
 ### Ansible and lxd.
 ### Use Cases.
