@@ -8,6 +8,7 @@ Looking at this issue provides the opportunity to move forward by learning from 
 
 ## Fix the pattern.
 *(we look at the problem but we're part of the problem)*
+
 - Define what we are trying to achieve.
     - Update containers in our environment centrally.
     - Maintain the best security model.
@@ -21,7 +22,8 @@ Looking at this issue provides the opportunity to move forward by learning from 
 - Select the best toolset and patterns and start using them. 
 
 ## Getting to it.
-### Ansible and lxd.
+### Ansible, cloud-init and lxd/incus.
 ### Use Cases.
-### Initialization
-### Ad Hoc Updates (ssh-keys root passwds usw)
+#### Initialization
+#### Ad Hoc Updates (ssh-keys root passwds usw)
+### Security model
