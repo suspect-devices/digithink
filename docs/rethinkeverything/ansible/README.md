@@ -21,9 +21,14 @@ Looking at this issue provides the opportunity to move forward by learning from 
 - Impliment the desired outcomes using each of the tools based on the goals above.
 - Select the best toolset and patterns and start using them. 
 
-## Getting to it.
-### Ansible, cloud-init and lxd/incus.
-### Use Cases.
+## Getting to it
+
+### Ansible, cloud-init, and lxd/incus
+
+### Use Cases
+
 #### Initialization
+
 #### Ad Hoc Updates (ssh-keys root passwds usw)
+
 ### Security model
