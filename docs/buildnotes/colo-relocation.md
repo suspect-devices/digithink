@@ -18,9 +18,8 @@
 - Add contents of /etc/bind/zones to the repo.
 - Commit and push it.
 ```sh
-cd /etc/bind
+cd /etc/bind/zones
 git clone https://x-token-auth:REDACTED@bitbucket.org/suspectdevicesadmin/susdev-dns.git
-mv named.conf.local /tmp/
 ls -lsa susdev-dns/
 mv susdev-dns/.git .
 rmdir susdev-dns/
