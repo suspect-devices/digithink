@@ -7,7 +7,10 @@
 - set dns ttls to be small. (600=10m) (done)
 - add new dns server to ns records for digithink.com (done)
 - stand up dns server and connect it to the new ip address range. (done)
-- add the new server to the upstream 
+- add the new server to the upstream
+- set up remaining dns nodes to pull from new server 
+- migrate vpn nodes first
+- move static websites first
 
 
 ### put the dns zone files into a repo
@@ -73,3 +76,44 @@ git config user.email REDACTED@bots.bitbucket.org
 git commit -a -m "delete unused domains"
 git push
 ```
+
+### stand up dns server and connect it to the new ip address range. (done)
+
+### add the new server to the upstream
+
+### set up remaining dns nodes to pull from new server 
+### migrate vpn nodes first
+Set dns entries for wireguard hosts then adjust their ips.
+
+```
+grep -r 198.202.31. /etc/
+nano /etc/netplan/50-cloud-init.yaml
+network:
+    version: 2
+    ethernets:
+        eth0:
+            addresses:
+            - 69.41.138.125/27
+            nameservers:
+                addresses:
+                - 69.41.138.99
+                - 8.8.8.8
+                search: []
+            routes:
+            -   to: default
+                via: 69.41.138.97
+        eth1:
+            addresses:
+            - 192.168.31.228/24
+root@virgil:~#
+^x
+netplan apply
+ip a
+sed -i s/198.202.31.132/198.202.31.99/ /etc/resolv.conf
+root@virgil:~# sed -i s/198.202.31.132/198.202.31.99/ /etc/resolv.conf.static
+reboot
+```
+
+YOU ARE HERE REPEATING THIS FOR SITKA
+
+### move static websites first
