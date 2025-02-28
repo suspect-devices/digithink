@@ -1,25 +1,33 @@
 # Need to move the colocated systems to a different network. ASAP.
-***WORK IN PROGRESS -- Documenting as we go....***
-## Basic Process
-- get the new ip addresses
 
+***WORK IN PROGRESS -- Documenting as we go....***
+
+## Basic Process
+
+- get the new ip addresses
 - put dns zone files into a repo (done)
 - set dns ttls to be small. (600=10m) (done)
 - add new dns server to ns records for digithink.com (done)
 - stand up dns server and connect it to the new ip address range. (done)
-- add the new server to the upstream
-- set up remaining dns nodes to pull from new server 
-- migrate vpn nodes first
-- move static websites first
+- add the new server to the upstream (web.com) (done)
+- set up remaining dns nodes to pull from new server (done) 
+- add new servers to upstream (web.com) (done)
+- move static websites first (done)
+  - move dns (wait 10 minutes)
+  - move ip configurations to new ips
+- repeat above to move remaining servers ending with the mail server. (done)
+- move the mail (done)
+- test the mail (done)
+- clean up all references to 198.202.31
 
-
-### put the dns zone files into a repo
+### Put the dns zone files into a repo
 
 - Create a blank repo in bitbucket and create an access token
 - Clone the repo into /etc/bind/zones using the access token
 - Move the .git folder into place and clean up.
 - Add contents of /etc/bind/zones to the repo.
 - Commit and push it.
+
 ```sh
 cd /etc/bind/zones
 git clone https://x-token-auth:REDACTED@bitbucket.org/suspectdevicesadmin/susdev-dns.git
@@ -37,7 +45,7 @@ git commit -a -m"add the named.conf.local"
 git push
 ```
 
-### Stand up new dns (dns.digithink.com)
+### Stand up dns new server (dns.digithink.com) and connect it to the new ip address range. (done)
 
 Start a new bookworm container.
 
@@ -77,15 +85,19 @@ git commit -a -m "delete unused domains"
 git push
 ```
 
-### stand up dns server and connect it to the new ip address range. (done)
+YOU ARE HERE Giving the cliffnotes version
 
 ### add the new server to the upstream
 
-### set up remaining dns nodes to pull from new server 
+### set up remaining dns nodes to pull from new server
+
+YOU ARE HERE Giving the cliffnotes version
+
 ### migrate vpn nodes first
+
 Set dns entries for wireguard hosts then adjust their ips.
 
-```
+```sh
 grep -r 198.202.31. /etc/
 nano /etc/netplan/50-cloud-init.yaml
 network:
@@ -117,3 +129,25 @@ reboot
 YOU ARE HERE REPEATING THIS FOR SITKA
 
 ### move static websites first
+
+- move dns (wait 10 minutes)
+
+  YOU ARE HERE Giving the cliffnotes version
+
+- move ip configurations to new ips
+
+  YOU ARE HERE Giving the cliffnotes version
+
+### repeat above to move remaining servers ending with the mail server. (done)
+
+### move the mail (done)
+
+YOU ARE HERE Giving the cliffnotes version
+
+### test the mail (done)
+
+### clean up all references to 198.202.31
+
+```sh
+root@tk2022:/etc/ansible# for c in `incus list -cn -f compact|grep -v NAME`; do echo $c ;incus exec $c -- grep -r 198.202.31. /etc/; done ; echo `hostname`; grep -r 198.202.31. /etc/
+```
