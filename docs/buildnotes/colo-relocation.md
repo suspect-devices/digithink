@@ -85,15 +85,40 @@ git commit -a -m "delete unused domains"
 git push
 ```
 
-YOU ARE HERE Giving the cliffnotes version
-
 ### add the new server to the upstream
+
+Use the web.com site to update the addresses of your authoritative dns servers
 
 ### set up remaining dns nodes to pull from new server
 
-YOU ARE HERE Giving the cliffnotes version
+on tk
 
-### migrate vpn nodes first
+```sh
+incus exec teddy bash
+```
+
+then adjust the secondary dns server.
+```sh
+nano /etc/systemd/network/10-cloud-init-eth0.network
+reboot
+cd /etc/named/zones
+sed -i s/198.202.31.141/69.41.138.98/ slave.conf
+systemctl reload named
+systemctl status named
+```
+
+While you're there clean up the rest of the 198.202.31.
+
+```sh
+grep -r 198.202.31 /etc
+sed -i s/198.202.31.98/69.41.138.98/ /etc/resolv.conf.static
+grep -r 198.202.31 /etc
+exit
+```
+
+### Migrate vpn nodes.
+
+#### Virgil.
 
 Set dns entries for wireguard hosts then adjust their ips.
 
@@ -126,9 +151,35 @@ root@virgil:~# sed -i s/198.202.31.132/198.202.31.99/ /etc/resolv.conf.static
 reboot
 ```
 
-YOU ARE HERE REPEATING THIS FOR SITKA
+#### Sitka
 
-### move static websites first
+Adjust the ip address of the public interface and the name servers
+
+```sh
+nano /etc/rc.conf
+hostname="sitka"
+
+ifconfig_igb4="69.41.138.126 netmask 255.255.255.224"
+defaultrouter="69.41.138.97"
+...
+^X y
+cp resolv.conf /tmp/
+sed s/198.202.31.141/69.41.138.98/ /tmp/resolv.conf|sed s/198.202.31.132/69.41.138.99/>/etc/resolv.conf
+
+reboot
+```
+
+Adjust the ip address of master dns server.
+
+```sh
+cd /usr/local/etc/namedb/zones
+cp slave.conf /tmp/
+sed s/198.202.31.141/69.41.138.98/ /tmp/slave.conf >slave.conf
+service named restart
+tail /var/log/messages
+```
+
+### move static websites 
 
 - move dns (wait 10 minutes)
 
@@ -149,5 +200,36 @@ YOU ARE HERE Giving the cliffnotes version
 ### clean up all references to 198.202.31
 
 ```sh
-root@tk2022:/etc/ansible# for c in `incus list -cn -f compact|grep -v NAME`; do echo $c ;incus exec $c -- grep -r 198.202.31. /etc/; done ; echo `hostname`; grep -r 198.202.31. /etc/
+for c in `incus list -cn -f compact|grep -v NAME`; do echo $c ;incus exec $c -- grep -r 198.202.31. /etc/; done ; echo `hostname`; grep -r 198.202.31. /etc/
+... clean up all container references ...
+... then clean up tk ...
+cd /etc/ansible/
+mkdir profiles
+incus profile show susdev23>profiles/susdev23.yaml
+incus profile show susdev24>profiles/susdev24.yaml
+sed -i s/198.202.31.200/69.41.138.113/ profiles/susdev23.yaml
+sed -i s/198.202.31.129/69.41.138.97/ profiles/susdev23.yaml
+sed -i s/198.202.31.141/69.41.138.99/ profiles/susdev23.yaml
+sed -i s/198.202.31.132/69.41.138.98/ profiles/susdev23.yaml
+sed -i s/255.255.255.128/255.255.255.244/ profiles/susdev23.yaml
+cat profiles/susdev23.yaml |incus profile edit susdev23
+incus profile show susdev24>profiles/susdev24.yaml
+sed -i s/198.202.31.200/69.41.138.113/ profiles/susdev24.yaml
+sed -i s/198.202.31.129/69.41.138.97/ profiles/susdev24.yaml
+sed -i s/198.202.31.141/69.41.138.98/ profiles/susdev24.yaml
+sed -i s/198.202.31.132/69.41.138.99/ profiles/susdev24.yaml
+sed -i s/255.255.255.128/255.255.255.244/ profiles/susdev24.yaml
+cat profiles/susdev24.yaml |incus profile edit susdev24
+grep -r 198.202.31. .
+mv files/merlot.profile.yaml profiles/merlot.yaml
+sed -i s/198.202.31.160/69.41.138.120/ profiles/merlot.yaml
+sed -i s/198.202.31.141/69.41.138.98/ profiles/merlot.yaml
+grep -r 198.202.31. .
+sed -i s/198.202.31.160/69.41.138.120/ README.md
+git status
+git add files README.md playbooks roles
+git add profiles/
+git commit -a -m migration
+git push
+grep -r 198.202.31. .
 ```
