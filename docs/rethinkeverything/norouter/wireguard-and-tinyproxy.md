@@ -171,7 +171,7 @@ Then test it.
 ```
 feurig@Amyl ~ % ssh root@192.168.31.159
 ...
-root@kb2018:~#
+root@tk2022:~#
 ```
 
 
@@ -212,7 +212,7 @@ nano wg0.conf
 [Interface]
 PrivateKey = <private key from above>
 Address = 10.0.0.8/32
-DNS = 198.202.31.141
+DNS = 192.168.31.141
 
 [Peer]
 PublicKey = <public key from server>
