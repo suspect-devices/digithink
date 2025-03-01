@@ -14,7 +14,7 @@ We are in the process of reducing our colo presence from 2 servers to one server
 
 ### Debian
 
-In this particular use case, Debian not only allowed me to install a system over a virtual serial console but allowed me to install from the original ubuntu. [So, I replaced ubuntu server with debian](https://www.digithink.com/rethinkeverything/no-canonical/debian/) on the secondary lxd server (with a temporary dual boot pathway back). Then I migrated the containers on the main server to theand repeated the process on our primary server.
+In this particular use case, Debian not only allowed me to install a system over a virtual serial console but allowed me to install from the original ubuntu. [So, I replaced ubuntu server with debian](https://www.digithink.com/rethinkeverything/no-canonical/debian/) on the secondary lxd server (with a temporary dual boot pathway back). Then I migrated the containers on the main server to it and repeated the process on our primary server.
 
 
 ### Incus
