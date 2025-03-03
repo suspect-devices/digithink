@@ -1,3 +1,14 @@
-# **DRAFT VERY ROUGH** Set up dnsmasq to serve dhcp and internal dns.
+# **DRAFT VERY ROUGH** Set up dnsmasq to serve dhcp and internal dns
 
 YOU ARE HERE.
+
+```sh
+git archive --remote=git@bitbucket.org:suspectdevicesadmin/susdev-dns.git --format=tar HEAD |tar -xvf - -O hosts/admin.hosts>/etc/hosts
+x hosts/admin.hosts
+```
+
+## References
+
+- <https://www.howtoforge.com/how-to-set-up-local-dns-with-dnsmasq-on-debian-12/>
+- <https://thinkingeek.com/2020/06/06/local-domain-and-dhcp-with-dnsmasq/>
+- <https://www.howtogeek.com/devops/how-to-run-your-own-dns-server-on-your-local-network/#dns-with-dnsmasq>
