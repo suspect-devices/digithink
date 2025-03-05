@@ -146,8 +146,8 @@ root@virgil:~#
 ^x
 netplan apply
 ip a
-sed -i s/198.202.31.132/198.202.31.99/ /etc/resolv.conf
-root@virgil:~# sed -i s/198.202.31.132/198.202.31.99/ /etc/resolv.conf.static
+sed -i s/198.202.31.132/69.41.138.99/ /etc/resolv.conf
+root@virgil:~# sed -i s/198.202.31.132/69.41.138.99/ /etc/resolv.conf.static
 reboot
 ```
 

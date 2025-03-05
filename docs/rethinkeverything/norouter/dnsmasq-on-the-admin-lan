@@ -2,6 +2,10 @@
 
 YOU ARE HERE.
 
+
+### Single file pulls.
+Just for grins I think the dnsmasq and etc hosts files should be kept with the dns, also the master and slave config files. That means that some hosts are just going to need to pull a single file from the repo. 
+
 ```sh
 git archive --remote=git@bitbucket.org:suspectdevicesadmin/susdev-dns.git --format=tar HEAD |tar -xvf - -O hosts/admin.hosts>/etc/hosts
 x hosts/admin.hosts
