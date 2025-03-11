@@ -41,7 +41,7 @@ So I am [migrating all of my lxd implimentations to the open source incus projec
 - Down secondary server (done).
 
 ### Firewall/Router.
-This work is described at [https://www.digithink.com/rethinkeverything/norouter/using-a-tank-for-crowd-control/](https://www.digithink.com/rethinkeverything/norouter/using-a-tank-for-crowd-control/)
+This work is described at [https://www.digithink.com/buildnotes/using-a-tank-for-crowd-control/](https://www.digithink.com/buildnotes/using-a-tank-for-crowd-control/)
 
 - Set up wireguard (done)
 - Set up secondary dns (done)
