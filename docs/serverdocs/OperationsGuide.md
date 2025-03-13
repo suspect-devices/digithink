@@ -46,7 +46,9 @@ As we move forward the unfiltered interface used by the public facing containers
 ![](images/asdeployed2024a.jpeg)
 ![](images/asdeployed2024b.jpeg)
 
-#### As implimented in /etc/network/interfaces
+#### As implimented
+
+##### in /etc/network/interfaces
 
 ```
 #--------------------------------------------------------/etc/network/interfaces
@@ -86,6 +88,23 @@ iface br1 inet static
         bridge_fd 0          # no forwarding delay
 EOD
 ```
+
+##### and in /etc/rc.conf
+
+```sh
+ifconfig_igb4="69.41.138.126 netmask 255.255.255.224"
+defaultrouter="69.41.138.97"
+
+#ifconfig_igb0="inet 192.168.31.2 netmask 255.255.255.0"
+
+cloned_interfaces="bridge0"
+ifconfig_bridge0="inet 192.168.31.2 netmask 255.255.255.0 addm igb0 addm igb1 up"
+ifconfig_igb0="up"
+ifconfig_igb1="up"
+
+```
+
+#### As referenced
 
 See: ​[https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts](https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts) which is built referencing [a google doc with proposed allocations](https://docs.google.com/spreadsheets/d/1KRkqdYvgRtV4vu6AGzdLWJVGTIsV2o2iSSJBEFMZJAw/edit#gid=0)
 
