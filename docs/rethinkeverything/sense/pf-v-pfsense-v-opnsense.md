@@ -1,4 +1,5 @@
-# Initial impression.
+# Initial impression of opnsense
+.
 
 This is mostly a note about freebsd audit and why I went with opnsense. One of my coworkers didnt like some of the coding last time he looked at opnsense, but I am willing to ignore this while I work on being able to do most of this stuff by hand. 
 
