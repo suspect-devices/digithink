@@ -22,4 +22,7 @@ So I turned unbound back on and looked at the alternatives.
 So this is going to be a longer process than I would have liked but I have a test system to build the jail on. 
 
 
+## Linkdump.
 
+- https://forum.opnsense.org/index.php?topic=26975.0
+- https://www.reddit.com/r/opnsense/comments/sjewa4/jails_under_opnsense_221/?rdt=59758
