@@ -26,3 +26,4 @@ So this is going to be a longer process than I would have liked but I have a tes
 
 - https://forum.opnsense.org/index.php?topic=26975.0
 - https://www.reddit.com/r/opnsense/comments/sjewa4/jails_under_opnsense_221/?rdt=59758
+- https://forum.opnsense.org/index.php?topic=26724.0
