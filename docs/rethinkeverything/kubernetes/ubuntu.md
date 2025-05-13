@@ -14,16 +14,16 @@ EOF
 sysctl --system
 mkdir -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-sudo chmod a+r /usr/share/keyrings/docker.gpg
-cat >/etc/apt/sources.list.d/docker.list
+chmod a+r /etc/apt/keyrings/docker.gpg
+cat >/etc/apt/sources.list.d/docker.list<<EOD
 deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu focal stable
-^D
+EOD
 apt update && apt install containerd.io -y
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-sudo chmod a+r /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-cat >/etc/apt/sources.list.d/kubernetes.list
+chmod a+r /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+cat >/etc/apt/sources.list.d/kubernetes.list  << EOD
 deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /
-^D
+EOD
 apt update
 apt-get install -y kubeadm=1.31.1-1.1 kubelet=1.31.1-1.1 kubectl=1.31.1-1.1
 apt-mark hold kubelet kubeadm kubectl
