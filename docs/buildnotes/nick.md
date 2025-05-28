@@ -17,9 +17,7 @@ sudo apt -o Acquire::Check-Valid-Until=false update
 sudo apt policy linux-headers-*
 sudo apt install linux-headers-$(uname -r)
 sudo apt install --reinstall zfsutils-linux
-zfs import
 zpool import
-zpool import -f
 zpool import -f tank
 zpool import -f local
 zpool import -f reddisk
