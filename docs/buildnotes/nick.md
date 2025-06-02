@@ -1,28 +1,53 @@
 # Nick Cave -- My personal datacenter 
 YOU ARE HERE DESCRIBING standing up a debian trixie server with appletalk, incus, and zfs
 ```
-ip a
-dmesg
 apt update
-ip a
-
 # DONT MODERNIZE THE FRACKING LIST TRIXIE TRASHES IT
+apt install sudo nano wget curl
+apt install avahi-daemon
+apt install avahi-daemon avahi-utils
+apt install libnss-mdns
+apt install htop
+apt install openssh-server
+apt install ca-certificates
+apt install curl
+apt install gpg
+apt install sudo
+apt install parted
+apt install htop
+apt install bridge-utils
+```
+Install the zfs stuff.
+```sh
 nano /etc/apt/sources.list
 apt update
-sudo apt install zfs-dkms
-sudo apt install zfsutils-linux
+apt install zfs-dkms
+apt install zfsutils-linux
 modprobe zfs
 zfs list
-sudo apt -o Acquire::Check-Valid-Until=false update
-sudo apt policy linux-headers-*
-sudo apt install linux-headers-$(uname -r)
-sudo apt install --reinstall zfsutils-linux
+apt -o Acquire::Check-Valid-Until=false update
+apt policy linux-headers-*
+apt install linux-headers-$(uname -r)
+apt install --reinstall zfsutils-linux
 zpool import
 zpool import -f tank
 zpool import -f local
 zpool import -f reddisk
 zpool clear tank ; zpool clear reddisk ; zpool status -v
+```
+replace the bad disk and replace the bad zfs partitions
+```sh
+sgdisk --replicate=/dev/sde /dev/sdb
+sgdisk -G /dev/sde
+ls -ls /dev/disk/by-id|grep /dev/sde
+ls -ls /dev/disk/by-id
+ls -ls /dev/disk/by-id|grep sde
+zpool status tank
+zpool replace tank -o ashift=12 ata-ST12000NM000J-2TY103_ZRT0GC3A-part3 ata-WDC_WD120EFBX-68B0EN0_D7JVX9MN-part3
+zpool replace reddisk -o ashift=12 9814339977262587103 ata-WDC_WD120EFBX-68B0EN0_D7JVX9MN-part4
+```
 
+```sh
 apt install sudo nano wget curl
 wget https://github.com/Netatalk/netatalk/releases/download/netatalk-4-0-0/netatalk_4.0.0.ds-1_amd64.deb
 dpkg --install ./netatalk_4.0.0.ds-1_amd64.deb
