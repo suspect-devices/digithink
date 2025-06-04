@@ -44,7 +44,8 @@ zpool status tank
 zpool replace tank -o ashift=12 ata-ST12000NM000J-2TY103_ZRT0GC3A-part3 ata-WDC_WD120EFBX-68B0EN0_D7JVX9MN-part3
 zpool replace reddisk -o ashift=12 9814339977262587103 ata-WDC_WD120EFBX-68B0EN0_D7JVX9MN-part4
 ```
-...
+
+Install netatalk
 
 ```sh
 wget https://github.com/Netatalk/netatalk/releases/download/netatalk-4-0-0/netatalk_4.0.0.ds-1_amd64.deb
@@ -129,6 +130,8 @@ boltctl list --all
 
 ### FAIL
 
+Move on to initial incus fail. Newest incus creates a bridge and expects it to be there.
+
 ```sh
 reboot
 fdisk -l
@@ -153,9 +156,11 @@ incus --version
 
 At this point incus was foobarred and had set up a default lxdbr0 and was not the way we like things. So we....
 
-Set up the bridge.
+Delete the lxd bridge and set up the normal bridge.
 
 ```sh
+ip link set incusbr0 down
+ip link delete incusbr0
 cat > /etc/network/interfaces<<EOD
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
@@ -185,7 +190,7 @@ EOD
 systemctl restart networking
 ```
 
-reinstall incus
+reinstall incus (purge doesnt work correctly here)
 
 ```sh
 apt purge incus
@@ -205,8 +210,7 @@ ip link set incusbr0 down
 ip link delete incusbr0
 nano /etc/resolv.conf
 ```
-
-Mount apfs volumes.
+So since we have a hot swappable disk container (usb3 since the tbolt is worthless) we wanna mount apfs volumes that we find in our disk collection.
 
 ```sh
 apt install apfs-dkms --fix-missing
