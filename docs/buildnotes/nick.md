@@ -1,6 +1,6 @@
 # Nick Cave -- My personal datacenter 
 YOU ARE HERE DESCRIBING standing up a debian trixie server with appletalk, incus, and zfs
-```
+```sh
 apt update
 # DONT MODERNIZE THE FRACKING LIST TRIXIE TRASHES IT
 apt install sudo nano wget curl
@@ -50,11 +50,8 @@ Install netatalk
 ```sh
 wget https://github.com/Netatalk/netatalk/releases/download/netatalk-4-0-0/netatalk_4.0.0.ds-1_amd64.deb
 dpkg --install ./netatalk_4.0.0.ds-1_amd64.deb
-apt --fix-broken install
-dpkg --install ./netatalk_4.0.0.ds-1_amd64.deb
 apt install avahi-daemon
 apt --fix-broken install
-nano .ssh/authorized_keys
 apt install avahi-daemon avahi-utils
 apt install libnss-mdns
 systemctl status avahi-daemon
@@ -62,53 +59,11 @@ nano /etc/netatalk/afp.conf
 systemctl restart netatalk
 systemctl status netatalk
 ```
-
+Add personal keys to ssh authorized keys.
 ```sh
-zpool status
-zpool upgrade local
-zpool clear tank ; zpool clear reddisk ; zpool clear local ; zpool status -v
-zfs mount -a
-zfs list
-zpool list
-nano /etc/netatalk/afp.conf
-ip a
-cat .ssh/authorized_keys
-df -k
-zfs list
-reboot
-su - feurig
-ip a
-dhclient
-nano /etc/default/networking
-ifup
-ip a
-ifup enp12s0
-ifup enp12s0
-shutdown -h now
-zpool status
-zpool clear tank ; zpool clear reddisk ; zpool clear local ; zpool status -v
-visudo
-vigr
-exit
-visudo
-cp .ssh/authorized_keys ~feurig/.ssh/authorized_keys
-cd
+nano .ssh/authorized_keys
 cp .ssh/authorized_keys ~feurig/.ssh/authorized_keys
 chown -R feurig:feurig ~feurig/.ssh
-exit
-ls -lsa
-cd
-ls -ls
-ls -lsa
-ls -lsa .ssh/
-ls -ls ~feurig/.ssh/
-nano /etc/ssh/sshd_config
-ls
-cat .ssh/authorized_keys
-nano .ssh/authorized_keys
-exit
-zpool status
-ls /dev/disk/
 ```
 attempt to use tbolt 2 enclosure.
 
