@@ -1,8 +1,11 @@
 # Nick Cave -- My personal datacenter 
-YOU ARE HERE DESCRIBING standing up a debian trixie server with appletalk, incus, and zfs
+When I went to new york 2 summers ago I took a mac mini and a pair of 14T disks, which had a sort pile of pictures, my music library and which backed up my laptop. At home it still does the backups. Recently I came apon a 2013 24 core mac pro with 64G of memory and 1T of internal ssd. With that kind of processing I can actually run vms as well as getting my backups served. So we are retiring Costello and building out Nick.
+
+Start by installing debian trixie from a usb stick. This worked flawlessly. Once you have that baseline set up the stuff we use.
+
 ```sh
 apt update
-# DONT MODERNIZE THE FRACKING LIST TRIXIE TRASHES IT
+# DONT MODERNIZE THE LIST TRIXIE TRASHES IT
 apt install sudo nano wget curl
 apt install avahi-daemon
 apt install avahi-daemon avahi-utils
@@ -10,14 +13,15 @@ apt install libnss-mdns
 apt install htop
 apt install openssh-server
 apt install ca-certificates
-apt install curl
 apt install gpg
 apt install sudo
 apt install parted
 apt install htop
 apt install bridge-utils
 ```
+
 Install the zfs stuff.
+
 ```sh
 nano /etc/apt/sources.list
 apt update
@@ -35,7 +39,9 @@ zpool import -f local
 zpool import -f reddisk
 zpool clear tank ; zpool clear reddisk ; zpool status -v
 ```
+
 replace the bad disk and replace the bad zfs partitions
+
 ```sh
 sgdisk --replicate=/dev/sde /dev/sdb
 sgdisk -G /dev/sde
