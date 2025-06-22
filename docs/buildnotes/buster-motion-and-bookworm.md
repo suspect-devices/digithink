@@ -38,4 +38,8 @@ chmod +w /etc/motion/motion.conf
 systemctl restart motion
 systemctl status motion
 netstat -tunlp
+mount utah:/tank/motion/buster /var/lib/motion
+grep motion /etc/mtab>>/etc/fstab
+mount -a
+cat /etc/fstab
 ```
