@@ -1,6 +1,6 @@
-YOU ARE HERE FLESHING THIS IN
+# YOU ARE HERE FLESHING THIS IN
 
-```
+```sh
 apt update && apt upgrade -y
 apt install apt-transport-https software-properties-common ca-certificates socat wget curl nano -y
 swapoff -a
