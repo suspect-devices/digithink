@@ -33,8 +33,7 @@ systemctl status motion
 Install libcamerify and edit the motion.service definition.
 
 ```sh
-apt install libcamera-tools libcamera-dev libcamera-v4l2
-libcamerify
+apt install libcamera-tools libcamera-dev libcamera-v4l2 libcamerify
 nano /lib/systemd/system/motion.service
 ...
 [Service]
@@ -84,4 +83,3 @@ mount -a
 - <https://pimylifeup.com/raspberry-pi-webcam-server/>
 - <https://github.com/Motion-Project/motion/discussions/1753>
 - <https://www.raspberrypi.com/documentation/computers/camera_software.html#getting-started>
-
