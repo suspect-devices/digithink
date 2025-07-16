@@ -1,27 +1,60 @@
 # Install motion on raspberry pi running debian bookworm
 ## install the base os.
-## install the temperature monitor
+
+If we uses raspberry pi imager we get an sdcard that allows our user to log in using our public key.
+
+Once on line we add our keys to roots authorized keys
+
 ```sh
+sudo bash
 ssh-keygen
-nano .ssh/authorized_keys
-nano ~-root/.ssh/authorized_keys
 nano ~root/.ssh/authorized_keys
+```
+
+## install the temperature monitor
+
+Configure the machine to enable spi(lcds mostly) and i2c (temperature sensors)
+
+```sh
 raspi-config
 ... Enable spi,i2c,text console, no splash, expand filesystem ...
 reboot
+i2cdetect 1
+i2cdetect 0
+```
+
+Install the merlot repo and install the python dependencies.
+
+```sh
 apt install -y git-core
 cd /usr/local/
 git clone git@github.com:feurig/merlot.git
-i2cdetect 1
-i2cdetect 2
-i2cdetect 0
 cd merlot/
 ls
 pip3 install -r requirements.txt --break-system-packages
-apt install -y prometheus-node-exporter
-bin/readtemp.py
 ```
-## Install motion.
+
+Install prometheus-node-exporter (required by readtemp.py)
+
+```sh
+apt install -y prometheus-node-exporter
+```
+
+Test readtemp.py and install it into roots crontab
+
+```sh
+/usr/local/merlot/bin/readtemp.py
+[24, 112]
+found an mcp9808
+found something else  112
+
+crontab -e
+...
+*/1 * * * * /usr/local/merlot/bin/readtemp.py
+
+```
+
+## Install motion
 
 Install and check the status of the motion service
 
