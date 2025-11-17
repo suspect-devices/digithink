@@ -85,7 +85,7 @@ PS1='TKTEST\w\$ '
 
 ### Set up apt (with proxy) (UPDATED T0 REFLECT 2025 HPE REPO LOCATION)
 
-Get the signing keys for hpe repos.
+Get the signing keys for hpe repos (needed later for ssacli).
 
 ```sh
 export https_proxy=http://192.168.31.2:3128/
@@ -139,6 +139,7 @@ apt install sudo
 apt install parted
 apt install htop
 apt install git
+apt install ssacli
 ```
 
 ### Make devices
@@ -268,11 +269,6 @@ chmod +x /usr/local/bin/update.sh
 ### Install ssacli
 
 ```
-apt install gpg
-apt install curl
-curl -x http://192.168.31.2:3128/ -fsSL https://downloads.linux.hpe.com/SDR/hpPublicKey2048.pub | gpg --dearmor -o /etc/apt/trusted.gpg.d/hpPublicKey2048.gpg
-curl -x http://192.168.31.2:3128/ -fsSL https://downloads.linux.hpe.com/SDR/hpePublicKey2048_key1.pub | gpg --dearmor -o /etc/apt/trusted.gpg.d/hpePublicKey2048_key1.gpg
-curl -x http://192.168.31.2:3128/-fsSL https://downloads.linux.hpe.com/SDR/hpPublicKey2048_key1.pub | gpg --dearmor -o /etc/apt/trusted.gpg.d/hpPublicKey2048_key1.gpg
 apt update
 apt install ssacli
 ```
@@ -324,8 +320,12 @@ Text console will not work until it actually gets to the bios and you can switch
 
 Virtual Serial Port Active: COM2
 ```
+
 ### Install zfs from trixie
-```
+
+The version of zfs installed by bookworm is behind the one that the zabbly incus install wants so we go to trixies backport. 
+
+```sh
 apt -t bookworm-backports install zfs-dkms zfs-zed zfsutils-linux
 ```
 
