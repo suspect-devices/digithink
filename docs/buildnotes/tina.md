@@ -83,7 +83,18 @@ LANG=C.UTF-8 chroot /mnt/tktest /bin/bash
 PS1='TKTEST\w\$ '
 ```
 
-### Set up apt (with proxy)
+### Set up apt (with proxy) (UPDATED TP REFLECT 2025 HPE REPO LOCATION)
+
+Get the signing keys for hpe repos.
+
+```sh
+export https_proxy=http://192.168.31.2:3128/
+curl https://downloads.linux.hpe.com/SDR/hpPublicKey2048_key1.pub | gpg --dearmor | sudo tee -a /usr/share/keyrings/hpePublicKey.gpg > /dev/null
+curl https://downloads.linux.hpe.com/SDR/hpePublicKey2048_key1.pub | gpg --dearmor | sudo tee -a /usr/share/keyrings/hpePublicKey.gpg > /dev/null
+curl https://downloads.linux.hpe.com/SDR/hpePublicKey2048_key2.pub | gpg --dearmor | sudo tee -a /usr/share/keyrings/hpePublicKey.gpg > /dev/null
+```
+
+Update repos to include backports (needed to get the right zfs version) and hpe (needed for ssacli).
 
 ```sh
 cat >/etc/apt/sources.list<<EOD
@@ -92,13 +103,17 @@ deb http://deb.debian.org/debian bookworm main non-free non-free-firmware contri
 deb http://deb.debian.org/debian bookworm-updates main non-free non-free-firmware contrib
 deb http://deb.debian.org/debian-security/ bookworm-security main non-free non-free-firmware contrib
 deb http://deb.debian.org/debian bookworm-backports main contrib non-free non-free-firmware
-deb [trusted=yes] http://downloads.linux.hpe.com/SDR/downloads/MCP/debian bookworm/current non-free # disabled on upgrade to focal
+# deb [trusted=yes] http://downloads.linux.hpe.com/SDR/downloads/MCP/debian bookworm/current non-free 
+deb [signed-by=/usr/share/keyrings/hpePublicKey.gpg] https://downloads.linux.hpe.com/SDR/repo/mcp/debian bookworm/current non-free
+
+Tell apt to use the admin lans http(s) proxy. 
 
 EOD
 TKTEST/# cat > /etc/apt/apt.conf.d/99proxy <<EOD
 > Acquire::http::Proxy "http://192.168.31.2:3128/";
 > EOD
 ```
+
 
 ### Set up the fstab.
 We want to use the uuid for the mounts. *The hp raid controller shuffles the /dev/sdx quite a bit.*

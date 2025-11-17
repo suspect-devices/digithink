@@ -2,7 +2,10 @@
 
 ## Install ssacli
 
+Note: for the hp recommended way to get the signatures see [the buildnotes for tx2022](Buildnotes/tina/)
+
 ```
+echo "deb [trusted=yes] https://downloads.linux.hpe.com/SDR/repo/mcp/debian bookworm/current non-free" >>/etc/apt/sources.list
 apt install gpg
 apt install curl
 curl -x http://192.168.31.2:3128/ -fsSL https://downloads.linux.hpe.com/SDR/hpPublicKey2048.pub | gpg --dearmor -o /etc/apt/trusted.gpg.d/hpPublicKey2048.gpg
