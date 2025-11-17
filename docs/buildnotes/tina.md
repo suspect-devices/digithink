@@ -105,10 +105,12 @@ deb http://deb.debian.org/debian-security/ bookworm-security main non-free non-f
 deb http://deb.debian.org/debian bookworm-backports main contrib non-free non-free-firmware
 # deb [trusted=yes] http://downloads.linux.hpe.com/SDR/downloads/MCP/debian bookworm/current non-free 
 deb [signed-by=/usr/share/keyrings/hpePublicKey.gpg] https://downloads.linux.hpe.com/SDR/repo/mcp/debian bookworm/current non-free
+EOD
+```
 
 Tell apt to use the admin lans http(s) proxy. 
 
-EOD
+```sh
 TKTEST/# cat > /etc/apt/apt.conf.d/99proxy <<EOD
 > Acquire::http::Proxy "http://192.168.31.2:3128/";
 > EOD
@@ -116,8 +118,10 @@ TKTEST/# cat > /etc/apt/apt.conf.d/99proxy <<EOD
 
 
 ### Set up the fstab.
+
 We want to use the uuid for the mounts. *The hp raid controller shuffles the /dev/sdx quite a bit.*
-```
+
+```sh
 blkid|grep sdb|sed 's/^/# /' >>/etc/fstab
 nano /etc/fstab
 UUID=c51cb56b-9da4-479b-ba11-dfaac580df64 / ext4 rw,relatime 0 0
