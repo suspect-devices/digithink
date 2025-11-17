@@ -83,7 +83,7 @@ LANG=C.UTF-8 chroot /mnt/tktest /bin/bash
 PS1='TKTEST\w\$ '
 ```
 
-### Set up apt (with proxy) (UPDATED TP REFLECT 2025 HPE REPO LOCATION)
+### Set up apt (with proxy) (UPDATED T0 REFLECT 2025 HPE REPO LOCATION)
 
 Get the signing keys for hpe repos.
 
