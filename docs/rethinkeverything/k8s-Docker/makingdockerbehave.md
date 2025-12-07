@@ -17,7 +17,7 @@ Deployments should be as self contained as possible. Data such as ssl certificat
 
 For docker host deployments, the repository containing any docker-compose files and related resources should be cloned to a predictable path. The pattern we use at work and at home is.
 
-/usr/local/\<organization\>/service/\<repo_name\>/
+/usr/local/\< organization \>/service/\< repo_name \>/
 
 
 ## Making Docker Behave
@@ -34,6 +34,7 @@ There are a bagillian ways for docker applications to log errors and other messa
 
 Here is an example of limits set in a hosts /etc/docker/daemon.json file
 
+```sh
 {
   "log-driver": "local",
   "log-opts": {
@@ -42,6 +43,7 @@ Here is an example of limits set in a hosts /etc/docker/daemon.json file
     "compress": "true"
   }
 }
+```
 
 ### Restart Policy 
 
@@ -78,5 +80,5 @@ healthcheck:
 ```
 ## References 
 
-- https://www.dash0.com/guides/mastering-docker-logs
-- https://docs.docker.com/reference/dockerfile/#healthcheck
+- [https://www.dash0.com/guides/mastering-docker-logs](https://www.dash0.com/guides/mastering-docker-logs)
+- [https://docs.docker.com/reference/dockerfile/#healthcheck](https://www.dash0.com/guides/mastering-docker-logs)
