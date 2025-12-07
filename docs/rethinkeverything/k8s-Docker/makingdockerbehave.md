@@ -1,6 +1,6 @@
 # Background
 
-Where I work there are that use docker and hosts that are dedicated to hosting them. Since docker makes everything easy often they get deployed by developers as they see fit. As the support team responsible for keeping those applications and the systems they run on we find ourselves scrambling to figure out where things are and how to fix them in a timely manner. There are some rules that will help make these issues less of an issue.
+Where I work there are services that use docker and hosts that are dedicated to hosting them. Since docker makes everything easy often they get deployed by developers as they see fit. As the support team responsible for keeping those applications and the systems they run on we find ourselves scrambling to figure out where things are and how to fix them in a timely manner. There are some rules that will help make these issues less painful.
 
 ## Deployments as code
 
@@ -8,10 +8,8 @@ Ok, if everything has to be code, it should practice good coding discipline as w
 
 ### Documentation and Dependencies
 
-Service repositories should had a README.md file containing instructions on how to deploy the service.
-
-In addition to the readme file a brief description of the service should be placed in the repository
-This file should should contain a one or two line description that can be easily found when trying to resolve issues. An example of this might be a motd fragment that is displayed when logging into the applications host.
+Service repositories should have a README.md file containing instructions on how to deploy the service.
+In addition to the readme, a brief description of the service should be placed in the repository with a one or two line description that can be easily found when trying to resolve issues. An example of this might be a motd fragment that is displayed when logging into the applications host.
 
 Deployments should be as self contained as possible. Data such as ssl certificates should be kept within the repository unless there is a good reason to leave them elsewhere. Nfs mounted data directories or environmental files needed by the deployment should be clearly documented in the deployments README.md file.
 
