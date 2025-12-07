@@ -51,13 +51,11 @@ Restart policy establishes the behavior of the docker deployment if it, the dock
 
 Unless there is a clear reason for a different configuration all docker compose files should set:
 
-
 ```sh
 restart: unless-stopped
 ```
 
 for their containers.
-
 
 ### Health Checks
 
