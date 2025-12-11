@@ -59,7 +59,7 @@ for their containers.
 
 ### Health Checks
 
-(This is mostly @mhix but it stands as common sense and within the bounds of docker documentation, I will discuss the issues of using it verbatum)
+(This is mostly from Mike Hix I and is used with his permission)
 
 All docker containers on docker hosts should have health checks. A health check is a way that docker can programmatically check the health of your service(s). For each service, you’ll need to provide a command and timing parameters. This enables docker to take action based on the health of your service. It also allows someone to see that the container is healthy in the way you intend.
 
