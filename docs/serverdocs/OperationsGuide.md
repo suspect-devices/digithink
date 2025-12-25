@@ -41,16 +41,19 @@ As we move forward the unfiltered interface used by the public facing containers
 | ilo |   |  192.168.31.119/24 | |remote console|
 
 #### As Drawn
-![](images/as-drawn2.jpeg) 
+
+![as drawn](images/as-drawn2.jpeg)
+
 #### As Deployed
-![](images/asdeployed2024a.jpeg)
-![](images/asdeployed2024b.jpeg)
+
+![as deployed a](images/asdeployed2024a.jpeg)
+![as deployed b](images/asdeployed2024b.jpeg)
 
 #### As implimented
 
 ##### in /etc/network/interfaces
 
-```
+```sh
 #-------------------------------------------------------------------/etc/network/interfaces
 # 2: enp3s0f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br0 state UP group default qlen 1000
 # 3: enp3s0f1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br1 state UP group default qlen 1000
@@ -97,6 +100,7 @@ iface br1 inet static
      bridge_stp off       # disable Spanning Tree Protocol
         bridge_waitport 0    # no delay before a port becomes available
         bridge_fd 0          # no forwarding delay```
+```
 
 ##### and in /etc/rc.conf
 
@@ -200,13 +204,13 @@ feurig@ian:~$
 The containers can be accessed directly from the incus host as root
 
 ```sh
-root@bs2020:~# incus exec harvey bash
+root@btk2022:~# incus exec harvey bash
 root@harvey:~# apt-get update&&apt-get -y dist-upgrade&& apt-get -y autoremove
 ```
 
 ## Updating dns
 
-Dns is provided by bind , The zone files have been consolidated into a single directory under /etc/bind/zones  on naomi (dns.suspectdevices.com).
+Dns is provided by bind , The zone files have been consolidated into a single directory under /etc/bind/zones on piage (dns.digithink.com). The zones file is maintained in a private git repository on bitbucket. Do not forget to push any changes made to the zones file when the work is complete
 
 ```sh
 root@naomi:/etc/bind/zones# nano suspectdevices.hosts
@@ -215,17 +219,17 @@ root@naomi:/etc/bind/zones# nano suspectdevices.hosts
                 2018080300 10800 3600 3600000 86400 )
 ;               ^^ update ^^
 ; .... make some changes ....
-morgan          IN      A       198.202.31.224
-git             IN      CNAME   morgan
+johnson         IN      A     69.41.138.103
+git             IN      CNAME   johnson
 ...
-root@naomi:/etc/bind/zones# service bind9 reload
+root@naomi:/etc/bind/zones# systemctl named reload
 root@naomi:/etc/bind/zones# tail /var/log/messages
 ...
-Sep  3 08:10:04 naomi named[178]: zone suspectdevices.com/IN: loaded serial 2018080300
-Sep  3 08:10:04 naomi named[178]: zone suspectdevices.com/IN: sending notifies (serial 2018080300)
-Sep  3 08:10:04 naomi named[178]: client 198.202.31.132#56120 (suspectdevices.com): transfer of 'suspectdevices.com/IN': AXFR-style IXFR started (serial 2018080300)
-Sep  3 08:10:04 naomi named[178]: client 198.202.31.132#56120 (suspectdevices.com): transfer of 'suspectdevices.com/IN': AXFR-style IXFR ended
-Sep  3 08:10:04 naomi named[178]: client 198.202.31.132#47381: received notify for zone 'suspectdevices.com'
+Sep  3 08:10:04 piage named[178]: zone 3dangst.com/IN: loaded serial 2018080300
+Sep  3 08:10:04 piage named[178]: zone 3dangst/IN: sending notifies (serial 2018080300)
+Sep  3 08:10:04 piage named[178]: client 69.41.138.126#56120 (3dangst.com): transfer of '3dangst.com/IN': AXFR-style IXFR started (serial 2018080300)
+Sep  3 08:10:04 piage named[178]: client 69.41.138.126#56120 (3dangst.com): transfer of '3dangst.com/IN': AXFR-style IXFR ended
+Sep  3 08:10:04 piaga named[178]: client 69.41.138.126#47381: received notify for zone '3dangst.com'
 ```
 
 ## Updating Hosts / Containers
