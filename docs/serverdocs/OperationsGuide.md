@@ -11,7 +11,7 @@ The network is divided into 3 segments
 
 * 192.168.31.0/24 a private administrative lan
 * 10.0.0.0/24 wireguard lan
-* 198.202.31.129/25 A public facing lan.
+* 69.41.138.97/27 A public facing lan.
 
 The host itself does not have any public facing interfaces. It only accessible though the wireguard protected admin lan. The containers, which handle all public facing work do so via an anonymous bridge configuration, allowing them to access the internet directly without allowing external access to the underlying servers.
 
@@ -37,7 +37,7 @@ As we move forward the unfiltered interface used by the public facing containers
 | 1 |  br0  | 0.0.0.0/32    | enp3s0f0 | unfiltered public interface|
 | 2 |  br2  | 0.0.0.0/32    | enp3s0f1 | firewalled public interface|
 | 3 |  N/A  | ?.?.?.?/?? | enp4s0f0 | TBD |  
-| 1 |  br1  | 192.168.31.159/24 | enp4s0f1 |internal / admin lan |
+| 4 |  br1  | 192.168.31.159/24 | enp4s0f1 |internal / admin lan |
 | ilo |   |  192.168.31.119/24 | |remote console|
 
 #### As Drawn
@@ -51,13 +51,11 @@ As we move forward the unfiltered interface used by the public facing containers
 ##### in /etc/network/interfaces
 
 ```
-#--------------------------------------------------------/etc/network/interfaces
+#-------------------------------------------------------------------/etc/network/interfaces
 # 2: enp3s0f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br0 state UP group default qlen 1000
 # 3: enp3s0f1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br1 state UP group default qlen 1000
 # 4: enp4s0f0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
 # 5: enp4s0f1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq master br3 state UP group default qlen 1000
-# https://ip4calculator.com
-
 source /etc/network/interfaces.d/*
 
 auto lo
@@ -75,8 +73,21 @@ iface br0 inet manual
         bridge_waitport 0    # no delay before a port becomes available
         bridge_fd 0          # no forwarding delay
 
-
 auto br1
+iface br1 inet manual
+     bridge_ports enp3s0f1
+     bridge_stp off       # disable Spanning Tree Protocol
+        bridge_waitport 0    # no delay before a port becomes available
+        bridge_fd 0          # no forwarding delay
+
+auto br2
+iface br2 inet manual
+     bridge_ports enp4s0f0
+     bridge_stp off       # disable Spanning Tree Protocol
+        bridge_waitport 0    # no delay before a port becomes available
+        bridge_fd 0          # no forwarding delay
+
+auto br3
 iface br1 inet static
      address 192.168.31.159
      network 192.168.31.0
@@ -85,9 +96,7 @@ iface br1 inet static
      bridge_ports enp4s0f1
      bridge_stp off       # disable Spanning Tree Protocol
         bridge_waitport 0    # no delay before a port becomes available
-        bridge_fd 0          # no forwarding delay
-EOD
-```
+        bridge_fd 0          # no forwarding delay```
 
 ##### and in /etc/rc.conf
 
