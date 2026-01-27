@@ -2,7 +2,7 @@
 
 Starting in December the environment will contains a freebsd based router/firwall and a single enterprise class server
 
-* sitka -- a RiverBed Stealhead CX-770 
+* sitka -- a RiverBed Stealhead CX-770
 * tk2018 -- a HP ProLiant DL380 (g7) .
 
 ## Network
@@ -19,26 +19,26 @@ As we move forward the unfiltered interface used by the public facing containers
 
 ### Sitka's Network Config
 
-|   |   |      |    sitka ports|
-|-----|---|------|------------------|
-|port | Interface|IP Address/mask |   purpose |
-| igb0 | bridge0| 192.168.31.159/24 | internal / admin lan |
-| igb1 | bridge0|                   |  |
-| igb2 |  N/A  | N/A | N/A | unused |  
-| igb3 |  igb3  |  ?.?.?.?/?? | TBD|
-| igb4 | igb4  |   198.202.31.132/25     |  |
-| igb5 | igb5  |   0.0.0.0/32     | firewalled public interface |
+|      |           |                   |                  sitka ports|
+|------|-----------|-------------------|-----------------------------|
+| port | Interface |  IP Address/mask  |           purpose           |
+| igb0 | bridge0   | 192.168.31.159/24 |  internal / admin lan       |
+| igb1 | bridge0   |                   |                             |
+| igb2 | N/A       |  N/A              |           unused            |  
+| igb3 | igb3      |  ?.?.?.?/??       |            TBD              |
+| igb4 | igb4      |  69.41.138.126/27 |     external interface      |
+| igb5 | igb5      |  0.0.0.0/32       | firewalled public interface |
 
 ### TK2022's Network Config
 
-|   |   |   |   |    tk2022 ports|
-|---|---|---|---|-----------------|
-|port| Interface|IP Address/mask |  linux device| purpose |
-| 1 |  br0  | 0.0.0.0/32    | enp3s0f0 | unfiltered public interface|
-| 2 |  br2  | 0.0.0.0/32    | enp3s0f1 | firewalled public interface|
-| 3 |  N/A  | ?.?.?.?/?? | enp4s0f0 | TBD |  
-| 4 |  br1  | 192.168.31.159/24 | enp4s0f1 |internal / admin lan |
-| ilo |   |  192.168.31.119/24 | |remote console|
+|      |           |                   |          |                   tk2022 ports|
+|------|-----------|-------------------|----------|-------------------------------|
+| port | Interface | IP Address/mask   | device   |           purpose             |
+| 1    | br0       | 0.0.0.0/32        | enp3s0f0 | unfiltered public interface.  |
+| 2    | br2       | 0.0.0.0/32        | enp3s0f1 | firewalled public interface   |
+| 3    | N/A       | ?.?.?.?/??        | enp4s0f0 |             TBD               |  
+| 4    | br1       | 192.168.31.159/24 | enp4s0f1 |internal / admin lan           |
+| ilo  |           | 192.168.31.119/24 |          |        remote console         |
 
 #### As Drawn
 
@@ -122,22 +122,22 @@ ifconfig_igb1="up"
 See: ​[https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts](https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts) which is built referencing [a google doc with proposed allocations](https://docs.google.com/spreadsheets/d/1KRkqdYvgRtV4vu6AGzdLWJVGTIsV2o2iSSJBEFMZJAw/edit#gid=0)
 
 ## Server OS, Filesystems and Disk layout
+
 The server runs Debian bookworm along with zabbly supported version of [incus](https://linuxcontainers.org/incus/). Outside of zfs not much is added to the stock installation. This is intentional. The real work is done by the containers the host os is considered disposable.
 
 ### Disk Layout
+
 The incus server uses hardware raid 1 for the boot disk. The containers and other data are a able to take advantage of zfs mirroring and caching.
 
-
-|   |   |   |   |              |   kb2018 disks|
-|---|---|---|---|--------------|-----------------:|
-| disk| device/pool | bay |  type| mount point(s)| purpose/notes|
-| sdb | /dev/sdb  | 2C:1:3 | raid1+0  | /, /var/lib/incus | os and incus data |
-|  |   | 2C:1:4 | raid1+0  |  |  |
-| sda  | infra, devel  | 3C:1:7 | zfs  |  | incus storage pools  |
-| sdg  |   | 3C:1:8| zfs mirror  |  |  |
-| sdd  | tank  | 3C:1:5 | zfs  | /tank | space for stuff  |
-| sdc  |   | 3C:1:6| zfs mirror  |  |  |
-
+|      |.             |        |            |                   |         kb2018 disks|
+|------|--------------|--------|------------|-------------------|--------------------:|
+| disk | device/pool  | bay    | type       | mount point(s)    |    purpose/notes.   |
+| sdb  | /dev/sdb     | 2C:1:3 | raid1+0    | /, /var/lib/incus |  os and incus data  |
+|      |  ""      ""  | 2C:1:4 | raid1+0    |                   |                     |
+| sda  | infra, devel | 3C:1:7 | zfs        |                   | incus storage pools |
+| sdg  |  ""      ""  | 3C:1:8 | zfs mirror |                   |                     |
+| sdd  | tank         | 3C:1:5 | zfs        | /tank             |  space for stuff    |
+| sdc  |  ""      ""  | 3C:1:6 | zfs mirror |                   |                     |
 
 ### Hardware raid on the DL380
 
@@ -147,19 +147,21 @@ See: [Dude Where Are My Disks](/zeearchive/DL380RaidController)
 
 ## Containers
 
-Work previously done by standalone servers is now done though incus managed containers. 
-An up to date list of containers is somewhat maintained at  https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts
+Work previously done by standalone servers is now done though incus managed containers.
+An up to date list of containers is somewhat maintained at  <https://bitbucket.org/suspectdevicesadmin/ansible/src/master/hosts>
 
 ## Ansible
 
 Ansible is used to make most tasks reasonable including.
+
 * creating containers
 * updating admin passwords and ssh keys.
 
 # Tasks: Accessing Hosts
-### tk2022 ssh access
-The host machines for the containers can be accessed through the admin lan. This is done via wirguard on either [sitka](norouter/using-a-tank-for-crowd-control/) or [virgil](norouter/wireguard-and-tinyproxy/)
 
+## tk2022 ssh access
+
+The host machines for the containers can be accessed through the admin lan. This is done via wirguard on either [sitka](norouter/using-a-tank-for-crowd-control/) or [virgil](norouter/wireguard-and-tinyproxy/)
 
 *note: as of a few updates ago you have to tell apples ssh client to use ssh-dss as below*
 
@@ -189,7 +191,7 @@ Virtual Serial Port is currently in use by another session.
 </>hpiLO-> stop /system1/oemhp_vsp1
 ```
 
-See: [ilo 3 notes page](NotesOnILO3) 
+See: [ilo 3 notes page](NotesOnILO3)
 
 ### ssh access to containers
 
@@ -236,7 +238,7 @@ Sep  3 08:10:04 piaga named[178]: client 69.41.138.126#47381: received notify fo
 
 When updates are available Apticron sends us an email. We prefer this to autoupdating our hosts as it helps us maintain awareness of what issues are being addressed and does not stop working when there are issues. All running containers can be updated using the following update script.
 
-```
+```sh
 nano /usr/local/bin/update.sh
 #!/bin/bash
 # update.sh for debian/ubuntu/centos/suse  (copyleft) don@suspecdevices.com
@@ -258,13 +260,17 @@ echo ========================== done ==============================
 ^X
 chmod +x /usr/local/bin/update.sh
 ```
+
 pushing the update script to containers.
+
 ```sh
 incus file push /usr/local/bin/update.sh virgil/usr/local/bin/
 incus exec virgil chmod +x /usr/local/bin/update.sh
 ```
+
 you can run this against all running containers as follows.
-```
+
+```sh
 for c in `incus list -cn -f compact|grep -v NAME`; do incus exec $c update.sh; done ; update.sh
 ```
 
@@ -274,20 +280,22 @@ This could also be used as an ansible ad hoc command.
 ansible pets -m raw -a "update.sh"
 ```
 
-https://bitbucket.org/suspectdevicesadmin/ansible/src/master/files/update.sh
+<https://bitbucket.org/suspectdevicesadmin/ansible/src/master/files/update.sh>
 
 ## Creating containers
+
 ```sh
 cd /etc/ansible
 nano hosts
 ... add new host ...
 ansible-playbook playbooks/create-lxd-containers.yml
 ```
-https://bitbucket.org/suspectdevicesadmin/ansible/src/master/roles/create_lxd_containers/tasks/main.yml
+
+<https://bitbucket.org/suspectdevicesadmin/ansible/src/master/roles/create_lxd_containers/tasks/main.yml>
 .....YOU ARE HERE..... *documenting the ansible script to create containers*
 
 ## Backing Up Containers
 
 YOU ARE HERE RETHINKING THIS
 
-#  links.... (tbd)
+# links.... (tbd)
