@@ -140,12 +140,4 @@ incus list
 for h in gru minion1 minion2 minion3 minion4; do incus file push k8s.conf $h/etc/sysctl.d/k8s.conf; done
 incus shell gru -- systemctl list-units --type swap
 for h in gru minion1 minion2 minion3 minion4; do incus file push /etc/apt/sources.list.d/docker.list $h/etc/apt/sources.list.d/docker.list; done
-incus shell gru -- cat /etc/mtab
-incus shell gru
-incus delete gru
-incus stop minion1
-incus delete minion1
-incus list
-history|cut -c8-200
-history|cut -c8-200|uniq
-history|cut -c8-200|uniq>onemoretime.sh
+```
