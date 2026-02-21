@@ -1,0 +1,151 @@
+
+# guess this needs a fracking heading
+
+```sh
+incus init trixie-vm-cloud -c limits.cpu=6 -c limits.memory=12GiB -d root,size=24GiB --vm gru -p default -p merlot   -c cloud-init.network-config="$(cat <<EOF
+version: 2
+ethernets:
+  enp5s0:
+    addresses:
+      - 192.168.129.130/17
+    gateway4: 192.168.128.1
+    nameservers:
+      addresses:
+        - 192.168.128.1
+EOF
+)"
+incus start gru --console
+incus init trixie-vm-cloud -c limits.cpu=6 -c limits.memory=12GiB -d root,size=24GiB --vm minion1 -p default -p merlot   -c cloud-init.network-config="$(cat <<EOF
+version: 2
+ethernets:
+  enp5s0:
+    addresses:
+      - 192.168.129.131/17
+    gateway4: 192.168.128.1
+    nameservers:
+      addresses:
+        - 192.168.128.1
+EOF
+)"
+incus start minion1
+incus init trixie-vm-cloud -c limits.cpu=6 -c limits.memory=12GiB -d root,size=24GiB --vm minion2 -p default -p merlot   -c cloud-init.network-config="$(cat <<EOF
+version: 2
+ethernets:
+  enp5s0:
+    addresses:
+      - 192.168.129.132/17
+    gateway4: 192.168.128.1
+    nameservers:
+      addresses:
+        - 192.168.128.1
+EOF
+)"
+incus init trixie-vm-cloud -c limits.cpu=6 -c limits.memory=12GiB -d root,size=24GiB --vm minion3 -p default -p merlot   -c cloud-init.network-config="$(cat <<EOF
+version: 2
+ethernets:
+  enp5s0:
+    addresses:
+      - 192.168.129.133/17
+    gateway4: 192.168.128.1
+    nameservers:
+      addresses:
+        - 192.168.128.1
+EOF
+)"
+for h in gru minion1 minion2 minion3 ; do echo $h; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- modprobe overlay; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- modprobe overlay; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- modprobe br-netfilter; done
+cat <<EOF | tee k8s.sysctl.d.conf
+net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+for h in gru minion1 minion2 minion3 ; do incus file push k8s.sysctl.d.conf $h/etc/sysctl.d/k8s.conf; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- sysctl --system; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- apt update; done
+; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- install -m 0755 -d /etc/apt/keyrings; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc; ; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- chmod a+r /etc/apt/keyrings/docker.asc; done
+for h in gru minion1 minion2 minion3 ; do incus file push /etc/apt/sources.list.d/docker.list $h/etc/apt/sources.list.d/docker.list; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- apt update; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- apt install containerd.io; done
+containerd config default | tee config.toml
+sed -e 's/SystemdCgroup = false/SystemdCgroup = true/g' -i config.toml
+apt install containerd
+nano /etc/resolv.conf 
+apt install containerd
+containerd config default | tee config.toml
+sed -e 's/SystemdCgroup = false/SystemdCgroup = true/g' -i config.toml
+for h in gru minion1 minion2 minion3 ; do incus file push config.toml $h/etc/containerd/config.toml; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- systemctl restart containerd && systemctl status containerd; done
+curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor | tee helm.gpg > /dev/null
+for h in gru minion1 minion2 minion3 ; do incus file push helm.gpg $h/usr/share/keyrings/helm.gpg; done
+echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | sudo tee helm-stable-debian.list
+for h in gru minion1 minion2 minion3 ; do incus file push helm.gpg $h/etc/apt/sources.list.d/helm-stable-debian.list; done
+for h in gru minion1 minion2 minion3 minion4; do incus file push helm-stable-debian.list $h/etc/apt/sources.list.d/helm-stable-debian.list; done
+for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt update && apt install helm; done
+incus shell gru
+for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt install helm; done
+ls
+mkdir cka
+mv config.toml helm* cka/
+cd cka
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key | gpg --dearmor -o kubernetes-apt-keyring.gpg
+for h in gru minion1 minion2 minion3 minion4; do incus file push kubernetes-apt-keyring.gpg $h/etc/apt/keyrings/kubernetes-apt-keyring.gpg; done
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /'|tee kubernetes.list
+for h in gru minion1 minion2 minion3 minion4; do incus file push kubernetes.list $h/etc/apt/sources.list.d/kubernetes.list; done
+for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt update; done
+for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt dist-upgrade; done
+for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt dist-upgrade -y; done
+for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt install -y kubeadm=1.33.5-1.1 kubelet=1.33.5-1.1 kubectl=1.33.5-1.1; done
+for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt-mark hold kubelet kubeadm kubectl; done
+cat <<EOF | sudo tee k8s.conf 
+overlay
+br_netfilter
+EOF
+ls
+for h in gru minion1 minion2 minion3 minion4; do incus file push k8s.conf $h/etc/sysctl.d/k8s.conf; done
+cat <<EOF | tee k8s.sysctl.conf
+net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- kubeadm config images list; done
+incus file pull gru/etc/containerd/config.toml
+incus file pull gru/etc/containerd/config.toml .
+nano config.toml 
+for h in gru minion1 minion2 minion3 minion4; do incus file push config.toml $h/etc/containerd/config.toml; done
+for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- systemctl restart containerd; done
+top
+cat /etc/hosts
+incus shell minion1
+incus shell minion2
+incus shell minion3
+incus shell minion4
+htop
+
+incus shell minion2
+incus shell minion3
+incus shell minion4
+cat /etc/hosts
+nano /etc/hosts
+cat /etc/hosts
+incus shell gru
+incus list
+incus shell gru
+incus list
+for h in gru minion1 minion2 minion3 minion4; do incus file push k8s.conf $h/etc/sysctl.d/k8s.conf; done
+incus shell gru -- systemctl list-units --type swap
+for h in gru minion1 minion2 minion3 minion4; do incus file push /etc/apt/sources.list.d/docker.list $h/etc/apt/sources.list.d/docker.list; done
+incus shell gru -- cat /etc/mtab
+incus shell gru
+incus delete gru
+incus stop minion1
+incus delete minion1
+incus list
+history|cut -c8-200
+history|cut -c8-200|uniq
+history|cut -c8-200|uniq>onemoretime.sh

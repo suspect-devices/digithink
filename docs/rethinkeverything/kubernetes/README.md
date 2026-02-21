@@ -9,6 +9,8 @@ The course work is based on ubuntu 24.04 but we use RockyLinux at work so my ori
 ### Attempt #1
 [Notes on Ubuntu Install](./ubuntu.md)
 
+### Attempt #2-3
+[Notes on Debian 13 Install](./trixie.md)
 
 ## linkdump
 - https://rudimartinsen.com/2023/12/29/kubernetes-cluster-on-vms-2024/
