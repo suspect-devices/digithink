@@ -132,5 +132,5 @@ for h in gru minion1 minion2 minion3 minion4; do incus file push /etc/apt/source
 ## references
 
 - <https://discuss.linuxcontainers.org/t/how-to-use-cloud-init-to-set-up-a-vm-or-container-static-ip/22075/2>
-- https://forum.linuxfoundation.org/discussion/869484/issue-with-coredns-pods-after-initial-cluster-setup
-- https://max-pfeiffer.github.io/installing-kubernetes-on-debian-13-trixie.html
+- <https://forum.linuxfoundation.org/discussion/869484/issue-with-coredns-pods-after-initial-cluster-setup>
+- <https://max-pfeiffer.github.io/installing-kubernetes-on-debian-13-trixie.html>
