@@ -125,19 +125,12 @@ incus shell minion1
 incus shell minion2
 incus shell minion3
 incus shell minion4
-htop
-
-incus shell minion2
-incus shell minion3
-incus shell minion4
-cat /etc/hosts
-nano /etc/hosts
-cat /etc/hosts
-incus shell gru
-incus list
-incus shell gru
-incus list
 for h in gru minion1 minion2 minion3 minion4; do incus file push k8s.conf $h/etc/sysctl.d/k8s.conf; done
-incus shell gru -- systemctl list-units --type swap
 for h in gru minion1 minion2 minion3 minion4; do incus file push /etc/apt/sources.list.d/docker.list $h/etc/apt/sources.list.d/docker.list; done
 ```
+
+## references
+
+- <https://discuss.linuxcontainers.org/t/how-to-use-cloud-init-to-set-up-a-vm-or-container-static-ip/22075/2>
+- https://forum.linuxfoundation.org/discussion/869484/issue-with-coredns-pods-after-initial-cluster-setup
+- https://max-pfeiffer.github.io/installing-kubernetes-on-debian-13-trixie.html
