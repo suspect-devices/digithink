@@ -1,5 +1,13 @@
 
-# guess this needs a fracking heading
+# Rinse Lather Repeat. K8s on trixie.
+
+Found a decent example of how to run up kubernetes by someone else trying to get a CKA.
+
+https://max-pfeiffer.github.io/installing-kubernetes-on-debian-13-trixie.html
+
+Unfortunately there was a little piece missing  '--set cni.binPath=/usr/lib/cni' which pretty much meant reinstalling everything about 4 times. On the third iteration I started seeing the point of getting cloud-init (or ansible, or puppet) involved in the bass systems.
+
+## Attempt #1/2 (do it by hand and then batch a bunch)
 
 ```sh
 incus init trixie-vm-cloud -c limits.cpu=6 -c limits.memory=12GiB -d root,size=24GiB --vm gru -p default -p merlot   -c cloud-init.network-config="$(cat <<EOF
@@ -127,6 +135,94 @@ incus shell minion3
 incus shell minion4
 for h in gru minion1 minion2 minion3 minion4; do incus file push k8s.conf $h/etc/sysctl.d/k8s.conf; done
 for h in gru minion1 minion2 minion3 minion4; do incus file push /etc/apt/sources.list.d/docker.list $h/etc/apt/sources.list.d/docker.list; done
+```
+## Attempt #3/4 
+
+### take the boring parts and make cloud init do the work.
+
+
+### also the key point.
+
+```sh
+kubeadm init --kubernetes-version 1.33.5 --control-plane-endpoint gru
+export KUBECONFIG=/etc/kubernetes/admin.conf
+helm install cilium cilium/cilium --version 1.18.3 --namespace kube-system  --set cni.binPath=/usr/lib/cni
+```
+
+### Make it work at the colo.
+
+```sh
+incus init trixie-vm -c limits.cpu=16 -c limits.memory=24GiB -d root,size=24GiB --vm gru -p default -p k8s-colo -c cloud-init.network-config="$(cat <<EOF
+version: 2
+ethernets:
+  enp5s0:
+    addresses:
+      - 69.41.138.117/27
+    gateway4: 69.41.138.97
+    nameservers:
+      addresses:
+        - 69.41.138.98
+        - 8.8.4.4
+EOF
+)"
+incus start gru
+```
+
+Initialize the control plane
+
+```sh
+kubeadm init --kubernetes-version 1.33.5 --control-plane-endpoint gru
+export KUBECONFIG=/etc/kubernetes/admin.conf
+helm install cilium cilium/cilium --version 1.18.3 --namespace kube-system  --set cni.binPath=/usr/lib/cni
+```
+
+Set up the nodes
+
+```sh
+incus init trixie-vm -c limits.cpu=16 -c limits.memory=24GiB -d root,size=24GiB --vm minion1 -p default -p k8s-colo -c cloud-init.network-config="$(cat <<EOF
+version: 2
+ethernets:
+  enp5s0:
+    addresses:
+      - 69.41.138.118/27
+    gateway4: 69.41.138.97
+    nameservers:
+      addresses:
+        - 69.41.138.98
+        - 8.8.4.4
+EOF
+)"
+incus start minion1
+
+incus init trixie-vm -c limits.cpu=16 -c limits.memory=24GiB -d root,size=24GiB --vm minion2 -p default -p k8s-colo -c cloud-init.network-config="$(cat <<EOF
+version: 2
+ethernets:
+  enp5s0:
+    addresses:
+      - 69.41.138.119/27
+    gateway4: 69.41.138.97
+    nameservers:
+      addresses:
+        - 69.41.138.98
+        - 8.8.4.4
+EOF
+)"
+incus start minion2
+
+incus init trixie-vm -c limits.cpu=16 -c limits.memory=24GiB -d root,size=24GiB --vm minion3 -p default -p k8s-colo -c cloud-init.network-config="$(cat <<EOF
+version: 2
+ethernets:
+  enp5s0:
+    addresses:
+      - 69.41.138.120/27
+    gateway4: 69.41.138.97
+    nameservers:
+      addresses:
+        - 69.41.138.98
+        - 8.8.4.4
+EOF
+)"
+incus start minion3
 ```
 
 ## references
