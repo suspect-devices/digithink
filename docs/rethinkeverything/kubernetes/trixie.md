@@ -74,7 +74,6 @@ for h in gru minion1 minion2 minion3 ; do incus exec $h -- sysctl --system; done
 for h in gru minion1 minion2 minion3 ; do incus exec $h -- apt update; done
 ; done
 for h in gru minion1 minion2 minion3 ; do incus exec $h -- install -m 0755 -d /etc/apt/keyrings; done
-for h in gru minion1 minion2 minion3 ; do incus exec $h -- curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc; ; done
 for h in gru minion1 minion2 minion3 ; do incus exec $h -- curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc; done
 for h in gru minion1 minion2 minion3 ; do incus exec $h -- chmod a+r /etc/apt/keyrings/docker.asc; done
 for h in gru minion1 minion2 minion3 ; do incus file push /etc/apt/sources.list.d/docker.list $h/etc/apt/sources.list.d/docker.list; done
@@ -88,14 +87,13 @@ apt install containerd
 containerd config default | tee config.toml
 sed -e 's/SystemdCgroup = false/SystemdCgroup = true/g' -i config.toml
 for h in gru minion1 minion2 minion3 ; do incus file push config.toml $h/etc/containerd/config.toml; done
-for h in gru minion1 minion2 minion3 ; do incus exec $h -- systemctl restart containerd && systemctl status containerd; done
+for h in gru minion1 minion2 minion3 ; do incus exec $h -- systemctl restart containerd ; done
 curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor | tee helm.gpg > /dev/null
 for h in gru minion1 minion2 minion3 ; do incus file push helm.gpg $h/usr/share/keyrings/helm.gpg; done
 echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | sudo tee helm-stable-debian.list
 for h in gru minion1 minion2 minion3 ; do incus file push helm.gpg $h/etc/apt/sources.list.d/helm-stable-debian.list; done
 for h in gru minion1 minion2 minion3 minion4; do incus file push helm-stable-debian.list $h/etc/apt/sources.list.d/helm-stable-debian.list; done
-for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt update && apt install helm; done
-incus shell gru
+for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt update ; done
 for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt install helm; done
 ls
 mkdir cka
@@ -106,7 +104,6 @@ for h in gru minion1 minion2 minion3 minion4; do incus file push kubernetes-apt-
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /'|tee kubernetes.list
 for h in gru minion1 minion2 minion3 minion4; do incus file push kubernetes.list $h/etc/apt/sources.list.d/kubernetes.list; done
 for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt update; done
-for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt dist-upgrade; done
 for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt dist-upgrade -y; done
 for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt install -y kubeadm=1.33.5-1.1 kubelet=1.33.5-1.1 kubectl=1.33.5-1.1; done
 for h in gru minion1 minion2 minion3 minion4; do incus exec $h -- apt-mark hold kubelet kubeadm kubectl; done
@@ -136,12 +133,15 @@ incus shell minion4
 for h in gru minion1 minion2 minion3 minion4; do incus file push k8s.conf $h/etc/sysctl.d/k8s.conf; done
 for h in gru minion1 minion2 minion3 minion4; do incus file push /etc/apt/sources.list.d/docker.list $h/etc/apt/sources.list.d/docker.list; done
 ```
-## Attempt #3/4 
 
-### take the boring parts and make cloud init do the work.
+## Attempt #3/4
 
+### take the boring parts and make cloud init do the work
 
-### also the key point.
+Incus allows you to provide cloud init sections to the profiles used to create incus containers.
+The gist of the parts to install kubernetes and helm is here <https://gist.github.com/feurig/c7db29c4df8eade0a027411d1917a602>.
+
+### also the key point
 
 ```sh
 kubeadm init --kubernetes-version 1.33.5 --control-plane-endpoint gru
@@ -149,7 +149,7 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 helm install cilium cilium/cilium --version 1.18.3 --namespace kube-system  --set cni.binPath=/usr/lib/cni
 ```
 
-### Make it work at the colo.
+### Make it work at the colo
 
 ```sh
 incus init trixie-vm -c limits.cpu=16 -c limits.memory=24GiB -d root,size=24GiB --vm gru -p default -p k8s-colo -c cloud-init.network-config="$(cat <<EOF
