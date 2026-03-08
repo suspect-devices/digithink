@@ -140,6 +140,65 @@ for h in gru minion1 minion2 minion3 minion4; do incus file push /etc/apt/source
 
 Incus allows you to provide cloud init sections to the profiles used to create incus containers.
 The gist of the parts to install kubernetes and helm is here <https://gist.github.com/feurig/c7db29c4df8eade0a027411d1917a602>.
+incus init trixie-vm -c limits.cpu=16 -c limits.memory=24GiB -d root,size=24GiB --vm gru -p default -p k8s-colo -c cloud-init.network-config="$(cat <<EOF
+version: 2
+ethernets:
+  enp5s0:
+    addresses:
+      - 69.41.138.117/27
+    gateway4: 69.41.138.97
+    nameservers:
+      addresses:
+        - 69.41.138.98
+        - 8.8.4.4
+EOF
+)"
+incus start gru
+```
+
+Initialize the control plane
+
+```sh
+kubeadm init --kubernetes-version 1.33.5 --control-plane-endpoint gru
+export KUBECONFIG=/etc/kubernetes/admin.conf
+helm install cilium cilium/cilium --version 1.18.3 --namespace kube-system  --set cni.binPath=/usr/lib/cni
+```
+
+Set up the nodes
+
+```sh
+incus init trixie-vm-cloud -c limits.cpu=16 -c limits.memory=24GiB -d root,size=24GiB --vm gru -p default -p merlot-k8s -c cloud-init.network-config="$(cat <<EOF
+version: 2
+ethernets:
+  enp5s0:
+    addresses:
+      - 192.168.129.130
+    gateway4: 192.168.128.1
+    nameservers:
+      addresses:
+        - 192.168.128.1
+        - 69.41.138.98
+EOF
+)"
+
+incus start gru
+
+incus init trixie-vm-cloud -c limits.cpu=16 -c limits.memory=24GiB -d root,size=24GiB --vm minion1 -p default -p merlot-k8s -c cloud-init.network-config="$(cat <<EOF
+version: 2
+ethernets:
+  enp5s0:
+    addresses:
+      - 192.168.129.131
+    gateway4: 192.168.128.1
+    nameservers:
+      addresses:
+        - 192.168.128.1
+        - 69.41.138.98
+EOF
+)"
+
+incus start minion1
+```
 
 ### also the key point
 
