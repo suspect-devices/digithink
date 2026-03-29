@@ -35,22 +35,22 @@ nano figaro/etc/rc.conf
 cp -pv /etc/resolv.conf figaro/etc/
 freebsd-update -b figaro/ fetch install
 cat >/etc/jail.conf<<EOD
-figaro {
 interface = igb0;
 path = /jails/${name};
+host.hostname = "${name}";
+exec.consolelog = "/var/log/jail_console_${name}.log";
+exec.start = "/bin/sh /etc/rc";
+exec.stop = "/bin/sh /etc/rc.shutdown";
+exec.clean;
 exec.jail_user = root;
 allow.raw_sockets;
-#mount.fstab = /jails/${name}/etc/fstab;
 allow.mount;
 allow.mount.zfs;
 enforce_statfs = 1;
 mount.devfs;
-exec.start = "/bin/sh /etc/rc";
-exec.stop = "/bin/sh /etc/rc.shutdown";
-exec.clean;
-host.hostname = "${name}";
+
+figaro {
 ip4.addr = "192.168.128.2";
-exec.consolelog = "/var/log/jail_console_${name}.log";
 }
 EOD
 service jail start figaro
