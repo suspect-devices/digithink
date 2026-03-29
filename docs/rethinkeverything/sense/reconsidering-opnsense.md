@@ -20,60 +20,45 @@ So I turned unbound back on and looked at the alternatives.
 ## You can't configure the software/services but you can run a jail.
 
 So this is going to be a longer process than I would have liked.
-But somehow we have located a fellow traveler.
+
+### installing a freebsd jail on an opnsense server
+
+EINFACH. ZB.
 
 ```sh
-git clone https://github.com/exeba/FTL-freebsd-port.git
-cd FTL-freebsd-port/examples/
-nano jail-setup.sh
-./jail-setup.sh
-```
-
-This is the current jail-setup
-
-```sh
-#!/bin/sh
-
-JAIL_NAME="vito"
-JAIL_IP_CIDR="192.168.128.13/17"
-JAIL_GATEWAY="192.168.128.1"
-JAIL_HOSTNAME="vito"
-IFACE_NAME="igb0"
-JAILS_PATH="/jails"
-JAIL_ROOT="$JAILS_PATH/$JAIL_NAME"
-
-# Create jail root
-mkdir -p "$JAIL_ROOT"
-
-# Install base system on jail root
-bsdinstall jail "$JAIL_ROOT"
-
-# Copy utility scripts
-mkdir -p /usr/local/scripts/
-install /usr/share/examples/jails/jib /usr/local/scripts/
-
-# Jail definition
-cat << EOF >> "/etc/jail.conf.d/$JAIL_NAME.conf"
-pihole {
-    vnet;
-    vnet.interface="e0b_$JAIL_NAME";
-    exec.prestart+="/usr/local/scripts/jib addm $JAIL_NAME $IFACE_NAME";
-    exec.poststop+="/usr/local/scripts/jib destroy $JAIL_NAME";
-    host.hostname = $JAIL_HOSTNAME;            # Hostname
-    path = "$JAIL_ROOT";                       # Path to the jail
-    mount.devfs;                               # Mount devfs inside the jail
-    exec.start = "/bin/sh /etc/rc";            # Start command
-    exec.stop = "/bin/sh /etc/rc.shutdown";    # Stop command
+curl http://ftp.uk.freebsd.org/pub/FreeBSD/releases/amd64/14.3-RELEASE/base.txz --output 14.3-RELEASE.base.tgz
+ls
+cd /jails/
+tar -xJpf ~root/14.3-RELEASE.base.tgz  -C figaro/
+ls
+nano figaro/etc/rc.conf
+cp -pv /etc/resolv.conf figaro/etc/
+freebsd-update -b figaro/ fetch install
+cat >/etc/jail.conf<<EOD
+figaro {
+interface = igb0;
+path = /jails/${name};
+exec.jail_user = root;
+allow.raw_sockets;
+#mount.fstab = /jails/${name}/etc/fstab;
+allow.mount;
+allow.mount.zfs;
+enforce_statfs = 1;
+mount.devfs;
+exec.start = "/bin/sh /etc/rc";
+exec.stop = "/bin/sh /etc/rc.shutdown";
+exec.clean;
+host.hostname = "${name}";
+ip4.addr = "192.168.128.2";
+exec.consolelog = "/var/log/jail_console_${name}.log";
 }
-EOF
-
-# Setup ip & default gateweay
-cat << EOF >> "$JAIL_ROOT/etc/rc.conf"
-ifconfig_e0b_$JAIL_NAME="$JAIL_IP_CIDR"
-defaultrouter="$JAIL_GATEWAY"
-EOF
+EOD
+service jail start figaro
 ```
 
+ As for what to do with the jail. I am going to have to separate the documentaion for how I want to drive dnsmasq and how its configured since most of the configuation will be in a host repo.
+
+ YOU ARE HERE LINKING TO THE DNSMASQ CONFIGURATION ON THE JAIL.
 
 ## Linkdump
 
