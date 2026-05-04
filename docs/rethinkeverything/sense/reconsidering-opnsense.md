@@ -56,9 +56,9 @@ EOD
 service jail start figaro
 ```
 
- As for what to do with the jail. I am going to have to separate the documentaion for how I want to drive dnsmasq and how its configured since most of the configuation will be in a host repo.
+ As for what to do with the jail. I am going to have to separate the documentaion for how I want to drive dnsmasq and how its configured.
 
- YOU ARE HERE LINKING TO THE DNSMASQ CONFIGURATION ON THE JAIL.
+https://www.digithink.com/merlot/Dnsmasq/
 
 ## Linkdump
 
