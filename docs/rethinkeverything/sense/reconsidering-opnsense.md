@@ -58,7 +58,7 @@ service jail start figaro
 
  As for what to do with the jail. I am going to have to separate the documentaion for how I want to drive dnsmasq and how its configured.
 
-https://www.digithink.com/merlot/Dnsmasq/
+See: [https://www.digithink.com/merlot/Dnsmasq/](https://www.digithink.com/merlot/Dnsmasq/)
 
 ## Linkdump
 
