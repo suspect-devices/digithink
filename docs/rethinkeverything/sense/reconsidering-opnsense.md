@@ -77,9 +77,11 @@ After I gave up I dug arround a bit and found two links using bridges specifical
 - https://henryleach.com/2025/04/vnet-jails-with-dhcp-on-freebsd/
 - https://www.amoradi.org/20210908201936.html
 
-The Henry Leach blog actually walked through starting and configuring the jail manually and then making it permanent. I followed th manual setup and was able to get a functioning dhcp server.
+The Henry Leach blog actually walked through starting and configuring the jail manually and then making it permanent. I followed th manual setup and was able to get a functioning dhcp server but the network would not pass through its responses.
 
-YOU ARE HERE MAKING IT permanent.
+### other things I tried.
+
+Yesterday I tried to run up a vm with debian under bhyve. This felt like fighting too much of the restricted os and my initial vm did not run at all.
 
 ## Linkdump
 
@@ -88,3 +90,6 @@ YOU ARE HERE MAKING IT permanent.
 - https://www.reddit.com/r/opnsense/comments/sjewa4/jails_under_opnsense_221/?rdt=59758
 - https://forum.opnsense.org/index.php?topic=26724.0
 - https://henryleach.com/2025/04/vnet-jails-with-dhcp-on-freebsd/
+- https://forum.opnsense.org/index.php?topic=32813.0
+- https://github.com/Pythonp90/opnsense
+- https://cdrmack.dev/posts/2025-02-26_debian_vm_with_bhyve.html
