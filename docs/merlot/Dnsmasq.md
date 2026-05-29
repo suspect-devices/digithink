@@ -79,6 +79,7 @@ conf-file=/usr/local/merlot/dnsmasq/cnames.list
 
 ## Generating the necessary files.
 
+
 ### one file to rule them all
 
 We start with a csv file with all of the information we need.
