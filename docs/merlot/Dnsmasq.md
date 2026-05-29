@@ -1,6 +1,21 @@
 
 # DNSMasq 
 
+dnsmasq is a caching dns and dhcp server that allows a single source of truth for
+both. This replaces services such as bind and isc-dhcp. One of the nice things is
+that once you give out an address to a host the host resolves to that address. 
+The other nice thing is that it is file based
+
+It was my hope that I could configure the dnsmasq provided by opnsense with files
+that I could control but it insisted on requiring all settings be implimented via 
+its gui and overwriting any manual files. So we are running dnsmasq on a separate 
+server. 
+
+At some point I will get this to work on a freebsd jail running on the router.
+
+
+## sample dnsmasq.conf
+
 ```sh
 #------------------------------------------------------------ dnsmasq.conf for figaro
 # symlink as appropriate (linux=/etc/dnsmasq.conf,bsd=/usr/local/etc/dnsmasq.conf)
@@ -62,14 +77,28 @@ dhcp-hostsfile=/usr/local/merlot/dnsmasq/reservations.list
 conf-file=/usr/local/merlot/dnsmasq/cnames.list
 ```
 
+## Generating the necessary files.
+
+### one file to rule them all
+
+We start with a csv file with all of the information we need.
+
 ```sh
 domain,address,mac,name,notes,alias,,,
 merlot,192.168.128.1,00:0e:b6:c0:1a:8b,misskitty,firewall,,,
-
+...
 ```
+
+### as little pile of python
 
 ```sh
 #!/usr/bin/env python3
+#------------------------------------------------------ creatednsmasqconfigs.py
+# Given a csv file in the following format
+# domain,address,mac,name,notes,alias,,,
+#
+# Generate the files used by dnsmasq (hosts,ether,reservations,cnames)
+#
 import sys
 import csv
 
@@ -82,13 +111,34 @@ with open("/etc/hosts", "w") as h, \
     print("127.0.0.1 localhost localhost.merlot localhost.merlot.suspectdevices.com",file=h)
     reader = csv.DictReader(open('/usr/local/merlot/data/merlot.csv'))
     for row in reader:
-        print(row['address']+' '+row['name']+' '+row['name']+'.'+row['domain'],file=h)
-        print(row['mac']+' '+row['name']+'.'+row['domain'],file=e)
-        print(row['mac']+','+row['address']+','+row['name']+',infinite',file=r)
-        if (row['alias']):
-            print('cname='+row['alias']+','+row['alias']+'.'+row['domain']+\
-                  ','+row['name']+'.'+row['domain'],file=c)
+        if ('#' not in row['domain']): # skip commentted out lines (kassumes domain is first field)
+            print(row['address']+' '+row['name']+' '+row['name']+'.'+row['domain'],file=h)
+            print(row['mac']+' '+row['name']+'.'+row['domain'],file=e)
+            print(row['mac']+','+row['address']+','+row['name']+',infinite',file=r)
+            if (row['alias']):
+                print('cname='+row['alias']+','+row['alias']+'.'+row['domain']+\
+                    ','+row['name']+'.'+row['domain'],file=c)
 
+```
+
+### files generated 
+
+* /etc/hosts
+```sh
+127.0.0.1 localhost localhost.merlot localhost.merlot.suspectdevices.com
+192.168.128.1 misskitty misskitty.merlot
+```
+* /etc/hosts
+```sh 
+00:0e:b6:c0:1a:8b misskitty.merlot
+```
+* reservations
+```sh
+00:0e:b6:c0:1a:8b,192.168.128.1,misskitty,infinite
+```
+* cnames
+```sh
+cname=firewall,firewall.merlot,misskitty.merlot
 ```
 
 ## references
