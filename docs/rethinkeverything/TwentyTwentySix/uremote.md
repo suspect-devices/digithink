@@ -1,4 +1,4 @@
-# Universal remote.
+# Universal remote (NOTES/WIP).
 
 This probably belongs elsewhere but I want to (un)mute/power(on/off) the tv and the radio from anywhere in the house
 

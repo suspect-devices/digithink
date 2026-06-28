@@ -6,5 +6,5 @@
 - Tempurature sensors to timscale db.
 - Direct connect merlot firewall to fiber
 - Figaro
-- Git mirrors again. (Forgejo)
+- [Git mirrors again. (Raw Git vs Forgejo?)](gitmirror.md)
 - [Network remote power and mute (tv and radio)](uremote.md)
