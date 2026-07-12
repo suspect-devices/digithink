@@ -53,20 +53,21 @@ Which is different than the remote for the tv (0x408=KEY_POWER,0x404=KEY_MUTE)
 
 ## links
 
-https://spotpear.com/index.php/index/study/detail/id/843.html
-https://unix.stackexchange.com/questions/227829/how-to-add-lirc-to-ir-keytable-protocols
-https://www.sbprojects.net/knowledge/ir/nec.php
-https://www.hackster.io/austin-stanton/creating-a-raspberry-pi-universal-remote-with-lirc-2fd581
-https://www.waveshare.com/wiki/Raspberry_Pi_Tutorial_Series:_Infrared_Remote_Control
-https://askubuntu.com/questions/951432/ir-remote-some-media-keys-wont-work-key-nextsong-key-previoussong
-https://lirc.readthedocs.io/en/latest/configuring-system-lirc.html
-https://www.infradead.org/~mchehab/kernel_docs/userspace-api/media/rc/rc-protos.html
-https://github.com/LibreELEC/documentation/blob/master/configuration/ir-remotes.md
-https://stackoverflow.com/questions/58636136/ir-remote-control-using-lirc-nec
-https://github.com/gordonturner/ControlKit/blob/master/Raspbian%20Setup%20and%20Configure%20IR.md
-https://blog.gordonturner.com/2020/06/10/raspberry-pi-ir-transmitter/
-https://www.instructables.com/Setup-IR-Remote-Control-Using-LIRC-for-the-Raspber/
-https://aron.ws/projects/lirc_rpi/openelec_howto.html
-https://projects-raspberry.com/raspberry-pi-as-ir-remote-lirc/#google_vignette
-https://www.hackster.io/austin-stanton/creating-a-raspberry-pi-universal-remote-with-lirc-2fd581
-https://zaman.is-a.dev/posts/how-to-use-raspberry-pi-as-infrared-ir-remote/
+<https://spotpear.com/index.php/index/study/detail/id/843.html>
+<https://unix.stackexchange.com/questions/227829/how-to-add-lirc-to-ir-keytable-protocols>
+<https://www.sbprojects.net/knowledge/ir/nec.php>
+<https://www.hackster.io/austin-stanton/creating-a-raspberry-pi-universal-remote-with-lirc-2fd581>
+<https://www.waveshare.com/wiki/Raspberry_Pi_Tutorial_Series:_Infrared_Remote_Control>
+<https://askubuntu.com/questions/951432/ir-remote-some-media-keys-wont-work-key-nextsong-key-previoussong>
+<https://lirc.readthedocs.io/en/latest/configuring-system-lirc.html>
+<https://www.infradead.org/~mchehab/kernel_docs/userspace-api/media/rc/rc-protos.html>
+<https://github.com/LibreELEC/documentation/blob/master/configuration/ir-remotes.md>
+<https://stackoverflow.com/questions/58636136/ir-remote-control-using-lirc-nec>
+<https://github.com/gordonturner/ControlKit/blob/master/Raspbian%20Setup%20and%20Configure%20IR.md>
+<https://blog.gordonturner.com/2020/06/10/raspberry-pi-ir-transmitter/>
+<https://www.instructables.com/Setup-IR-Remote-Control-Using-LIRC-for-the-Raspber/>
+<https://aron.ws/projects/lirc_rpi/openelec_howto.html>
+<https://projects-raspberry.com/raspberry-pi-as-ir-remote-lirc/#google_vignette>
+<https://www.hackster.io/austin-stanton/creating-a-raspberry-pi-universal-remote-with-lirc-2fd581>
+<https://zaman.is-a.dev/posts/how-to-use-raspberry-pi-as-infrared-ir-remote/>
+<https://www.drejo.com/blog/arduino-lirc/>

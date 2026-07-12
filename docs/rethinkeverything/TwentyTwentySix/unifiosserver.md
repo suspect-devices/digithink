@@ -8,3 +8,4 @@ YOU ARE HERE WRITING UP THE NEWFANGLED UNIFI OS SERVER.
 ### Related.
 - [https://discussion.scottibyte.com/t/incus-profile-tricks-power-shortcuts-to-creating-containers/418](https://discussion.scottibyte.com/t/incus-profile-tricks-power-shortcuts-to-creating-containers/418)
 - [https://blog.simos.info/useful-networking-tips-with-incus/](https://blog.simos.info/useful-networking-tips-with-incus/)
+- [https://securingtheuniverse.com/2025/11/10/unifi-innerspace-managing-floorplans-and-network-coverage/](https://securingtheuniverse.com/2025/11/10/unifi-innerspace-managing-floorplans-and-network-coverage/)
