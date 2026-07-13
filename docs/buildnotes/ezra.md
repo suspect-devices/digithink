@@ -21,7 +21,7 @@ I am following along with [this guide](https://www.wangzerui.com/2017/03/06/usin
 - Create repository with all of the current configs in it
   - Make a "reference" copy branch with current configs in it.
   - Add a README.md a doc updating this process as we go.
-    - copy / edit this readme for public consumption on digithink 
+    - copy this readme to [document for public consumption on digithink](https://www.digithink.com/buildnotes/ezra/)
 - Create a dns entry for the new server and make it the default MX for a domain you don't currently use for email (3dangst.com)
 - Stand up a new mail server on Debian (trixie)
   - Install reference email server software and certbot
@@ -156,7 +156,7 @@ cd configs
 git config core.worktree "../../../"
 git branch stock
 cat > /.gitignore <<EOD
-**
+/**
 EOD
 git add -f ../../etc/postfix
 git add -f ../../etc/aliases
@@ -181,10 +181,163 @@ git pull
 
 ### Fix the new configs and add the new stuff.
 
-YOU ARE HERE....
+The bigges pain in the ass here is that breaking changes were made between Dovecot 2.3 and 2.4 and the community documentation does an absolutely shitty job of documenting how to translate them. The rough version of things that work present the following. 
+
+```sh
+root@mailhost:/etc/dovecot/conf.d# doveconf -n
+# 2.4.1-4 (7d8c0e5759): /etc/dovecot/dovecot.conf
+# Pigeonhole version 2.4.1-4 (0a86619f)
+# OS: Linux 6.12.30+bpo-amd64 x86_64 Debian 13.6
+# Hostname: ezra.suspectdevices.com
+dovecot_config_version = 2.4.1
+dovecot_storage_version = 2.4.1
+listen = *
+mail_driver = maildir
+mail_path = ~/Maildir
+protocols {
+  imap = yes
+}
+passdb pam {
+}
+userdb passwd {
+}
+namespace inbox {
+  inbox = yes
+  mailbox Drafts {
+    special_use = "\\Drafts"
+  }
+  mailbox Junk {
+    special_use = "\\Junk"
+  }
+  mailbox Trash {
+    special_use = "\\Trash"
+  }
+  mailbox Sent {
+    special_use = "\\Sent"
+  }
+  mailbox "Sent Messages" {
+    special_use = "\\Sent"
+  }
+}
+service imap-login {
+  inet_listener imap {
+  }
+  inet_listener imaps {
+    port = 993
+    ssl = yes
+  }
+}
+service lmtp {
+  unix_listener lmtp {
+  }
+}
+service imap {
+}
+service auth {
+  unix_listener auth-userdb {
+  }
+  unix_listener /var/spool/postfix/private/auth {
+    mode = 0666
+  }
+}
+service auth-worker {
+  user = root
+}
+service dict {
+  unix_listener dict {
+  }
+}
+ssl_server {
+  cert_file = /etc/letsencrypt/live/mailhost.suspectdevices.com/fullchain.pem
+  dh_file = /etc/letsencrypt/ssl-dhparams.pem
+  key_file = /etc/letsencrypt/live/mailhost.suspectdevices.com/privkey.pem
+}
+```
+
+The actual configuration is smeared all over a linux conf.d style pile of configuration files and I am pretty sure I need to get rid of most of them. 
+
+## Testing the new system. 
+
+With the config above we are able to send mail from gmail but cant recieve it because spf and dkim havent been set up for 3dangst.com
+We were also unable to email between suspectdevices.com and 3dangst.com because 3dangst.com was still in naomis postfix config. This was fixed. 
+
+## Fixing spf and dkim.
+
+YOU ARE HERE FIXING 3dangst.com before moving on to the actual transfer of users and data.
+
 
 ## References
 - [https://www.wangzerui.com/2017/03/06/using-git-to-manage-system-configuration-files/](https://www.wangzerui.com/2017/03/06/using-git-to-manage-system-configuration-files/)
 - [https://www.linuxbabe.com/mail-server/build-email-server-from-scratch-debian-postfix-smtp](https://www.linuxbabe.com/mail-server/build-email-server-from-scratch-debian-postfix-smtp)
 - [http://www.postfix.org/STANDARD_CONFIGURATION_README.html](http://www.postfix.org/STANDARD_CONFIGURATION_README.html)
-- [old mail server install docs](https://www.digithink.com/serverdocs/UbuntuMailServerSetup/)# 
+- [old mail server install docs](https://www.digithink.com/serverdocs/UbuntuMailServerSetup/)
+- [https://www.digithink.com/buildnotes/ezra/](https://www.digithink.com/buildnotes/ezra/)
+
+
+## CLEAN THIS DUMP UP
+```sh
+	deleted:    ../../README.md
+	modified:   ../../etc/aliases
+	deleted:    ../../etc/dkimkeys/README.PrivateKeys
+	modified:   ../../etc/dovecot/conf.d/10-auth.conf
+	deleted:    ../../etc/dovecot/conf.d/10-auth.conf.ucf-old
+	deleted:    ../../etc/dovecot/conf.d/10-director.conf
+	modified:   ../../etc/dovecot/conf.d/10-logging.conf
+	deleted:    ../../etc/dovecot/conf.d/10-logging.conf.ucf-old
+	modified:   ../../etc/dovecot/conf.d/10-mail.conf
+	deleted:    ../../etc/dovecot/conf.d/10-mail.conf.ucf-dist
+	modified:   ../../etc/dovecot/conf.d/10-master.conf
+	deleted:    ../../etc/dovecot/conf.d/10-master.conf.ucf-dist
+	new file:   ../../etc/dovecot/conf.d/10-metrics.conf
+	modified:   ../../etc/dovecot/conf.d/10-ssl.conf
+	deleted:    ../../etc/dovecot/conf.d/10-ssl.conf.ucf-dist
+	deleted:    ../../etc/dovecot/conf.d/10-tcpwrapper.conf
+	modified:   ../../etc/dovecot/conf.d/15-lda.conf
+	modified:   ../../etc/dovecot/conf.d/20-imap.conf
+	deleted:    ../../etc/dovecot/conf.d/20-pop3.conf
+	new file:   ../../etc/dovecot/conf.d/30-dict-server.conf
+	modified:   ../../etc/dovecot/conf.d/90-acl.conf
+	new file:   ../../etc/dovecot/conf.d/90-fts.conf
+	deleted:    ../../etc/dovecot/conf.d/90-plugin.conf
+	modified:   ../../etc/dovecot/conf.d/90-quota.conf
+	new file:   ../../etc/dovecot/conf.d/90-sieve-extprograms.conf
+	new file:   ../../etc/dovecot/conf.d/90-sieve.conf
+	deleted:    ../../etc/dovecot/conf.d/auth-checkpassword.conf.ext
+	modified:   ../../etc/dovecot/conf.d/auth-deny.conf.ext
+	deleted:    ../../etc/dovecot/conf.d/auth-dict.conf.ext
+	modified:   ../../etc/dovecot/conf.d/auth-master.conf.ext
+	new file:   ../../etc/dovecot/conf.d/auth-oauth2.conf.ext
+	modified:   ../../etc/dovecot/conf.d/auth-passwdfile.conf.ext
+	modified:   ../../etc/dovecot/conf.d/auth-sql.conf.ext
+	modified:   ../../etc/dovecot/conf.d/auth-static.conf.ext
+	modified:   ../../etc/dovecot/conf.d/auth-system.conf.ext
+	deleted:    ../../etc/dovecot/conf.d/auth-vpopmail.conf.ext
+	deleted:    ../../etc/dovecot/dovecot-dict-auth.conf.ext
+	deleted:    ../../etc/dovecot/dovecot-dict-sql.conf.ext
+	deleted:    ../../etc/dovecot/dovecot-sql.conf.ext
+	modified:   ../../etc/dovecot/dovecot.conf
+	deleted:    ../../etc/dovecot/dovecot.conf.ucf-old
+	modified:   ../../etc/mailcap
+	modified:   ../../etc/mailname
+	modified:   ../../etc/opendkim.conf
+	deleted:    ../../etc/opendkim/key.table
+	deleted:    ../../etc/opendkim/keys/201807.txt
+	deleted:    ../../etc/opendkim/keys/fromhell.private
+	deleted:    ../../etc/opendkim/keys/suspectdevices.private
+	deleted:    ../../etc/opendkim/signing.table
+	deleted:    ../../etc/opendkim/trusted.hosts
+	modified:   ../../etc/postfix/dynamicmaps.cf
+	modified:   ../../etc/postfix/main.cf
+	deleted:    ../../etc/postfix/main.cf.medea
+	modified:   ../../etc/postfix/main.cf.proto
+	deleted:    ../../etc/postfix/makedefs.out
+	modified:   ../../etc/postfix/master.cf
+	modified:   ../../etc/postfix/master.cf.proto
+	deleted:    ../../etc/postfix/post-install
+	modified:   ../../etc/postfix/postfix-files
+	deleted:    ../../etc/postfix/postfix-script
+	deleted:    ../../etc/postfix/virtual
+	deleted:    ../../etc/postfix/virtual.db
+	modified:   ../../etc/postgrey/whitelist_clients
+	deleted:    ../../etc/procmailrc
+```
