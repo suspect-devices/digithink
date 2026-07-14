@@ -1,6 +1,6 @@
 # Klein -- Transfer of mail from naomi to ezra
 
-Naomi was built on ubuntu close to a decade ago. It's a procmail / imap server with enough stuff to more or less survive as a self standing mail server in a very hostile world. Like freebsd its biggest problem is that it works and has suffered much neglect. It didnt survive do-release-upgrading from 22.04 to 24.04 and so it't time to migrate it to debian It's the last critical piece of my infrastructure still running a canonical based operating system.
+Naomi was built on ubuntu close to a decade ago. It's a procmail / imap server with enough stuff to more or less survive as a self standing mail server in a very hostile world. Like freebsd its biggest problem is that it works and has suffered much neglect. It didnt survive do-release-upgrading from 22.04 to 24.04 and so it's time to migrate it to debian It's the last critical piece of my infrastructure still running a canonical based operating system.
 
 I am following along with [this guide](https://www.wangzerui.com/2017/03/06/using-git-to-manage-system-configuration-files/) to transfer the existing mail server to git via a private bitbucket repository.
 
@@ -34,8 +34,11 @@ I am following along with [this guide](https://www.wangzerui.com/2017/03/06/usin
   - replace the self signed certs with those maintained by certbot
   - update and fix issues until we have a running base
 - Test server using new user delmar@3dangst.com
+  - Fix any issues identified. 
 - add remaining users (manually)
-- scp home and mail spool directories (for rsync later)
+- shut down the old mail services
+- copy home and mail spool directories (for rsync later)
+- start the new server and test again.
 
 ## Work on the original server (naomi)
 
@@ -181,7 +184,9 @@ git pull
 
 ### Fix the new configs and add the new stuff.
 
-The bigges pain in the ass here is that breaking changes were made between Dovecot 2.3 and 2.4 and the community documentation does an absolutely shitty job of documenting how to translate them. The rough version of things that work present the following. 
+The biggest PITA without tazzikki sause here is that breaking changes were made between Dovecot 2.3 and 2.4 and the community documentation does an absolutely awefull job of documenting how to translate them. Dovecot really wants you to purchase the professional version. Spent a few hours re-evaluating the alternatives before moving on. 
+
+The rough version of things that work at present is the following.
 
 ```sh
 root@mailhost:/etc/dovecot/conf.d# doveconf -n
@@ -254,7 +259,7 @@ ssl_server {
 }
 ```
 
-The actual configuration is smeared all over a linux conf.d style pile of configuration files and I am pretty sure I need to get rid of most of them. 
+The actual configuration is smeared all over a linux conf.d style pile of files and I am pretty sure I need to get rid of most of them. 
 
 ## Testing the new system. 
 
@@ -272,6 +277,15 @@ YOU ARE HERE FIXING 3dangst.com before moving on to the actual transfer of users
 - [http://www.postfix.org/STANDARD_CONFIGURATION_README.html](http://www.postfix.org/STANDARD_CONFIGURATION_README.html)
 - [old mail server install docs](https://www.digithink.com/serverdocs/UbuntuMailServerSetup/)
 - [https://www.digithink.com/buildnotes/ezra/](https://www.digithink.com/buildnotes/ezra/)
+- [https://serverfault.com/questions/905225/migrate-from-old-to-new-postfix-dovecot-mail-server](https://serverfault.com/questions/905225/migrate-from-old-to-new-postfix-dovecot-mail-server)
+- [https://www.linuxbabe.com/mail-server/spf-dkim-postfix-debian-server](https://www.linuxbabe.com/mail-server/spf-dkim-postfix-debian-server)
+- [https://doc.dovecot.org/2.4.4/core/config/quick.html](https://doc.dovecot.org/2.4.4/core/config/quick.html)
+- [https://zunzuncito.oriole.systems/28/](https://zunzuncito.oriole.systems/28/)
+- [https://github.com/dovecot/tools/blob/main/dovecot-2.4.0-example-config.tar.gz](https://github.com/dovecot/tools/blob/main/dovecot-2.4.0-example-config.tar.gz)
+- [https://gist.github.com/roojs/d065c29b1d35d2b9d754cc78fc8f3b56](https://gist.github.com/roojs/d065c29b1d35d2b9d754cc78fc8f3b56)
+- [https://monospace.games/posts/20250815-dovecot-24.html](https://monospace.games/posts/20250815-dovecot-24.html)
+- [https://thomas-leister.de/en/mailserver-migrate-config-to-dovecot-2.4-debian-trixie/](https://thomas-leister.de/en/mailserver-migrate-config-to-dovecot-2.4-debian-trixie/)
+- 
 
 
 ## CLEAN THIS DUMP UP
