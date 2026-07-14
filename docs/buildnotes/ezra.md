@@ -266,9 +266,86 @@ The actual configuration is smeared all over a linux conf.d style pile of files 
 With the config above we are able to send mail from gmail but cant recieve it because spf and dkim havent been set up for 3dangst.com
 We were also unable to email between suspectdevices.com and 3dangst.com because 3dangst.com was still in naomis postfix config. This was fixed. 
 
-## Fixing spf and dkim.
+## Adding / Fixing spf, dmark, and dkim
 
-YOU ARE HERE FIXING 3dangst.com before moving on to the actual transfer of users and data.
+I never did get dkim to communicate with postfix via a local socket so it's going through the loopback. Need to make sure this doesn't bleed out any where.
+
+### /etc/opendkim.conf
+
+```sh
+Socket inet:8891@localhost
+...
+KeyTable            refile:/etc/opendkim/key.table
+SigningTable        refile:/etc/opendkim/signing.table
+...
+ExternalIgnoreList  refile:/etc/opendkim/trusted.hosts
+InternalHosts       refile:/etc/opendkim/trusted.hosts
+```
+
+### /etc/opendkim/key|signing.tables
+
+```sh
+root@mailhost:~/mailhost# cat /etc/opendkim/signing.table
+*@fromhell.com fromhell
+*@suspectdevices.com suspectdevices
+*@3dangst.com 3dangst
+*@digithink.com digithink
+*@busholini.org busholini
+root@mailhost:~/mailhost# cat /etc/opendkim/key.table
+fromhell     fromhell.com:201807:/etc/opendkim/keys/fromhell.private
+suspectdevices suspectdevices.com:201807:/etc/opendkim/keys/suspectdevices.private
+3dangst 3dangst.com:default:/etc/opendkim/keys/3dangst.private
+digithink digithink.com:default:/etc/opendkim/keys/digithink.private
+busholini busholini.org:default:/etc/opendkim/keys/busholini.private
+root@mailhost:~/mailhost# cat /etc/opendkim/trusted.hosts
+127.0.0.1
+69.41.138.98/27
+localhost
+*.digithink.com
+*.fromhell.com
+*.suspectdevices.com
+*.busholini.org
+*.3dangst.com
+```
+
+### /etc/postfix/main.cf
+
+```sh
+...
+smtpd_milters = inet:127.0.0.1:8891
+non_smtpd_milters = $smtpd_milters
+...
+```
+
+### Dns changes
+
+```sh
+$TTL 600
+digithink.com.  IN      SOA     dns.digithink.com. don.digithink.com. (
+                2026071400 108000 36000 960000 864000 )
+                IN      NS      dns.digithink.com.
+                IN      NS      dns1.digithink.com.
+                IN      NS      dns2.digithink.com.
+                IN      MX      10 mailhost.digithink.com.
+                IN      A       69.41.138.100
+$ORIGIN digithink.com.
+... other hosts ...
+mailhost        IN      A       69.41.138.102
+mail            IN      CNAME   mailhost.digithink.com.
+... other stuff ...
+@               TXT     "v=spf1 ip4:69.41.138.97/27 -all"
+_dmarc          TXT     "V=DMARC1; p=none; pct=100; fo=1; rua=mailto:don@digithink.com"
+default._domainkey      IN      TXT     ( "v=DKIM1; h=sha256; k=rsa; "
+          "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo6SVMubkHnZu8f15O08LJfD1EzLKEo17Yw/KZGhOZ8VFvXHY8FK/Wi//odNsq66B8PYC+reRdnueIvY>
+          "WBT5NL/dzF5+6THLC3jEL03GtenjQSAE6BgXdc7gSfeFaYIWsm19GEMgEt1Yz9Z6fLqtHVaLcesL0dcXdpSSd8bJWME/q8rRmiG5hoUpsyrEE90yDR7eNmT5nWQ6l>
+
+```
+## Checking the Mail data.
+
+*You are here making sure that the new config makes the same files/directories as the original.*
+
+## Transferring the mail from the old host
+
 
 
 ## References
