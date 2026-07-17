@@ -4,25 +4,24 @@ Dovecot 2.3 to Dovecot CE 2.4 Pain and suffering.
 
 ## TLDR
 
-* Dovecot 2.4 has breaking changes
-  * Configuration is different.
-  * Community documentation ~~kind of~~ sucks.
-    * In particular everything is defined but no examples are given 
-* Default trixie install is a convoluted pile.
-  * It's rubbish bin it. (remove/disable /etc/dovecot/conf.d/)
-* use https://dovecot.org/upgrader/
-  * on source server dovecot -n and copy results into upgrader
-  * run convert and replace /etc/dovecot.conf with the results
-  * update things such as ssl certs
-* if your mail shows up wonky it probably needs:
-
+- Dovecot 2.4 has breaking changes
+    - Configuration is different.
+    - Community documentation ~~kind of~~ sucks.
+        - In particular everything is defined but no examples are given 
+- Default trixie install is a convoluted pile.
+    - It's rubbish bin it. (remove/disable /etc/dovecot/conf.d/)
+- use https://dovecot.org/upgrader/
+    - on source server dovecot -n and copy results into upgrader
+    - run convert and replace /etc/dovecot.conf with the results
+    - update things such as ssl certs
+- if your mail shows up wonky it probably needs:
     ```sh
     namespace inbox {
       ... other stuff ...
       prefix = .INBOX.
     }
     ```
-* you may have to just do things the hard way. 
+- you may have to just do things the hard way. 
 
 ## Background
 
@@ -117,7 +116,7 @@ git branch main
 
 ## DNS Changes
 
-The reverse for our current mailserver claims to be mailhost.suspectdevices.com but is actually mailhost.\<CURRENTDOMAIN\>.com for now we are going to test on mailhost.suspectdevices.com and point the mx record for suspectdevices.com to mailhost.digithink.com.
+The reverse for our current mailserver claims to be mailhost.suspectdevices.com is defined as mailhost.CURRENTDOMAIN.com for now we are going to test on mailhost.suspectdevices.com and point the mx record for all domains to that.
 I dunno. Will fix this later.
 
 ```sh
@@ -127,12 +126,10 @@ $TTL 600
 	IN	NS	dns1.digithink.com.
 	IN	NS	dns2.digithink.com.
 	IN	NS	dns.digithink.com.
-	IN	MX	5 mailhost.digithink.com
-	IN	MX	10 mailhost.suspectdevices.com
+	IN	MX	10 mailhost.suspectdevices.com.
 	IN	HINFO	"UltraSparc" "Solaris"
 	IN	A	69.41.138.105
 $ORIGIN @
-
 ... other stuff ...
 naomi       IN  A   69.41.138.102
 ezra    	IN	A	69.41.138.110
@@ -287,9 +284,9 @@ ssl_server {
 
 The actual configuration is smeared all over a linux conf.d style pile of files and I am pretty sure I need to get rid of most of them. 
 
-## Testing the new system. 
+## Testing the new system
 
-With the config above we are able to send mail from gmail but cant recieve it because spf and dkim havent been set up for 3dangst.com
+With the config above we are able to send mail from gmail but cant recieve it because spf and dkim haven't been set up for 3dangst.com
 We were also unable to email between suspectdevices.com and 3dangst.com because 3dangst.com was still in naomis postfix config. This was fixed. 
 
 ## Adding / Fixing spf, dmark, and dkim
@@ -366,7 +363,7 @@ default._domainkey      IN      TXT     ( "v=DKIM1; h=sha256; k=rsa; "
           "WBT5NL/dzF5+6THLC3jEL03GtenjQSAE6BgXdc7gSfeFaYIWsm19GEMgEt1Yz9Z6fLqtHVaLcesL0dcXdpSSd8bJWME/q8rRmiG5hoUpsyrEE90yDR7eNmT5nWQ6l>
 
 ```
-## Checking the tail data and transferring the mail from the old host
+## Checking the mail data and transferring the mail from the old host
 
 I didnt see any difference between the new account and the transferred ones so I transferred the mail the old shcool way. 
 *This was wrong.*
@@ -375,7 +372,7 @@ After tarring, copying and untarring, the /var/mail and /home directories I poin
 
 ## Cleaning up the mess.
 
-I was going to eliminate the /etc/doveconf/conf.d directory but something is missing from the single conf file created by dovecot.org/upgrader/ file and so I just put everything that was working back and cleaned up the other mess by migrating things the hard way.
+I was going to eliminate the /etc/doveconf/conf.d directory but something is missing from the single conf file created by dovecot.org/upgrader/ file and so I just put everything that was working back and cleaned up the remaining mess by migrating things the hard way.
 
 ### Migrating things the hard way
 
@@ -398,7 +395,7 @@ As I already had mail coming in I needed to get the mailboxes on my local system
 
 After I migrated all of my mx records to point to mailhost.suspectdevices.com I forgot to put a period at the end of the mx record and gmail started trying to send things to hosts like mailhost.suspectdevices.com.digithink.com. This was fixed.
 
-I forgot to rename the default private key to digithink.private and set the owner to opendkim:opendkim so google rejected things from digithink.com for a bit. 
+I forgot to rename the default private key to digithink.private and set the owner to opendkim:opendkim so google rejected things from digithink.com for a bit.
 
 ## Improvements made.
 
@@ -436,4 +433,4 @@ I think there is still clean up that can be done on the conf.d which I may revis
 - [https://thomas-leister.de/en/mailserver-migrate-config-to-dovecot-2.4-debian-trixie/](https://thomas-leister.de/en/mailserver-migrate-config-to-dovecot-2.4-debian-trixie/)
 #### INBOX
 - [https://dovecot.org/mailman3/archives/list/dovecot@dovecot.org/message/2GFRCKC52A37FV6ZOU4VBBF3CKGV5NEK/](https://dovecot.org/mailman3/archives/list/dovecot@dovecot.org/message/2GFRCKC52A37FV6ZOU4VBBF3CKGV5NEK/) -- This may have been what I was missing.
-- https://marc.info/?l=dovecot&m=176241480007764
+- [https://marc.info/?l=dovecot&m=176241480007764](https://marc.info/?l=dovecot&m=176241480007764)
