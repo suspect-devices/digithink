@@ -1,5 +1,31 @@
 # Klein -- Transfer of mail from naomi to ezra
 
+Dovecot 2.3 to Dovecot CE 2.4 Pain and suffering.
+
+## TLDR
+
+* Dovecot 2.4 has breaking changes
+  * Configuration is different.
+  * Community documentation ~~kind of~~ sucks.
+    * In particular everything is defined but no examples are given 
+* Default trixie install is a convoluted pile.
+  * It's rubbish bin it. (remove/disable /etc/dovecot/conf.d/)
+* use https://dovecot.org/upgrader/
+  * on source server dovecot -n and copy results into upgrader
+  * run convert and replace /etc/dovecot.conf with the results
+  * update things such as ssl certs
+* if your mail shows up wonky it probably needs:
+
+    ```sh
+    namespace inbox {
+      ... other stuff ...
+      prefix = .INBOX.
+    }
+    ```
+* you may have to just do things the hard way. 
+
+## Background
+
 Naomi was built on ubuntu close to a decade ago. It's a procmail / imap server with enough stuff to more or less survive as a self standing mail server in a very hostile world. Like freebsd its biggest problem is that it works and has suffered much neglect. It didnt survive do-release-upgrading from 22.04 to 24.04 and so it's time to migrate it to debian It's the last critical piece of my infrastructure still running a canonical based operating system.
 
 I am following along with [this guide](https://www.wangzerui.com/2017/03/06/using-git-to-manage-system-configuration-files/) to transfer the existing mail server to git via a private bitbucket repository.
@@ -184,7 +210,7 @@ git pull
 
 ### Fix the new configs and add the new stuff.
 
-The biggest PITA without tazzikki sause here is that breaking changes were made between Dovecot 2.3 and 2.4 and the community documentation does an absolutely awefull job of documenting how to translate them. Dovecot really wants you to purchase the professional version. Spent a few hours re-evaluating the alternatives before moving on. 
+The biggest PITA without tazzikki sause here is that breaking changes were made between Dovecot 2.3 and 2.4 and the community documentation does an absolutely awefull job of documenting how to translate them. Dovecot really wants you to purchase the professional version. Spent a few hours re-evaluating the alternatives before moving on.
 
 The rough version of things that work at present is the following.
 
@@ -326,12 +352,12 @@ digithink.com.  IN      SOA     dns.digithink.com. don.digithink.com. (
                 IN      NS      dns.digithink.com.
                 IN      NS      dns1.digithink.com.
                 IN      NS      dns2.digithink.com.
-                IN      MX      10 mailhost.digithink.com.
+                IN      MX      10 mailhost.suspectdevices.com.
                 IN      A       69.41.138.100
 $ORIGIN digithink.com.
 ... other hosts ...
 mailhost        IN      A       69.41.138.102
-mail            IN      CNAME   mailhost.digithink.com.
+mail            IN      CNAME   mailhost
 ... other stuff ...
 @               TXT     "v=spf1 ip4:69.41.138.97/27 -all"
 _dmarc          TXT     "V=DMARC1; p=none; pct=100; fo=1; rua=mailto:don@digithink.com"
@@ -340,95 +366,74 @@ default._domainkey      IN      TXT     ( "v=DKIM1; h=sha256; k=rsa; "
           "WBT5NL/dzF5+6THLC3jEL03GtenjQSAE6BgXdc7gSfeFaYIWsm19GEMgEt1Yz9Z6fLqtHVaLcesL0dcXdpSSd8bJWME/q8rRmiG5hoUpsyrEE90yDR7eNmT5nWQ6l>
 
 ```
-## Checking the Mail data.
+## Checking the tail data and transferring the mail from the old host
 
-*You are here making sure that the new config makes the same files/directories as the original.*
+I didnt see any difference between the new account and the transferred ones so I transferred the mail the old shcool way. 
+*This was wrong.*
 
-## Transferring the mail from the old host
+After tarring, copying and untarring, the /var/mail and /home directories I pointed thunderbird to the new server. I was able to see and send mail but everything was mangled.
 
+## Cleaning up the mess.
+
+I was going to eliminate the /etc/doveconf/conf.d directory but something is missing from the single conf file created by dovecot.org/upgrader/ file and so I just put everything that was working back and cleaned up the other mess by migrating things the hard way.
+
+### Migrating things the hard way
+
+As I already had mail coming in I needed to get the mailboxes on my local system and on the new mail server sorted out. It turns out I probably only needed to add "prefix = .INBOX." to the inbox namespace. But by that time I had already migrated most of my mail the hard way.
+
+#### The hard way.
+
+- Set up the accounts or point the old accounts to the new server 
+   *this was in an attempt to keep the rules/filters* 
+- Move the ~Maildir to ~MaildirFoobarred for later removal
+- Find file location of of the account storage.
+- Quit thunderbird. (imap client)
+- clean everything out of that directory *(for old accounts)*
+- Open thunderbird.
+- Stand up a temporary account and point it at the old server
+- Drag the mail (folder at a time) from one server to the next
+- Delete the temporary account.
+
+## Other Mistakes.
+
+After I migrated all of my mx records to point to mailhost.suspectdevices.com I forgot to put a period at the end of the mx record and gmail started trying to send things to hosts like mailhost.suspectdevices.com.digithink.com. This was fixed.
+
+I forgot to rename the default private key to digithink.private and set the owner to opendkim:opendkim so google rejected things from digithink.com for a bit. 
+
+## Improvements made.
+
+- 3 of the 5 domains served did not have spf,_dmarc, and dkim set up. 
+  - This is done for all domains.
+- Snake oil certs are now set up through LetsEncrypt.
+
+## And we are done (for now)
+
+I think there is still clean up that can be done on the conf.d which I may revisit. 
 
 
 ## References
+
+### Host repositories
+
 - [https://www.wangzerui.com/2017/03/06/using-git-to-manage-system-configuration-files/](https://www.wangzerui.com/2017/03/06/using-git-to-manage-system-configuration-files/)
+
+### Postfix, spf, _dmarc, dkim
+
 - [https://www.linuxbabe.com/mail-server/build-email-server-from-scratch-debian-postfix-smtp](https://www.linuxbabe.com/mail-server/build-email-server-from-scratch-debian-postfix-smtp)
 - [http://www.postfix.org/STANDARD_CONFIGURATION_README.html](http://www.postfix.org/STANDARD_CONFIGURATION_README.html)
 - [old mail server install docs](https://www.digithink.com/serverdocs/UbuntuMailServerSetup/)
 - [https://www.digithink.com/buildnotes/ezra/](https://www.digithink.com/buildnotes/ezra/)
 - [https://serverfault.com/questions/905225/migrate-from-old-to-new-postfix-dovecot-mail-server](https://serverfault.com/questions/905225/migrate-from-old-to-new-postfix-dovecot-mail-server)
 - [https://www.linuxbabe.com/mail-server/spf-dkim-postfix-debian-server](https://www.linuxbabe.com/mail-server/spf-dkim-postfix-debian-server)
+
+### Docvecot
+
 - [https://doc.dovecot.org/2.4.4/core/config/quick.html](https://doc.dovecot.org/2.4.4/core/config/quick.html)
 - [https://zunzuncito.oriole.systems/28/](https://zunzuncito.oriole.systems/28/)
 - [https://github.com/dovecot/tools/blob/main/dovecot-2.4.0-example-config.tar.gz](https://github.com/dovecot/tools/blob/main/dovecot-2.4.0-example-config.tar.gz)
 - [https://gist.github.com/roojs/d065c29b1d35d2b9d754cc78fc8f3b56](https://gist.github.com/roojs/d065c29b1d35d2b9d754cc78fc8f3b56)
 - [https://monospace.games/posts/20250815-dovecot-24.html](https://monospace.games/posts/20250815-dovecot-24.html)
 - [https://thomas-leister.de/en/mailserver-migrate-config-to-dovecot-2.4-debian-trixie/](https://thomas-leister.de/en/mailserver-migrate-config-to-dovecot-2.4-debian-trixie/)
-- 
-
-
-## CLEAN THIS DUMP UP
-```sh
-	deleted:    ../../README.md
-	modified:   ../../etc/aliases
-	deleted:    ../../etc/dkimkeys/README.PrivateKeys
-	modified:   ../../etc/dovecot/conf.d/10-auth.conf
-	deleted:    ../../etc/dovecot/conf.d/10-auth.conf.ucf-old
-	deleted:    ../../etc/dovecot/conf.d/10-director.conf
-	modified:   ../../etc/dovecot/conf.d/10-logging.conf
-	deleted:    ../../etc/dovecot/conf.d/10-logging.conf.ucf-old
-	modified:   ../../etc/dovecot/conf.d/10-mail.conf
-	deleted:    ../../etc/dovecot/conf.d/10-mail.conf.ucf-dist
-	modified:   ../../etc/dovecot/conf.d/10-master.conf
-	deleted:    ../../etc/dovecot/conf.d/10-master.conf.ucf-dist
-	new file:   ../../etc/dovecot/conf.d/10-metrics.conf
-	modified:   ../../etc/dovecot/conf.d/10-ssl.conf
-	deleted:    ../../etc/dovecot/conf.d/10-ssl.conf.ucf-dist
-	deleted:    ../../etc/dovecot/conf.d/10-tcpwrapper.conf
-	modified:   ../../etc/dovecot/conf.d/15-lda.conf
-	modified:   ../../etc/dovecot/conf.d/20-imap.conf
-	deleted:    ../../etc/dovecot/conf.d/20-pop3.conf
-	new file:   ../../etc/dovecot/conf.d/30-dict-server.conf
-	modified:   ../../etc/dovecot/conf.d/90-acl.conf
-	new file:   ../../etc/dovecot/conf.d/90-fts.conf
-	deleted:    ../../etc/dovecot/conf.d/90-plugin.conf
-	modified:   ../../etc/dovecot/conf.d/90-quota.conf
-	new file:   ../../etc/dovecot/conf.d/90-sieve-extprograms.conf
-	new file:   ../../etc/dovecot/conf.d/90-sieve.conf
-	deleted:    ../../etc/dovecot/conf.d/auth-checkpassword.conf.ext
-	modified:   ../../etc/dovecot/conf.d/auth-deny.conf.ext
-	deleted:    ../../etc/dovecot/conf.d/auth-dict.conf.ext
-	modified:   ../../etc/dovecot/conf.d/auth-master.conf.ext
-	new file:   ../../etc/dovecot/conf.d/auth-oauth2.conf.ext
-	modified:   ../../etc/dovecot/conf.d/auth-passwdfile.conf.ext
-	modified:   ../../etc/dovecot/conf.d/auth-sql.conf.ext
-	modified:   ../../etc/dovecot/conf.d/auth-static.conf.ext
-	modified:   ../../etc/dovecot/conf.d/auth-system.conf.ext
-	deleted:    ../../etc/dovecot/conf.d/auth-vpopmail.conf.ext
-	deleted:    ../../etc/dovecot/dovecot-dict-auth.conf.ext
-	deleted:    ../../etc/dovecot/dovecot-dict-sql.conf.ext
-	deleted:    ../../etc/dovecot/dovecot-sql.conf.ext
-	modified:   ../../etc/dovecot/dovecot.conf
-	deleted:    ../../etc/dovecot/dovecot.conf.ucf-old
-	modified:   ../../etc/mailcap
-	modified:   ../../etc/mailname
-	modified:   ../../etc/opendkim.conf
-	deleted:    ../../etc/opendkim/key.table
-	deleted:    ../../etc/opendkim/keys/201807.txt
-	deleted:    ../../etc/opendkim/keys/fromhell.private
-	deleted:    ../../etc/opendkim/keys/suspectdevices.private
-	deleted:    ../../etc/opendkim/signing.table
-	deleted:    ../../etc/opendkim/trusted.hosts
-	modified:   ../../etc/postfix/dynamicmaps.cf
-	modified:   ../../etc/postfix/main.cf
-	deleted:    ../../etc/postfix/main.cf.medea
-	modified:   ../../etc/postfix/main.cf.proto
-	deleted:    ../../etc/postfix/makedefs.out
-	modified:   ../../etc/postfix/master.cf
-	modified:   ../../etc/postfix/master.cf.proto
-	deleted:    ../../etc/postfix/post-install
-	modified:   ../../etc/postfix/postfix-files
-	deleted:    ../../etc/postfix/postfix-script
-	deleted:    ../../etc/postfix/virtual
-	deleted:    ../../etc/postfix/virtual.db
-	modified:   ../../etc/postgrey/whitelist_clients
-	deleted:    ../../etc/procmailrc
-```
+#### INBOX
+- [https://dovecot.org/mailman3/archives/list/dovecot@dovecot.org/message/2GFRCKC52A37FV6ZOU4VBBF3CKGV5NEK/](https://dovecot.org/mailman3/archives/list/dovecot@dovecot.org/message/2GFRCKC52A37FV6ZOU4VBBF3CKGV5NEK/) -- This may have been what I was missing.
+- https://marc.info/?l=dovecot&m=176241480007764
