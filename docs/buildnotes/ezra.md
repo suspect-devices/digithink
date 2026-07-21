@@ -470,12 +470,11 @@ root@tk2022:~# incus config set ezra volatile.apply_template=create
 root@tk2022:~# incus start ezra
 ```
 
-Since ifupdown was required to configure both interfaces I believe that the right thing to do would be to delete cloud-init.network-config from the container and do the steps above.
+Since ifupdown seemed to be required to configure both interfaces I believe that the right thing to do would be to delete "cloud-init.network-config" from the container and do the steps above.
 
 ## And we are done (for now)
 
-I think there is still clean up that can be done on the conf.d which I may revisit. 
-
+I think there is still clean up that can be done on the conf.d which I may revisit.
 
 ## References
 
