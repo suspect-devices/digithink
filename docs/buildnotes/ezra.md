@@ -434,8 +434,9 @@ I forgot to rename the default private key to digithink.private and set the owne
 
 Given the way I created the initial ip I was having a hard time deleting it. Which did two things. 
 
-1) it required me to change the ip on the of the original email server which was created eons ago and had the old school /etc/network/interfaces definition (because it wasnt broken)
-2) scratch my head until I had to ask dumb questions on [discuss.linuxcontainers.org](https://discuss.linuxcontainers.org/t/reinitializing-network-config-in-existing-container/5790/12)
+1) Rather than swapping the staging and production ips it required me to change the ip on the of the original email server.
+
+2) Scratch my head until I had to ask dumb questions on [discuss.linuxcontainers.org](https://discuss.linuxcontainers.org/t/reinitializing-network-config-in-existing-container/5790/12)
 
 Since the incus debian/13/cloud image doesn't install network manager (which is a good thing) I installed ifupdown
 
