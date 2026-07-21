@@ -142,6 +142,22 @@ mail		IN	CNAME   ezra
 
 ### Install container
 
+```sh
+incus init trixie -p default -p susdev25 ezra -c cloud-init.network-config="$(cat <<EOF
+version: 2
+ethernets:
+  eth0:
+    addresses:
+      - 69.41.138.110/27
+    gateway4: 69.41.138.97
+    nameservers:
+      addresses:
+        - 69.41.138.98
+        - 8.8.4.4
+EOF
+)"
+```
+
 ### Install mail server and set up certificate
 
 Break this out and explain it a bit. 
@@ -403,6 +419,47 @@ I forgot to rename the default private key to digithink.private and set the owne
   - This is done for all domains.
 - Snake oil certs are now set up through LetsEncrypt.
 
+## Getting rid of the staging ip.
+
+Given the way I created the initial ip I was having a hard time deleting it. Which did two things. 
+
+1) it required me to change the ip on the of the original email server which was created eons ago and had the old school /etc/network/interfaces definition (because it wasnt broken)
+2) scratch my head until I had to ask dumb questions on [discuss.linuxcontainers.org](https://discuss.linuxcontainers.org/t/reinitializing-network-config-in-existing-container/5790/12)
+
+Since the incus debian/13/cloud image doesn't install network manager (which is a good thing) I installed ifupdown
+
+```sh
+apt update && sudo apt install ifupdown
+cat > /etc/network/interfaces <<EOD
+auto eth0
+iface eth0 inet static
+     address 69.41.138.102
+     network 69.41.138.96
+     netmask 255.255.255.224
+     broadcast 69.41.138.127
+     gateway 69.41.138.97
+     mtu 9000
+
+auto eth1
+iface eth1 inet static
+    address 192.168.31.141/24
+EOD
+reboot
+```
+
+But rather than allowing me to replace the staging ip it created a second one.
+It turns out you need to get cloud init to reset the network config. I also tried to get it to seed the new address but really the ifupdown did its job after that. 
+
+```sh
+root@tk2022:~# incus config edit ezra
+root@tk2022:~# incus exec ezra -- cloud-init clean --seed --logs --configs network
+root@tk2022:~# incus stop ezra
+root@tk2022:~# incus config set ezra volatile.apply_template=create
+root@tk2022:~# incus start ezra
+```
+
+Since ifupdown was required to configure both interfaces I believe that the right thing to do would be to delete cloud-init.network-config from the container and do the steps above.
+
 ## And we are done (for now)
 
 I think there is still clean up that can be done on the conf.d which I may revisit. 
@@ -434,3 +491,6 @@ I think there is still clean up that can be done on the conf.d which I may revis
 #### INBOX
 - [https://dovecot.org/mailman3/archives/list/dovecot@dovecot.org/message/2GFRCKC52A37FV6ZOU4VBBF3CKGV5NEK/](https://dovecot.org/mailman3/archives/list/dovecot@dovecot.org/message/2GFRCKC52A37FV6ZOU4VBBF3CKGV5NEK/) -- This may have been what I was missing.
 - [https://marc.info/?l=dovecot&m=176241480007764](https://marc.info/?l=dovecot&m=176241480007764)
+
+#### cloud-init 
+-[https://discuss.linuxcontainers.org/t/reinitializing-network-config-in-existing-container/5790/12](https://discuss.linuxcontainers.org/t/reinitializing-network-config-in-existing-container/5790/12)
