@@ -160,10 +160,10 @@ EOF
 
 ### Install mail server and set up certificate
 
-Break this out and explain it a bit. 
-```
+Set up certbot to handle our mailhosts certificates
+
+```sh
 hostnamectl hostname mailhost.suspectdevices.com
-apt install postfix postgrey dovecot-core dovecot-imapd opendkim
 apt install -y certbot nginx python3-certbot-nginx
 ... fix the stupid default ipv6 entry ...
 nano /etc/nginx/sites-enabled/default
@@ -174,7 +174,18 @@ certbot run -a nginx --agree-tos --no-eff-email --staple-ocsp --email don@suspec
 nano /etc/nginx/sites-enabled/default
 systemctl start nginx
 systemctl status nginx
+```
+
+Then install the mail server software following more or less the [fine instructions from linuxbabe.com](https://www.linuxbabe.com/mail-server/build-email-server-from-scratch-debian-postfix-smtp)
+
+```sh
+apt install postfix postgrey dovecot-core dovecot-imapd opendkim
 opendkim-testkey -d suspectdevices.com  -s 201807 -vvv
+```
+
+Then adjust the install based on the software installed on the old server.
+
+```sh
 apt install -y bsd-mailx
 apt install -y libmail-spf-perl
 apt install -y mailcap
@@ -190,7 +201,7 @@ apt install -y dovecot-imapd
 apt install -y git
 ```
 
-### Create stock branch and populate it with stock configuration 
+### Create a "stock" branch and populate it with stock configuration from the install
 
 ```sh
 git clone  --no-checkout git@bitbucket.org:suspectdevicesadmin/mailhost.git configs
@@ -480,7 +491,7 @@ I think there is still clean up that can be done on the conf.d which I may revis
 - [https://serverfault.com/questions/905225/migrate-from-old-to-new-postfix-dovecot-mail-server](https://serverfault.com/questions/905225/migrate-from-old-to-new-postfix-dovecot-mail-server)
 - [https://www.linuxbabe.com/mail-server/spf-dkim-postfix-debian-server](https://www.linuxbabe.com/mail-server/spf-dkim-postfix-debian-server)
 
-### Docvecot
+### Dovecot
 
 - [https://doc.dovecot.org/2.4.4/core/config/quick.html](https://doc.dovecot.org/2.4.4/core/config/quick.html)
 - [https://zunzuncito.oriole.systems/28/](https://zunzuncito.oriole.systems/28/)
