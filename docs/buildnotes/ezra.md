@@ -460,7 +460,7 @@ reboot
 ```
 
 But rather than allowing me to replace the staging ip it created a second one.
-It turns out you need to get cloud init to reset the network config. I also tried to get it to seed the new address but really the ifupdown did its job after that. 
+It turns out you need to get cloud init to reset the network config. I also tried to get it to seed the new address but really the ifupdown seemed to be what worked. 
 
 ```sh
 root@tk2022:~# incus config edit ezra
