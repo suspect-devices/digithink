@@ -95,5 +95,5 @@ root@tk2022:~# curl -x 192.168.31.228:3128 http://archive.ubuntu.com/ubuntu/
 
 ## References:
 
-- https://oneuptime.com/blog/post/2026-03-02-how-to-disable-systemd-resolved-and-use-etc-resolv-conf-directly-on-ubuntu/view
-- https://www.digithink.com/rethinkeverything/norouter/wireguard-and-tinyproxy/
+- [https://oneuptime.com/blog/post/2026-03-02-how-to-disable-systemd-resolved-and-use-etc-resolv-conf-directly-on-ubuntu/view](https://oneuptime.com/blog/post/2026-03-02-how-to-disable-systemd-resolved-and-use-etc-resolv-conf-directly-on-ubuntu/view)
+- [https://www.digithink.com/rethinkeverything/norouter/wireguard-and-tinyproxy/](https://www.digithink.com/rethinkeverything/norouter/wireguard-and-tinyproxy/)
