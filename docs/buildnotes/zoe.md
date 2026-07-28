@@ -32,6 +32,11 @@ mkdir -p /var/lib/containers/storage
 wget https://fw-download.ubnt.com/data/unifi-os-server/b828-linux-x64-5.1.19-e38d0b0e-b462-403d-9861-f57f25772106.19-x64
 chmod +x ./b828-linux-x64-5.1.19-e38d0b0e-b462-403d-9861-f57f25772106.19-x64
  ./b828-linux-x64-5.1.19-e38d0b0e-b462-403d-9861-f57f25772106.19-x64
+```
+
+Install nginx to normalize web.
+
+```sh
 apt install -y nginx libnginx-mod-stream
 mv /etc/nginx/sites-enabled/default /tmp/
 cat >/etc/nginx/nginx.conf<<EOD
@@ -81,15 +86,16 @@ sytemctl enable --now nginx
 - Start with a back up from the previous console
   ![backup](images/backup.png)
 - Initialize application
-    - ![name server](images/server-name.png)
-    - ![skip unifi](images/proceed.png)
-    - ![really](images/really.png)
-    - ![passwd](images/password.png)
+     ![name server](images/server-name.png)
+     ![skip unifi](images/proceed.png)
+     ![really](images/really.png)
+     ![passwd](images/password.png)
 - Log in
-    - ![login](images/login.png)
-    - ![proceed](images/go2dashboard.png)
+     ![login](images/login.png)
+     ![proceed](images/go2dashboard.png)
 - Restore data from backup.
-    - ![restore](images/restore.png) 
+     ![restore](images/restore.png)
+
 ## References
 
 - [https://discussion.scottibyte.com/t/self-hosted-unifi-os-in-an-incus-container/673](https://discussion.scottibyte.com/t/self-hosted-unifi-os-in-an-incus-container/673)
