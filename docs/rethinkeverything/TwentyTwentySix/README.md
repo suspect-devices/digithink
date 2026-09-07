@@ -1,6 +1,6 @@
 # Todo List 2026
 
-- Update mailhost.suspectdevices.com
+- ~~Update mailhost.suspectdevices.com~~(DONE)
 - [Unifi OS Server](unifiosserver.md)
 - Wireguard -- connect merlot to admin lan.
 - Tempurature sensors to timscale db.
